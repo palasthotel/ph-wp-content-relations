@@ -58,7 +58,7 @@ run_ph_content_relations();
  * @param $relation_type type string
  * @return false|int|void
  */
-function ph_content_realtions_add_realtion($post_id_source, $post_id_target, $relation_type){
+function ph_content_relations_add_realtion($post_id_source, $post_id_target, $relation_type){
 	$store = new Content_Relations_Store($post_id_source);
 	return $store->add_relation($post_id_target, $relation_type);
 }
@@ -68,7 +68,7 @@ function ph_content_realtions_add_realtion($post_id_source, $post_id_target, $re
  * @param $post_id
  * @return relations
  */
-function ph_content_realtions_get_realtions_by_post_id($post_id){
+function ph_content_relations_get_relations_by_post_id($post_id){
 	$store = new Content_Relations_Store($post_id);
 	return $store->get_relations();
 }
@@ -80,7 +80,7 @@ function ph_content_realtions_get_realtions_by_post_id($post_id){
  * @param bool|true $source_only
  * @return array
  */
-function ph_content_realtions_get_realtions_by_post_id_and_type($post_id, $relation_type, $source_only = true){
+function ph_content_relations_get_relations_by_post_id_and_type($post_id, $relation_type, $source_only = true){
 	$store = new Content_Relations_Store($post_id);
 	return $store->get_relations_by_type($relation_type, $source_only);
 }
