@@ -4,7 +4,7 @@
  * @wordpress-plugin
  * Plugin Name:       PALASTHOTEL Content Relations
  * Description:       To relate contents to other contents
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            PALASTHOTEL by Edward Bock
  */
 
@@ -58,7 +58,7 @@ run_ph_content_relations();
  * @param $relation_type type string
  * @return false|int|void
  */
-function ph_content_relations_add_realtion($post_id_source, $post_id_target, $relation_type){
+function ph_content_relations_add_relation($post_id_source, $post_id_target, $relation_type){
 	$store = new Content_Relations_Store($post_id_source);
 	return $store->add_relation($post_id_target, $relation_type);
 }
