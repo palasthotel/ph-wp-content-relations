@@ -114,7 +114,7 @@ class Content_Relations_Admin
 		);
 		wp_enqueue_script(
 			$this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/content-relations-admin.js',
-			array( 'jquery', 'jquery-ui-autocomplete' ),
+			array( 'jquery', 'jquery-ui-autocomplete', 'jquery-ui-sortable' ),
 			$this->version,
 			false
 		);

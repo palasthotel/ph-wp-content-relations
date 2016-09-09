@@ -46,7 +46,7 @@ class Content_Relations_Store {
 					'FROM '.$wpdb->prefix.'content_relations as relations '.
 					'LEFT JOIN '.$wpdb->prefix.'content_relations_types as types ON relations.type_id=types.id '.
 					'LEFT JOIN '.$wpdb->prefix.'posts as posts ON relations.target_id = posts.ID '.
-					"WHERE source_id = '".$this->post_ID."';";
+					"WHERE source_id = '".$this->post_ID." ORDER BY weight ASC';";
 			$result = $wpdb->get_results( $query, OBJECT );
 
 			// get relations where this post is target
@@ -54,12 +54,16 @@ class Content_Relations_Store {
 					'FROM '.$wpdb->prefix.'content_relations as relations '.
 					'LEFT JOIN '.$wpdb->prefix.'content_relations_types as types ON relations.type_id=types.id '.
 					'LEFT JOIN '.$wpdb->prefix.'posts as posts ON relations.source_id = posts.ID '.
-					"WHERE target_id = '".$this->post_ID."' ;";
+					"WHERE target_id = '".$this->post_ID."' ORDER BY weight ASC ;";
 			$result = array_merge( $result, $wpdb->get_results( $query, OBJECT ) );
 			/**
 			 * Save result to class array
 			 */
-			$this->content_relations = $result;
+			usort($result, function($a, $b){
+				if($a->weight == $b->weight) return 0;
+				return ($a->weight < $b->weight) ? -1 : 1;
+			});
+			$this->content_relations =$result;
 		}
 		return $this->content_relations;
 	}
@@ -146,7 +150,7 @@ class Content_Relations_Store {
 		$this->clear();
 		// add new relation
 		for ( $i = 0; $i < count( $data ); $i++ ){
-			$this->add_relation( $data[ $i ]['source_id'], $data[ $i ]['target_id'], $data[ $i ]['type'] );
+			$this->add_relation( $data[ $i ]['source_id'], $data[ $i ]['target_id'], $data[ $i ]['type'], $i );
 		}
 
 	}
@@ -154,7 +158,7 @@ class Content_Relations_Store {
 	/**
 	 * Adds a single relation
 	 */
-	public function add_relation($source_id, $target_id, $type){
+	public function add_relation($source_id, $target_id, $type, $weight = 0){
 		global $wpdb;
 		// if there are invalid posts given, don't add them.
 		if ( intval( $source_id ) <= 0 || intval( $target_id ) <= 0 ) { return; }
@@ -168,7 +172,12 @@ class Content_Relations_Store {
 		}
 		return $wpdb->replace(
 			$wpdb->prefix.'content_relations',
-			array( 'source_id' => $source_id, 'target_id' => $target_id, 'type_id' => $type_id )
+			array(
+				'source_id' => $source_id,
+				'target_id' => $target_id,
+				'type_id' => $type_id,
+				'weight' => $weight
+			)
 		);
 	}
 

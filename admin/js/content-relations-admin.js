@@ -356,8 +356,10 @@
 						var relation = relations_by_type[type][i];
 						$relations.append(renderListItem( type, relation.source_id, relation.target_id, relation.post_title, relation.pub_date, relation.post_type, relation.src ));
 					};
+					$relations.sortable();
 					$list.append($section);
 				}
+				
 			}
 
 			/**
@@ -447,7 +449,7 @@
 		 	*/
 		 	function initRelationsList(){
 		 		var init_relations = window.ph_content_relations_initial;
-		 		for (var i = init_relations.length - 1; i >= 0; i--) {
+		 		for (var i = 0; i < init_relations.length; i++) {
 		 			var src = null;
 		 			if(typeof init_relations[i].src != "undefined"){
 		 				src = init_relations[i].src;
