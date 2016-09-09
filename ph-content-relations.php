@@ -2,9 +2,9 @@
 /**
  *
  * @wordpress-plugin
- * Plugin Name:       PALASTHOTEL Content Relations
+ * Plugin Name:       Content Relations
  * Description:       To relate contents to other contents
- * Version:           1.0.2
+ * Version:           1.1.0
  * Author:            PALASTHOTEL by Edward Bock
  */
 
@@ -13,60 +13,89 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-/**
- * The code that runs during plugin activation.
- */
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-content-relations-activator.php';
-
-/** This action is documented in includes/class-content-relations-activator.php */
-register_activation_hook( __FILE__, array( 'Content_Relations_Activator', 'activate' ) );
-
-/**
- * The code that runs during plugin deactivation.
- */
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-content-relations-deactivator.php';
-
-/** This action is documented in includes/class-content-relations-deactivator.php */
-register_deactivation_hook( __FILE__, array( 'Content_Relations_Deactivator', 'deactivate' ) );
-
-/**
- * The core plugin class that is used to define internationalization,
- * dashboard-specific hooks, and public-facing site hooks.
- */
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-content-relations.php';
-
-/**
- * Begins execution of the plugin.
- *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
- */
-function run_ph_content_relations()
-{
-	$plugin = new Content_Relations();
-	$plugin->run();
-
+class ContentRelations{
+	
+	public $dir;
+	public $url;
+	
+	public function __construct() {
+		
+		$this->dir = plugin_dir_path( __FILE__ );
+		$this->url = plugin_dir_url( __FILE__ ) ;
+		
+		/**
+		 * on activation or deactivation
+		 */
+		require_once $this->dir . '/classes/activator.php';
+		$activator = new \ContentRelations\Activator();
+		register_activation_hook( __FILE__, array( $activator, 'activate' ) );
+		register_deactivation_hook( __FILE__, array( $activator, 'deactivate' ) );
+		
+		/**
+		 * require objects
+		 */
+		require_once $this->dir . '/classes/store.php';
+		require_once $this->dir . '/classes/required.php';
+		
+		/**
+		 * meta box
+		 */
+		require_once $this->dir . '/classes/meta.php';
+		new \ContentRelations\Meta($this);
+		
+		/**
+		 * tools page
+		 */
+		require_once $this->dir . '/classes/tools.php';
+		new \ContentRelations\Tools($this);
+		
+		/**
+		 * post object
+		 */
+		require_once $this->dir . '/classes/post.php';
+		new \ContentRelations\Post($this);
+		
+		/**
+		 * ajax endpoints
+		 */
+		require_once $this->dir . '/classes/ajax.php';
+		new \ContentRelations\Ajax($this);
+		
+	}
 }
-run_ph_content_relations();
+
+/**
+ * expose to public
+ */
+global $content_relations;
+$content_relations = new ContentRelations();
+
+/**
+ * Class Content_Relations_Store for backward compatibility
+ */
+class Content_Relations_Store extends ContentRelations\Store{}
+
+/**
+ * Class Content_Relations_Required for backward compatibility
+ */
+class Content_Relations_Required extends ContentRelations\Required{}
 
 /**
  * Adds a new relation
- * @param $post_id_source Post ID
- * @param $post_id_target Post ID
- * @param $relation_type type string
+ * @param $post_id_source integer Post ID
+ * @param $post_id_target integer Post ID
+ * @param $relation_type string type
  * @return false|int|void
  */
 function ph_content_relations_add_relation($post_id_source, $post_id_target, $relation_type){
 	$store = new Content_Relations_Store($post_id_source);
-	return $store->add_relation($post_id_target, $relation_type);
+	return $store->add_relation($post_id_target, $relation_type, $relation_type);
 }
 
 /**
  * All relations by post id
  * @param $post_id
- * @return relations
+ * @return null|array
  */
 function ph_content_relations_get_relations_by_post_id($post_id){
 	$store = new Content_Relations_Store($post_id);
@@ -95,14 +124,16 @@ function ph_content_relations_get_relations_by_post_id_and_type($post_id, $relat
  */
 function ph_content_relations_post_content_relations_handler_register()
 {
-	ph_migrate_register_field_handler( 'ph_post_destination','content_relations:','ph_content_relations_post_content_relations_handler' );
+	if(function_exists("ph_migrate_register_field_handler")){
+		ph_migrate_register_field_handler( 'ph_post_destination','content_relations:','ph_content_relations_post_content_relations_handler' );
+	}
 }
 add_action( 'ph_migrate_register_field_handlers','ph_content_relations_post_content_relations_handler_register' );
 
 /**
  * function that handles the migrate process
- * @param  $post Array with post details
- * @param  $fields Array with migration data (content_relation:types, content_relations:targets)
+ * @param  array $post with post details
+ * @param  array $fields with migration data (content_relation:types, content_relations:targets)
  *
  */
 function ph_content_relations_post_content_relations_handler($post, $fields)
@@ -123,7 +154,6 @@ function ph_content_relations_post_content_relations_handler($post, $fields)
 	/**
 	 * save relations
 	 */
-	require_once plugin_dir_path( __FILE__ ) . 'classes/class-content-relations-store.php';
 	$store = new Content_Relations_Store( $post['ID'] );
 	foreach ( $targets as $key => $target ) {
 		if($target == null) continue;
