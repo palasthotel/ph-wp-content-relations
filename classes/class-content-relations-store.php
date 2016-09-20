@@ -32,7 +32,7 @@ class Content_Relations_Store {
 
 	/**
 	 * saves relations to post object
-	 * @return  relations
+	 * @return array relations
 	 */
 	public function get_relations(){
 		if ( $this->content_relations == null ){
@@ -97,7 +97,7 @@ class Content_Relations_Store {
 
 	/**
 	 * get all relation types
-	 * @return  relation_types
+	 * @return  array relation_types
 	 */
 	public function get_types(){
 		if ( $this->relation_types == null ){
@@ -130,7 +130,7 @@ class Content_Relations_Store {
 	/**
 	 * deletes all relations with post id as source
 	 * @param   targets  	boolean if target relations should be cleared too
-	 * @return  numbers of rows that were deleted
+	 * @return  int numbers of rows that were deleted
 	 */
 	public function clear($target = false){
 		global $wpdb;
