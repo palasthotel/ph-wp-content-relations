@@ -1,64 +1,99 @@
-## Content Relations
+# Content Relations
 
 You can add typed relations between posts with a new meta box in post editor. The plugin is available on [WordPress.org](https://wordpress.org/plugins/content-relations/)
 
-### Use in Theme
+## Use in Theme
 
 You can use the following functions in theme. **Wrap with if function_exists.**
 
 ---
 
-Get all relations related to the post ID.
-
-**Params:**
-
-post_id: ID of the post we want relations for.
+### Get all relations related to the post ID.
 
 
 ```php
 $relatioins = ph_content_relations_get_relations_by_post_id($post_id)
 ```
 
-**Returns Array of Objects:**
+**Parameters:**
 
-source_id: Post ID of source post. (The Post in which meta field the relation was created)
- 
-target_id: Post ID of related target.
 
-type: Relation type slug.
- 
-weight: Weight of relation in list. (Used for sorting) 
+_$post_id_ 
 
-post_title: Title of related post.
+ID of the post we want relations for.
+
+
+**Return**
+
+_$source_id_ 
+
+Post ID of source post. (The Post in which meta field the relation was created)
  
-post_type: Post type of related post.
+_$target_id_ 
+
+Post ID of related target.
+
+_$type_ 
+
+Relation type slug.
+ 
+_$weight_ 
+
+Weight of relation in list. (Used for sorting) 
+
+_post_title_  
+
+Title of related post.
+ 
+_post_type_ 
+
+Post type of related post.
 
 ---
 
-Get all relations of a type by the post ID.
+### Get all relations of a type by the post ID.
 
-Params:
-
-post_id: ID of the post we want relations for.
-
-type_slug: Slug of relation type.
-
-source_only: get only relations where post ID is source or all relations.
+**Parameters:**
 
 ```php
 $relations = ph_content_relations_get_relations_by_post_id_and_type($post_id, $relation_type, $source_only = true);
 ```
 
-**Returns Array of Objects:**
+_post_id_ 
 
-source_id: Post ID of source post. (The Post in which meta field the relation was created)
- 
-target_id: Post ID of related target.
+ID of the post we want relations for.
 
-type: Relation type slug.
+_type_slug_
  
-weight: Weight of relation in list. (Used for sorting) 
+Slug of relation type. Default: true
 
-post_title: Title of related post.
+_source_only_ 
+
+get only relations where post ID is source or all relations.
+
+
+**Return**
+
+_source_id_ 
+
+Post ID of source post. (The Post in which meta field the relation was created)
  
-post_type: Post type of related post.
+_target_id_ 
+
+Post ID of related target.
+
+_type_ 
+
+Relation type slug.
+ 
+_weight_ 
+
+Weight of relation in list. (Used for sorting) 
+
+_post_title_ 
+
+Title of related post.
+ 
+_post_type_ 
+
+Post type of related post.
