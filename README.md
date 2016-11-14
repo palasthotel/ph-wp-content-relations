@@ -25,6 +25,8 @@ ID of the post we want relations for.
 
 **Return**
 
+Array of objects as follows:
+
 _$source_id_ 
 
 Post ID of source post. (The Post in which meta field the relation was created)
@@ -73,6 +75,8 @@ get only relations where post ID is source or all relations.
 
 
 **Return**
+
+Array of objects as follows:
 
 _source_id_ 
 
