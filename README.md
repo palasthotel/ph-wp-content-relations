@@ -18,38 +18,24 @@ $relatioins = ph_content_relations_get_relations_by_post_id($post_id)
 **Parameters:**
 
 
-_$post_id_ 
-
-ID of the post we want relations for.
+_$post_id_ ==> ID of the post we want relations for.
 
 
 **Return**
 
 Array of objects as follows:
 
-_$source_id_ 
-
-Post ID of source post. (The Post in which meta field the relation was created)
+_source_id_ ==> Post ID of source post. (The Post in which meta field the relation was created)
  
-_$target_id_ 
+_target_id_ ==> Post ID of related target.
 
-Post ID of related target.
-
-_$type_ 
-
-Relation type slug.
+_type_ ==> Relation type slug.
  
-_$weight_ 
+_weight_ ==> Weight of relation in list. (Used for sorting) 
 
-Weight of relation in list. (Used for sorting) 
-
-_post_title_  
-
-Title of related post.
+_post_title_ ==> Title of related post.
  
-_post_type_ 
-
-Post type of related post.
+_post_type_ ==> Post type of related post.
 
 ---
 
@@ -61,43 +47,25 @@ Post type of related post.
 $relations = ph_content_relations_get_relations_by_post_id_and_type($post_id, $relation_type, $source_only = true);
 ```
 
-_post_id_ 
+_$post_id_ ==> ID of the post we want relations for.
 
-ID of the post we want relations for.
+_$type_slug_ ==> Slug of relation type. Default: true
 
-_type_slug_
- 
-Slug of relation type. Default: true
-
-_source_only_ 
-
-get only relations where post ID is source or all relations.
+_$source_only_ ==> Get only relations where post ID is source or all relations.
 
 
 **Return**
 
 Array of objects as follows:
 
-_source_id_ 
-
-Post ID of source post. (The Post in which meta field the relation was created)
+_source_id_ ==> Post ID of source post. (The Post in which meta field the relation was created)
  
-_target_id_ 
+_target_id_ ==> Post ID of related target.
 
-Post ID of related target.
-
-_type_ 
-
-Relation type slug.
+_type_ ==> Relation type slug.
  
-_weight_ 
+_weight_ ==> Weight of relation in list. (Used for sorting) 
 
-Weight of relation in list. (Used for sorting) 
-
-_post_title_ 
-
-Title of related post.
+_post_title_ ==> Title of related post.
  
-_post_type_ 
-
-Post type of related post.
+_post_type_ ==> Post type of related post.
