@@ -1,6 +1,6 @@
 ## Content Relations
 
-You can add typed relations between posts with a new meta box in post editor.
+You can add typed relations between posts with a new meta box in post editor. The plugin is available on [WordPress.org](https://wordpress.org/plugins/content-relations/)
 
 ### Use in Theme
 
