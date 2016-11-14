@@ -12,7 +12,7 @@ Add relations between posts.
 
 == Description ==
 
-You can add relations beween posts with a new meta box in post editor.
+You can add relations between posts with a new meta box in post editor.
 
 == Installation ==
 
