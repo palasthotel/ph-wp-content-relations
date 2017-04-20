@@ -1,5 +1,5 @@
 === Content Relations ===
-Contributors: edwardbock
+Contributors: palasthotel, edwardbock
 Donate link: http://palasthotel.de/
 Tags: post, relation, metabox
 Requires at least: 4.0
