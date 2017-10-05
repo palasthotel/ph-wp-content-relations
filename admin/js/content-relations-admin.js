@@ -356,7 +356,9 @@
 						var relation = relations_by_type[type][i];
 						$relations.append(renderListItem( type, relation.source_id, relation.target_id, relation.post_title, relation.pub_date, relation.post_type, relation.src ));
 					};
-					$relations.sortable();
+					$relations.sortable({
+						handle: ".relation-sort"
+					});
 					$list.append($section);
 				}
 				
@@ -397,19 +399,22 @@
 				var icon_type = "dashicons-no relation-delete";
 				
 				var display_id = target_id;
-				if(ID == target_id){
+				if(ID === target_id){
 					display_id = source_id;
 					icon_type = "dashicons-external relation-external";
 				}
 				var link = "<a target='_new' href='/wp-admin/post.php?post="+display_id+"&action=edit'>"+post_title+"</a>";
 				var icon = "<span class='dashicons "+icon_type+"'></span> ";
+				var icon_sort = "<span class='dashicons dashicons-sort relation-sort'></span>"
+
 				var image = "";
-				if(post_type == "attachment"){
+				if(post_type === "attachment"){
 					classes+= "ph-content-relation-has-image ";
 					image = "<img class='ph-relation-image' src='"+src+"' />";
 				}
 				var $display = $("<div class='content-relation-item-title'>"
 								+icon
+								+icon_sort
 								+link
 								+"</div>");
 				var $infos = $("<div class='content-relation-infos'>"

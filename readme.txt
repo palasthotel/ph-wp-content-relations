@@ -4,7 +4,7 @@ Donate link: http://palasthotel.de/
 Tags: post, relation, metabox
 Requires at least: 4.0
 Tested up to: 4.6.1
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -27,6 +27,9 @@ You can add relations between posts with a new meta box in post editor.
 
 
 == Changelog ==
+
+= 1.0.4 =
+* Sortable handler icon
 
 = 1.0.3 =
 * sortable relations

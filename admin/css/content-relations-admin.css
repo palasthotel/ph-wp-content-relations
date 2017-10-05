@@ -106,7 +106,7 @@
 	padding-right: 70px;
 }
 .content-relation-infos{
-	margin-left: 24px;
+	margin-left: 30px;
 	color: #6e6e6e;
 }
 .ph-relation-image{
@@ -114,6 +114,15 @@
 	top: 2px;
 	right: 2px;
 	height: 60px;
+}
+.content-relation-item .relation-sort{
+	margin: 0 5px;
+	cursor: pointer;
+}
+.content-relation-item .relation-delete{
+	position: absolute;
+	top: 0;
+	right: 5px;
 }
 .content-relation-item:hover .relation-delete{
 	color: #a00;
