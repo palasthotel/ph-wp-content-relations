@@ -119,7 +119,8 @@
 	margin: 0 8px 0 2px;
 	cursor: pointer;
 }
-.content-relation-item .relation-delete{
+.content-relation-item .relation-delete,
+.content-relation-item .relation-external{
 	position: absolute;
 	top: 5px;
 	right: 5px;
