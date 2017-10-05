@@ -403,7 +403,7 @@
 					display_id = source_id;
 					icon_type = "dashicons-external relation-external";
 				}
-				var link = "<a target='_new' href='/wp-admin/post.php?post="+display_id+"&action=edit'>"+post_title+"</a>";
+
 				var icon = "<span class='dashicons "+icon_type+"'></span> ";
 				var icon_sort = "<span class='dashicons dashicons-sort relation-sort'></span>"
 
@@ -412,14 +412,14 @@
 					classes+= "ph-content-relation-has-image ";
 					image = "<img class='ph-relation-image' src='"+src+"' />";
 				}
-				var trashed = ""
+				var link = "<a target='_new' href='/wp-admin/post.php?post="+display_id+"&action=edit'>"+post_title+"</a>";
 				if(post_status === "trash"){
-					trashed = " [<a href='/wp-admin/edit.php?post_status=trash&post_type="+post_type+"' target='_blank'>is in trash</a>]";
+					link = "<a href='/wp-admin/edit.php?post_status=trash&post_type="+post_type+"' target='_blank'>"+post_title+"</a> is in trash!";
 				}
 				var $display = $("<div class='content-relation-item-title'>"
 								+icon
 								+icon_sort
-								+link + trashed
+								+link
 								+"</div>");
 				var $infos = $("<div class='content-relation-infos'>"
 								+"ID " + display_id + " - " + post_type + " - " + pub_date
@@ -452,6 +452,18 @@
 				delete relations[_ID+"-"+_target_id+"-"+_type];
 				renderRelations();
 			});
+
+		    /**
+		     * on move item to trash
+			 */
+		    $(".submitdelete").on("click", function(e){
+			    if(Object.keys(relations).length > 0){
+			    	if(!window.confirm('This content has content relations which could break if you move it to trash. Want to proceed?')){
+			    		e.preventDefault();
+			    		return false;
+				    }
+			    }
+		    });
 
 		 	/**
 		 	* Init relations that are already saved
