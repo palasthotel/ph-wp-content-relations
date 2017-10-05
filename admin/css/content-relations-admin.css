@@ -121,12 +121,20 @@
 }
 .content-relation-item .relation-delete{
 	position: absolute;
-	top: 0;
+	top: 5px;
 	right: 5px;
+	z-index: 2;
+	background-color: rgba(247, 247, 247, 0.8);
+	border-radius: 10px;
+}
+.content-relation-item.ph-content-relation-has-image .relation-delete{
+	opacity: 0.3;
+	transition: opacity 0.3s;
 }
 .content-relation-item:hover .relation-delete{
 	color: #a00;
 	cursor: pointer;
+	opacity: 1;
 }
 .clearfix:after {
     visibility: hidden;
