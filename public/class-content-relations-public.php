@@ -66,17 +66,13 @@ class Content_Relations_Public {
 	 */
 	public function add_relations_to_rest_api($object){
 
-		$post = get_post( $object['id'] );
-		setup_postdata($post);
-
-		$current_post = $post;
-
 		/**
 		 * @var $store \Content_Relations_Store
 		 */
-		$store    = $post->content_relations;
+		$post_id = $object['id'];
+		$store    = new Content_Relations_Store($post_id);
 		$relations = $store->get_relations();
-		return apply_filters('content_relations_modify_rest_json', $relations, $store);
+		return apply_filters('content_relations_modify_rest_json', $relations, $store, $post_id);
 	}
 
 }
