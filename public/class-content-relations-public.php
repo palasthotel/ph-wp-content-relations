@@ -48,7 +48,7 @@ class Content_Relations_Public {
 		$post_types = get_post_types( array( 'public' => true ), 'objects' );
 		foreach ( $post_types as $post_type ) {
 			register_rest_field( $post_type->name,
-				'content_relations',
+				apply_filters('content_relations_modify_rest_attribute_name', 'content_relations', $post_type),
 				array(
 					'get_callback' => array( $this, 'add_relations_to_rest_api' ),
 					'schema'       => null,
