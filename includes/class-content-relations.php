@@ -127,6 +127,8 @@ class Content_Relations {
 		// on post render
 		$this->loader->add_action( 'the_post', $plugin_public, 'add_relations_to_post' );
 
+		$this->loader->add_action('rest_api_init', $plugin_public, 'rest_api_init');
+
 	}
 
 	/**

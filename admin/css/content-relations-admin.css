@@ -116,7 +116,7 @@
 	height: 60px;
 }
 .content-relation-item .relation-sort{
-	margin: 0 5px;
+	margin: 0 8px 0 2px;
 	cursor: pointer;
 }
 .content-relation-item .relation-delete{

@@ -41,4 +41,42 @@ class Content_Relations_Public {
 		$post->content_relations = new Content_Relations_Store( $post->ID );
 	}
 
+	/**
+	 * on initialization of rest api
+	 */
+	public function rest_api_init(){
+		$post_types = get_post_types( array( 'public' => true ), 'objects' );
+		foreach ( $post_types as $post_type ) {
+			register_rest_field( $post_type->name,
+				'content_relations',
+				array(
+					'get_callback' => array( $this, 'add_relations_to_rest_api' ),
+					'schema'       => null,
+				)
+			);
+		}
+	}
+
+	/**
+	 * add relations to json
+	 *
+	 * @param $object
+	 *
+	 * @return array
+	 */
+	public function add_relations_to_rest_api($object){
+
+		$post = get_post( $object['id'] );
+		setup_postdata($post);
+
+		$current_post = $post;
+
+		/**
+		 * @var $store \Content_Relations_Store
+		 */
+		$store    = $post->content_relations;
+		$relations = $store->get_relations();
+		return apply_filters('content_relations_modify_rest_json', $relations, $store);
+	}
+
 }
