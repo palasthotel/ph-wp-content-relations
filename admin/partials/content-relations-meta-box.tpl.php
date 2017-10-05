@@ -80,6 +80,7 @@
 			$relations[$i]->src = $src[0];
 		}
 		$relations[$i]->pub_date = get_the_date('l, F j, Y', $target_pid);
+		$relations[$i]->post_status = get_post_status($target_pid);
 	 } 
 	?>
 	window.ph_content_relations_initial = <?php echo json_encode($relations); ?>;

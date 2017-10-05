@@ -277,6 +277,7 @@ class Content_Relations_Admin
 		$item['post_title'] = $post->post_title;
 		$item['ID'] = $post->ID;
 		$item['post_type'] = $post->post_type;
+		$item['post_status'] = get_post($post->ID);
 		$item['format'] = get_post_format($post->ID);
 		if($post->post_type == "attachment"){
 			$item['src'] = wp_get_attachment_image_src( $post->ID, 'thumbnail', false );

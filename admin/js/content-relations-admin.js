@@ -354,7 +354,7 @@
 					var $relations = $section.find(".content-relations-list-relations");
 					for (var i = 0; i < relations_by_type[type].length; i++) {
 						var relation = relations_by_type[type][i];
-						$relations.append(renderListItem( type, relation.source_id, relation.target_id, relation.post_title, relation.pub_date, relation.post_type, relation.src ));
+						$relations.append(renderListItem( type, relation.source_id, relation.target_id, relation.post_title, relation.pub_date, relation.post_type, relation.src, relation.post_status ));
 					};
 					$relations.sortable({
 						handle: ".relation-sort"
@@ -379,7 +379,7 @@
 			/**
 			 * renders relations list item
 			 */
-			function renderListItem(type, source_id, target_id, post_title, pub_date, post_type, src){
+			function renderListItem(type, source_id, target_id, post_title, pub_date, post_type, src, post_status){
 				var classes = "ph-content-relation ";
 				var $field_type = $("<input />")
 					.attr("name", "ph-content-relations-type[]")
@@ -412,10 +412,14 @@
 					classes+= "ph-content-relation-has-image ";
 					image = "<img class='ph-relation-image' src='"+src+"' />";
 				}
+				var trashed = ""
+				if(post_status === "trash"){
+					trashed = " [<a href='/wp-admin/edit.php?post_status=trash&post_type="+post_type+"' target='_blank'>is in trash</a>]";
+				}
 				var $display = $("<div class='content-relation-item-title'>"
 								+icon
 								+icon_sort
-								+link
+								+link + trashed
 								+"</div>");
 				var $infos = $("<div class='content-relation-infos'>"
 								+"ID " + display_id + " - " + post_type + " - " + pub_date
@@ -467,6 +471,7 @@
 		 				post_type: init_relations[i].post_type,
 		 				src: src,
 		 				pub_date: init_relations[i].pub_date,
+					    post_status: init_relations[i].post_status,
 		 			};
 		 		};
 		 		renderRelations();
