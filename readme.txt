@@ -28,6 +28,9 @@ You can add relations between posts with a new meta box in post editor.
 
 == Changelog ==
 
+= 1.0.5 =
+* Bugfix for WP Multisite Setups
+
 = 1.0.4 =
 * Sortable handler icon
 * REST API compatibility
