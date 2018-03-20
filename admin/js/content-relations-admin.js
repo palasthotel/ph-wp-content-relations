@@ -175,7 +175,7 @@
 					return;
 				}
 				$.ajax({
-					url: "/wp-admin/admin-ajax.php?action=ph_content_relations_title",
+					url: ajaxurl+"?action=ph_content_relations_title",
 					dataType: "json",
 					data: {
 						q: title
