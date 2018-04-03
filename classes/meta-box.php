@@ -1,46 +1,42 @@
 <?php
-
 /**
- * The dashboard-specific functionality of the plugin.
- *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the dashboard-specific stylesheet and JavaScript.
- *
+ * Created by PhpStorm.
+ * User: edward
+ * Date: 03.04.18
+ * Time: 08:21
  */
-class Content_Relations_Admin
-{
 
-	/**
-	 * The ID of this plugin.
-	 *
-	 */
-	private $plugin_name;
+namespace ContentRelations;
 
-	/**
-	 * The version of this plugin.
-	 *
-	 */
-	private $version;
 
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 */
-	public function __construct( $plugin_name, $version )
-	{
+use Content_Relations_Required;
+use Content_Relations_Store;
+use WP_Query;
 
-		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+class MetaBox {
 
+	public function __construct(Plugin $plugin) {
+		$this->plugin = $plugin;
+		add_action( 'admin_menu', array($this, 'menu_page') );
+		add_action( 'add_meta_boxes', array( $this, 'add_post_meta_relations') );
+		add_action( 'save_post', array($this, 'save_post_meta_relations') );
+		add_action( 'delete_post', array($this, 'delete_post_meta_relations') );
+		add_action( 'wp_ajax_ph_content_relations_title', array( $this, 'get_contents_by_title' ) );
 	}
-
 	/**
 	 * Register the menu page for gallery sharing
 	 *
 	 */
 	public function menu_page()
 	{
-		add_submenu_page( 'tools.php', 'Content Relations', 'Content Relations', 'manage_options', 'settings-'.$this->plugin_name, array( $this, 'render_menu' ) );
+		add_submenu_page(
+				'tools.php',
+				'Content Relations',
+				'Content Relations',
+				'manage_options',
+				'settings-content-realations',
+				array( $this, 'render_menu' )
+		);
 	}
 
 	/**
@@ -49,43 +45,43 @@ class Content_Relations_Admin
 	public function render_menu()
 	{
 		$store = new Content_Relations_Store();
-		
+
 		$deleted_relations = "";
 		if ( isset( $_POST[ 'delete_relation' ] ) && is_numeric($_POST["delete_relation"]) ){
 			$type_id = intval($_POST['delete_relation']);
 			$deleted_relations = $store->delete_type($type_id);
 			$deleted_relations = "<p>".$deleted_relations." had been deleted</p>";
-		}		
+		}
 
 		$relation_types = $store->get_types();
-		$page = 'settings-'.$this->plugin_name;
+		$page = 'settings-content-realations';
 		?>
 		<div class="wrap delete-relations-wrapper">
 			<h2>Content Relations</h2>
-			
-				<?php echo $deleted_relations; ?>
-				<table class="form-table">
+
+			<?php echo $deleted_relations; ?>
+			<table class="form-table">
 				<?php
 				foreach ( $relation_types as $relation_type ) {
 					?>
 					<form method="post" action="<?php echo sanitize_text_field( $_SERVER['PHP_SELF'] ).'?page='.sanitize_text_field( $page ); ?>">
-					<tr>
-						<th scope="row"><?php echo $relation_type->type ?> (<?php echo $store->get_relations_count_by_type($relation_type->id); ?>)</th>
-						<input type="hidden" name="delete_relation" value="<?php echo $relation_type->id ; ?>" />
-						<td><?php submit_button( 'Löschen' ,'delete delete-relation-button button-primary', 'delete_'.$relation_type->id ); ?></td>
-					</tr>
+						<tr>
+							<th scope="row"><?php echo $relation_type->type ?> (<?php echo $store->get_relations_count_by_type($relation_type->id); ?>)</th>
+							<input type="hidden" name="delete_relation" value="<?php echo $relation_type->id ; ?>" />
+							<td><?php submit_button( 'Löschen' ,'delete delete-relation-button button-primary', 'delete_'.$relation_type->id ); ?></td>
+						</tr>
 					</form>
 					<?php
-				}	
+				}
 				?>
-				</table>
-				<script type="text/javascript">
+			</table>
+			<script type="text/javascript">
 				jQuery(".delete-relations-wrapper").on("click", ".delete-relation-button", function(e){
 					if(!confirm("Do you really want to delete this relation type and all post relations of this type?")){
 						e.preventDefault();
 					}
 				});
-				</script>			
+			</script>
 		</div>
 		<?php
 	}
@@ -101,21 +97,21 @@ class Content_Relations_Admin
 			'ph_meta_box_content_relations',
 			__( 'Content relations', 'ph_content_relations' ),
 			array( $this, 'render_post_meta_relations' )
-			// 'post'
+		// 'post'
 		);
 		/**
 		 * Add css and javascript for meta box
 		 */
 		wp_enqueue_style(
-			$this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/content-relations-admin.css',
+			'content-realations-style', $this->plugin->url . '/css/content-relations-admin.css',
 			array(),
-			$this->version,
+			1,
 			'all'
 		);
 		wp_enqueue_script(
-			$this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/content-relations-admin.js',
+			'content-realations-js', $this->plugin->url . '/js/content-relations-admin.js',
 			array( 'jquery', 'jquery-ui-autocomplete', 'jquery-ui-sortable' ),
-			$this->version,
+			1,
 			false
 		);
 
@@ -136,7 +132,7 @@ class Content_Relations_Admin
 		/**
 		 * template file for content relations meta box
 		 */
-		include plugin_dir_path( __FILE__ ) . 'partials/content-relations-meta-box.tpl.php';
+		include dirname( __FILE__ ) . '/../parts/content-relations-meta-box.tpl.php';
 	}
 
 	/**
@@ -175,7 +171,7 @@ class Content_Relations_Admin
 			return $post_id;
 		}
 
-		
+
 
 		$types = $_POST['ph-content-relations-type'];
 		/**
@@ -217,7 +213,7 @@ class Content_Relations_Admin
 	 * Endpoint for getting gallery ids
 	 */
 	public function get_contents_by_title() {
-		
+
 		if( !isset( $_GET['q'] ) ){
 			print json_encode( array( 'result' => array() ) );
 			die();
@@ -252,7 +248,7 @@ class Content_Relations_Admin
 			 * Cleanup WP_Query results to minimize result size
 			 * Add gallery images for preview in backend
 			 */
-			
+
 			foreach ( $query->posts as $post ) {
 				$item = $this->get_contents_item($post);
 				$format = $item["format"];
@@ -285,5 +281,4 @@ class Content_Relations_Admin
 		$item['pub_date'] = get_the_date('l, F j, Y', $post->ID);
 		return $item;
 	}
-
 }

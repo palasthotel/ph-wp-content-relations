@@ -157,18 +157,19 @@ class Content_Relations_Store {
 
 	/**
 	 * Adds a single relation
+	 * @return false|int
 	 */
 	public function add_relation($source_id, $target_id, $type, $weight = 0){
 		global $wpdb;
 		// if there are invalid posts given, don't add them.
-		if ( intval( $source_id ) <= 0 || intval( $target_id ) <= 0 ) { return; }
+		if ( intval( $source_id ) <= 0 || intval( $target_id ) <= 0 ) { return false; }
 		$type_id = $this->get_type_id( $type );
 		if ( $type_id == null ){
 			// add the type if it does not exist yet
 			$type_id = $this->add_type( $type );
 			// if the type was empty, add_type returns -1.
 			// catch this and return without creating the relation
-			if ( $type_id === -1 ) { return; }
+			if ( $type_id === -1 ) { return false; }
 		}
 		return $wpdb->replace(
 			$wpdb->prefix.'content_relations',

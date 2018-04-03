@@ -8,131 +8,107 @@
  * Author:            PALASTHOTEL by Edward Bock
  */
 
+namespace ContentRelations;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
 /**
- * The code that runs during plugin activation.
- */
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-content-relations-activator.php';
-
-/** This action is documented in includes/class-content-relations-activator.php */
-register_activation_hook( __FILE__, array( 'Content_Relations_Activator', 'activate' ) );
-
-/**
- * The code that runs during plugin deactivation.
- */
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-content-relations-deactivator.php';
-
-/** This action is documented in includes/class-content-relations-deactivator.php */
-register_deactivation_hook( __FILE__, array( 'Content_Relations_Deactivator', 'deactivate' ) );
-
-/**
- * The core plugin class that is used to define internationalization,
- * dashboard-specific hooks, and public-facing site hooks.
- */
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-content-relations.php';
-
-/**
- * Begins execution of the plugin.
+ * Class Plugin
  *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
+ * @package ContentRelations
  */
-function run_ph_content_relations()
-{
-	$plugin = new Content_Relations();
-	$plugin->run();
-
-}
-run_ph_content_relations();
-
-/**
- * Adds a new relation
- * @param $post_id_source Post ID
- * @param $post_id_target Post ID
- * @param $relation_type type string
- * @return false|int|void
- */
-function ph_content_relations_add_relation($post_id_source, $post_id_target, $relation_type){
-	$store = new Content_Relations_Store($post_id_source);
-	return $store->add_relation($post_id_target, $relation_type);
-}
-
-/**
- * All relations by post id
- * @param $post_id
- * @return relations
- */
-function ph_content_relations_get_relations_by_post_id($post_id){
-	$store = new Content_Relations_Store($post_id);
-	return $store->get_relations();
-}
-
-/**
- * All relations by post id and type. Optional you can get both directions and not only relations where post is source
- * @param $post_id
- * @param $relation_type
- * @param bool|true $source_only
- * @return array
- */
-function ph_content_relations_get_relations_by_post_id_and_type($post_id, $relation_type, $source_only = true){
-	$store = new Content_Relations_Store($post_id);
-	return $store->get_relations_by_type($relation_type, $source_only);
-}
-
-
-/**
- * -------------> PH Migrate Part
- */
-/**
- * registeres handler for content relations
- *
- */
-function ph_content_relations_post_content_relations_handler_register()
-{
-	ph_migrate_register_field_handler( 'ph_post_destination','content_relations:','ph_content_relations_post_content_relations_handler' );
-}
-add_action( 'ph_migrate_register_field_handlers','ph_content_relations_post_content_relations_handler_register' );
-
-/**
- * function that handles the migrate process
- * @param  $post Array with post details
- * @param  $fields Array with migration data (content_relation:types, content_relations:targets)
- *
- */
-function ph_content_relations_post_content_relations_handler($post, $fields)
-{
-	$types = $fields['content_relations:types'];
-	$targets = $fields['content_relations:targets'];
+class Plugin{
 
 	/**
-	 * be sure that there are arrays
+	 * singleton pattern
+	 * @var Plugin
 	 */
-	if ( ! is_array( $types ) ){
-		$types = array( $types );
-	}
-	if ( ! is_array( $targets ) ){
-		$targets = array( $targets );
+	private static $instance =  null;
+	public static function instance(){
+		if(self::$instance == null) self::$instance = new Plugin();
+		return self::$instance;
 	}
 
 	/**
-	 * save relations
+	 * Plugin constructor.
 	 */
-	require_once plugin_dir_path( __FILE__ ) . 'classes/class-content-relations-store.php';
-	$store = new Content_Relations_Store( $post['ID'] );
-	foreach ( $targets as $key => $target ) {
-		if($target == null) continue;
-		if($types[ $key ] == null) continue;
-		$store->add_relation( $post['ID'], $target, $types[ $key ] );
+	private function __construct() {
+
+		$this->url = plugin_dir_url( __FILE__ );
+
+		/**
+		 * The class that handles required relations for post types
+		 */
+		require_once dirname(__FILE__)."/classes/class-content-relations-required.php";
+
+		/**
+		 * The class that handles all data
+		 */
+		require_once dirname(__FILE__)."/classes/class-content-relations-store.php";
+
+		/**
+		 * Post meta box
+		 */
+		require_once dirname(__FILE__)."/classes/meta-box.php";
+		$this->meta_box = new MetaBox($this);
+
+		/**
+		 * Post meta box
+		 */
+		require_once dirname(__FILE__)."/classes/post.php";
+		$this->post = new Post($this);
+
+		/**
+		 * Post meta box
+		 */
+		require_once dirname(__FILE__)."/classes/rest-api.php";
+		$this->rest_api = new RestApi($this);
+
+
+		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+	}
+
+	function activate(){
+		/**
+		 * wpdb object for prefix
+		 */
+		global $wpdb;
+		/**
+		 * require upgrade.php for dbDelta function
+		 */
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		/**
+		 * Create content_relations_relations table
+		 */
+		dbDelta('CREATE TABLE IF NOT EXISTS `'.$wpdb->prefix.'content_relations` (
+				  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+				  `source_id` int(11) unsigned NOT NULL,
+				  `target_id` int(11) unsigned NOT NULL,
+				  `type_id` int(11) NOT NULL,
+				  `weight` int(11) NOT NULL,
+				  PRIMARY KEY (`id`),
+				  UNIQUE KEY `item_key` (`source_id`,`target_id`, `type_id`),
+				  KEY `source_id` (`source_id`),
+				  KEY `target_id` (`target_id`),
+				  KEY `type_id` (`type_id`)
+				) DEFAULT CHARSET=utf8;');
+
+		/**
+		 * create content_relations_types table
+		 */
+		dbDelta( 'CREATE TABLE IF NOT EXISTS `'.$wpdb->prefix."content_relations_types` (
+				  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+				  `type` varchar(30) NOT NULL DEFAULT '',
+				  PRIMARY KEY (`id`),
+				  UNIQUE KEY `type` (`type`)
+				) DEFAULT CHARSET=utf8;");
 	}
 
 }
-/**
- * -------------> PH Migrate Part END
- */
+Plugin::instance();
 
+require_once dirname(__FILE__)."/public-functions.php";
+require_once dirname(__FILE__)."/migrate.php";
