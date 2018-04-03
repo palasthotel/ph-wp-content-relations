@@ -2,6 +2,30 @@
 
 You can add typed relations between posts with a new meta box in post editor. The plugin is available on [WordPress.org](https://wordpress.org/plugins/content-relations/)
 
+## WP_Query Extension
+
+You can use the ```content_relations``` argument in ```new WP_Query($args)``` to get related posts.
+
+```php
+$query = new WP_Query(array(
+	...
+	"content_relations" => array(
+		"from" => $post_id,
+		"to" => $post_id,
+		"with" => $post_id,
+		"type"=> String|Array of strings
+	)
+));
+```
+
+_from_ ==> Get post relations created on post edit $post_id page
+
+_to_ ==> Get post relations created on related posts edit page
+
+_with_ ==> Get _from_ AND _to_ related posts
+
+_type_ ==> Get only posts with specified type or types
+
 ## Use in Theme
 
 You can use the following functions in theme. **Wrap with if function_exists.**
