@@ -62,6 +62,12 @@ class Plugin{
 		$this->post = new Post($this);
 
 		/**
+		 * WP_Query args extension
+		 */
+		require_once dirname(__FILE__)."/classes/wp-post-query-extension.php";
+		$this->wp_query_extension = new WPPostQueryExtension($this);
+
+		/**
 		 * Post meta box
 		 */
 		require_once dirname(__FILE__)."/classes/rest-api.php";
