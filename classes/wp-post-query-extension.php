@@ -43,15 +43,15 @@ class WPPostQueryExtension {
 		if(!is_array($relation_param) && !is_object($relation_param)) return $where;
 
 		// get args from query
-		$to = null;
+		$to   = null;
 		$from = null;
-		if(isset($relation_param[self::ARG_RELATED_WITH]) && is_integer($relation_param[self::ARG_RELATED_WITH]) ){
-			$to = intval($relation_param[self::ARG_RELATED_WITH]);
-			$from = intval($relation_param[self::ARG_RELATED_WITH]);
+		if ( isset( $relation_param[ self::ARG_RELATED_WITH ] ) && $this->isOnlyNumbers($relation_param[ self::ARG_RELATED_WITH ]) ) {
+			$to   = intval( $relation_param[ self::ARG_RELATED_WITH ] );
+			$from = intval( $relation_param[ self::ARG_RELATED_WITH ] );
 		} else {
-			if(isset($relation_param[self::ARG_RELATED_TO]) && is_integer($relation_param[self::ARG_RELATED_TO]) ) {
+			if ( isset( $relation_param[ self::ARG_RELATED_TO ] ) && $this->isOnlyNumbers($relation_param[ self::ARG_RELATED_TO ]) ) {
 				$to = intval( $relation_param[ self::ARG_RELATED_TO ] );
-			} else if (isset($relation_param[self::ARG_RELATED_FROM]) && is_integer($relation_param[self::ARG_RELATED_FROM]) ){
+			} else if ( isset( $relation_param[ self::ARG_RELATED_FROM ] ) && $this->isOnlyNumbers($relation_param[ self::ARG_RELATED_FROM ]) ) {
 				$from = intval( $relation_param[ self::ARG_RELATED_FROM ] );
 			}
 		}
@@ -106,4 +106,11 @@ class WPPostQueryExtension {
 		return $where;
 	}
 
+	private function isOnlyNumbers($var){
+		if( is_integer( $var ) || preg_match( '/\\d/', $var ) === 1 ){
+			return true;
+		}
+
+		return false;
+	}
 }
