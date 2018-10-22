@@ -23,6 +23,15 @@ if ( ! defined( 'WPINC' ) ) {
 class Plugin{
 
 	/**
+	 * WP_Query args extension
+	 */
+	const WP_QUERY_ARG_RELATION = "content_relations";
+	const WP_QUERY_ARG_RELATED_TO = "to";
+	const WP_QUERY_ARG_RELATED_FROM = "from";
+	const WP_QUERY_ARG_RELATED_WITH = "with";
+	const WP_QUERY_ARG_RELATED_TYPE = "type";
+
+	/**
 	 * singleton pattern
 	 * @var Plugin
 	 */

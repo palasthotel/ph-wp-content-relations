@@ -11,12 +11,6 @@ namespace ContentRelations;
 
 class WPPostQueryExtension {
 
-	const ARG_RELATION = "content_relations";
-	const ARG_RELATED_TO = "to";
-	const ARG_RELATED_FROM = "from";
-	const ARG_RELATED_WITH = "with";
-	const ARG_RELATED_TYPE = "type";
-
 	/**
 	 * WPPostQueryExtension constructor.
 	 *
@@ -36,29 +30,29 @@ class WPPostQueryExtension {
 	function posts_where($where, $query){
 
 		// no relation query parameter set
-		if(!isset($query->query_vars[self::ARG_RELATION]) || empty($query->query_vars[self::ARG_RELATION])) return $where;
+		if(!isset($query->query_vars[Plugin::WP_QUERY_ARG_RELATION]) || empty($query->query_vars[Plugin::WP_QUERY_ARG_RELATION])) return $where;
 
-		$relation_param = $query->query_vars[self::ARG_RELATION];
+		$relation_param = $query->query_vars[Plugin::WP_QUERY_ARG_RELATION];
 		// no valid element
 		if(!is_array($relation_param) && !is_object($relation_param)) return $where;
 
 		// get args from query
 		$to   = null;
 		$from = null;
-		if ( isset( $relation_param[ self::ARG_RELATED_WITH ] ) && $this->isOnlyNumbers($relation_param[ self::ARG_RELATED_WITH ]) ) {
-			$to   = intval( $relation_param[ self::ARG_RELATED_WITH ] );
-			$from = intval( $relation_param[ self::ARG_RELATED_WITH ] );
+		if ( isset( $relation_param[ Plugin::WP_QUERY_ARG_RELATED_WITH ] ) && $this->isOnlyNumbers($relation_param[ Plugin::WP_QUERY_ARG_RELATED_WITH ]) ) {
+			$to   = intval( $relation_param[ Plugin::WP_QUERY_ARG_RELATED_WITH ] );
+			$from = intval( $relation_param[ Plugin::WP_QUERY_ARG_RELATED_WITH ] );
 		} else {
-			if ( isset( $relation_param[ self::ARG_RELATED_TO ] ) && $this->isOnlyNumbers($relation_param[ self::ARG_RELATED_TO ]) ) {
-				$to = intval( $relation_param[ self::ARG_RELATED_TO ] );
-			} else if ( isset( $relation_param[ self::ARG_RELATED_FROM ] ) && $this->isOnlyNumbers($relation_param[ self::ARG_RELATED_FROM ]) ) {
-				$from = intval( $relation_param[ self::ARG_RELATED_FROM ] );
+			if ( isset( $relation_param[ Plugin::WP_QUERY_ARG_RELATED_TO ] ) && $this->isOnlyNumbers($relation_param[ Plugin::WP_QUERY_ARG_RELATED_TO ]) ) {
+				$to = intval( $relation_param[ Plugin::WP_QUERY_ARG_RELATED_TO ] );
+			} else if ( isset( $relation_param[ Plugin::WP_QUERY_ARG_RELATED_FROM ] ) && $this->isOnlyNumbers($relation_param[ Plugin::WP_QUERY_ARG_RELATED_FROM ]) ) {
+				$from = intval( $relation_param[ Plugin::WP_QUERY_ARG_RELATED_FROM ] );
 			}
 		}
 
 		$types = array();
-		if(isset($relation_param[self::ARG_RELATED_TYPE])){
-			$type = $relation_param[self::ARG_RELATED_TYPE];
+		if(isset($relation_param[Plugin::WP_QUERY_ARG_RELATED_TYPE])){
+			$type = $relation_param[Plugin::WP_QUERY_ARG_RELATED_TYPE];
 			if(is_string($type)){
 				$types[] = sanitize_text_field($type);
 			} else if(is_array($type)){
@@ -96,8 +90,6 @@ class WPPostQueryExtension {
 			}
 			$conditions[] = " (ID IN ( SELECT target_id FROM {$prefix}content_relations WHERE source_id = $from ) $type_conditions) ";
 		}
-
-		$dings = " AND ( ".join(" OR ",$conditions)." )";
 
 		if(count($conditions) > 0){
 			$where.=" AND ( ".join(" OR ",$conditions)." )";
