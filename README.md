@@ -2,6 +2,16 @@
 
 You can add typed relations between posts with a new meta box in post editor. The plugin is available on [WordPress.org](https://wordpress.org/plugins/content-relations/)
 
+## Filters
+
+Disable content relations meta box for some posts.
+
+```
+add_filter('content_relations_add_meta_box', function($doIt, $post_type, $post){
+	return false;
+}) 
+```
+
 ## WP_Query Extension
 
 You can use the ```content_relations``` argument in ```new WP_Query($args)``` to get related posts.
@@ -36,7 +46,7 @@ You can use the following functions in theme. **Wrap with if function_exists.**
 
 
 ```php
-$relatioins = ph_content_relations_get_relations_by_post_id($post_id)
+$relatioins = content_relations_get_relations_by_post_id($post_id)
 ```
 
 **Parameters:**
@@ -68,7 +78,7 @@ _post_type_ ==> Post type of related post.
 **Parameters:**
 
 ```php
-$relations = ph_content_relations_get_relations_by_post_id_and_type($post_id, $relation_type, $source_only = true);
+$relations = content_relations_get_relations_by_post_id_and_type($post_id, $relation_type, $source_only = true);
 ```
 
 _$post_id_ ==> ID of the post we want relations for.
