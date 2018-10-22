@@ -42,6 +42,17 @@ You can use the following functions in theme. **Wrap with if function_exists.**
 
 ---
 
+### Get relation store object
+
+```php
+$store = content_relations_get_store($post_id);
+```
+
+**Parameters:**
+
+
+_$post_id_ ==> ID of the post we want relations for.
+
 ### Get all relations related to the post ID.
 
 

@@ -1,6 +1,15 @@
 <?php
 
 /**
+ * @param $post_id
+ *
+ * @return \Content_Relations_Store
+ */
+function content_relations_get_store($post_id){
+	return new Content_Relations_Store($post_id);
+}
+
+/**
  * Adds a new relation
  * @param $post_id_source WP_Post ID
  * @param $post_id_target WP_Post ID
@@ -8,7 +17,7 @@
  * @return false|int
  */
 function content_relations_add_relation($post_id_source, $post_id_target, $relation_type){
-	$store = new Content_Relations_Store($post_id_source);
+	$store = content_relations_get_store($post_id_source);
 	return $store->add_relation($post_id_source, $post_id_target, $relation_type);
 }
 
@@ -30,7 +39,7 @@ function ph_content_relations_add_relation($post_id_source, $post_id_target, $re
  * @return array relations
  */
 function content_relations_get_relations_by_post_id($post_id){
-	$store = new Content_Relations_Store($post_id);
+	$store = content_relations_get_store($post_id);
 	return $store->get_relations();
 }
 
@@ -52,7 +61,7 @@ function ph_content_relations_get_relations_by_post_id($post_id){
  * @return array
  */
 function content_relations_get_relations_by_post_id_and_type($post_id, $relation_type, $source_only = true){
-	$store = new Content_Relations_Store($post_id);
+	$store = content_relations_get_store($post_id);
 	return $store->get_relations_by_type($relation_type, $source_only);
 }
 
