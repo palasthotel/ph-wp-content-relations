@@ -18,7 +18,7 @@ class MetaBox {
 	public function __construct(Plugin $plugin) {
 		$this->plugin = $plugin;
 		add_action( 'admin_menu', array($this, 'menu_page') );
-		add_action( 'add_meta_boxes', array( $this, 'add_post_meta_relations') );
+		add_action( 'add_meta_boxes', array( $this, 'add_post_meta_relations'), 10, 2 );
 		add_action( 'save_post', array($this, 'save_post_meta_relations') );
 		add_action( 'delete_post', array($this, 'delete_post_meta_relations') );
 		add_action( 'wp_ajax_ph_content_relations_title', array( $this, 'get_contents_by_title' ) );
@@ -90,8 +90,10 @@ class MetaBox {
 	 * Register meta fields for content relations to post
 	 *
 	 */
-	public function add_post_meta_relations()
+	public function add_post_meta_relations($post_type, $post)
 	{
+		// should I render meta box?
+		if(!apply_filters(Plugin::FILTER_ADD_META_BOX, true, $post_type, $post)) return;
 
 		add_meta_box(
 			'ph_meta_box_content_relations',

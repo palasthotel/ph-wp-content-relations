@@ -32,6 +32,11 @@ class Plugin{
 	const WP_QUERY_ARG_RELATED_TYPE = "type";
 
 	/**
+	 * Filters
+	 */
+	const FILTER_ADD_META_BOX = "content_relations_add_meta_box";
+
+	/**
 	 * singleton pattern
 	 * @var Plugin
 	 */
