@@ -26,7 +26,7 @@ function add_relation($source_id, $target_id, $type, $weight = 0){
 	$type_id = get_type_id( $type );
 	if ( $type_id == null ){
 		// add the type if it does not exist yet
-		$type_id = $this->add_type( $type );
+		$type_id = add_type( $type );
 		// if the type was empty, add_type returns -1.
 		// catch this and return without creating the relation
 		if ( $type_id === -1 ) { return false; }
