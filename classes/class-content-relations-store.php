@@ -102,6 +102,19 @@ class Content_Relations_Store {
 	}
 
 	/**
+	 * Delete all relations with post id as source and a given type
+	 *
+	 * @param string $type
+	 * @param int numbers of rows that were deleted
+	 *
+	 * @return false|int
+	 */
+	public function clearByType($type, $target = false){
+		return Db\clearByType($this->post_ID, $type, $target);
+	}
+
+
+	/**
 	 * deletes all relations with post id as source
 	 * @param   boolean if target relations should be cleared too
 	 * @return  int numbers of rows that were deleted

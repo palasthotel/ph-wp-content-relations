@@ -31,8 +31,9 @@ You can add relations between posts with a new meta box in post editor.
 = 1.0.7 =
 * new public function to get the relation store for a post id
 * New filter: with content_relations_add_meta_box you can disable meta box for posts
-* public function with ph_ prefix were deprecated
 * db.php functions refactoring
+* public function with ph_ prefix were deprecated
+* some more public functions were deprecated
 
 = 1.0.6 =
 * WP_Query extension

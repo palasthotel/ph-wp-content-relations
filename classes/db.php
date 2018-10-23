@@ -134,6 +134,26 @@ function clear($post_id, $target = false){
 }
 
 /**
+ * Delete all relations with post id as source and a given type
+ *
+ * @param $post_id
+ * @param string $type
+ * @param bool $target
+ *
+ * @return false|int
+ */
+
+function clearByType($post_id, $type, $target = false){
+	global $wpdb;
+	$type_id = get_type_id($type);
+	if ( $target ){
+		$wpdb->delete( $wpdb->prefix.'content_relations', array( 'target_id' => $post_id, 'type_id' => $type_id ) );
+	}
+	return $wpdb->delete( $wpdb->prefix.'content_relations', array( 'source_id' => $post_id, 'type_id' => $type_id ) );
+}
+
+
+/**
  * install database tables
  */
 function install(){

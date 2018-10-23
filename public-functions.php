@@ -15,6 +15,9 @@ function content_relations_get_store($post_id){
  * @param $post_id_target WP_Post ID
  * @param $relation_type string type
  * @return false|int
+ *
+ * @deprecated please use content_relations_get_store and use the store functions
+ *
  */
 function content_relations_add_relation($post_id_source, $post_id_target, $relation_type){
 	$store = content_relations_get_store($post_id_source);
@@ -27,7 +30,9 @@ function content_relations_add_relation($post_id_source, $post_id_target, $relat
  * @param $relation_type
  *
  * @return false|int
- * @deprecated will be remove with version 2
+ *
+ * @deprecated please use content_relations_get_store and use the store functions
+ *
  */
 function ph_content_relations_add_relation($post_id_source, $post_id_target, $relation_type){
 	return content_relations_add_relation($post_id_source, $post_id_target, $relation_type);
@@ -37,6 +42,9 @@ function ph_content_relations_add_relation($post_id_source, $post_id_target, $re
  * All relations by post id
  * @param $post_id
  * @return array relations
+ *
+ * @deprecated please use content_relations_get_store and use the store functions
+ *
  */
 function content_relations_get_relations_by_post_id($post_id){
 	$store = content_relations_get_store($post_id);
@@ -47,7 +55,9 @@ function content_relations_get_relations_by_post_id($post_id){
  * @param $post_id
  *
  * @return array
- * @deprecated will be removed with version 2
+ *
+ * @deprecated please use content_relations_get_store and use the store functions
+ *
  */
 function ph_content_relations_get_relations_by_post_id($post_id){
 	return content_relations_get_relations_by_post_id($post_id);
@@ -59,6 +69,8 @@ function ph_content_relations_get_relations_by_post_id($post_id){
  * @param $relation_type
  * @param bool|true $source_only
  * @return array
+ *
+ * @deprecated please use content_relations_get_store and use the store functions
  */
 function content_relations_get_relations_by_post_id_and_type($post_id, $relation_type, $source_only = true){
 	$store = content_relations_get_store($post_id);
@@ -71,8 +83,38 @@ function content_relations_get_relations_by_post_id_and_type($post_id, $relation
  * @param bool $source_only
  *
  * @return array
- * @deprecated will be removed with version 2
+ *
+ * @deprecated please use content_relations_get_store and use the store functions
  */
 function ph_content_relations_get_relations_by_post_id_and_type($post_id, $relation_type, $source_only = true){
 	return content_relations_get_relations_by_post_id_and_type($post_id, $relation_type, $source_only);
+}
+
+/**
+ * Delete relations by post id and type
+ *
+ * @param int $post_id
+ * @param string $relation_type
+ *
+ * @return false|int
+ *
+ * @deprecated please use content_relations_get_store and use the store functions
+ */
+function content_relations_delete_relations_by_type($post_id, $relation_type){
+	$store = content_relations_get_store($post_id);
+	return $store->clearByType($relation_type);
+}
+
+/**
+ * Delete relations by post id and type
+ *
+ * @param int $post_id
+ * @param string $relation_type
+ *
+ * @return false|int
+ *
+ * @deprecated please use content_relations_get_store and use the store functions
+ */
+function ph_content_relations_delete_relations_by_type($post_id, $relation_type){
+	return content_relations_delete_relations_by_type($post_id, $relation_type);
 }
