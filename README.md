@@ -9,7 +9,7 @@ Disable content relations meta box for some posts.
 ```
 add_filter('content_relations_add_meta_box', function($doIt, $post_type, $post){
 	return false;
-}) 
+}, 10, 3) 
 ```
 
 ## WP_Query Extension
