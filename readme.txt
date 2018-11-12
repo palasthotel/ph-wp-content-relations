@@ -4,7 +4,7 @@ Donate link: http://palasthotel.de/
 Tags: post, relation, metabox
 Requires at least: 4.0
 Tested up to: 4.9.8
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -27,6 +27,9 @@ You can add relations between posts with a new meta box in post editor.
 
 
 == Changelog ==
+
+= 1.0.8 =
+* hookable into grid posts box
 
 = 1.0.7 =
 * new public function to get the relation store for a post id
