@@ -16,13 +16,12 @@ class Grid {
 	 * @param $cs
 	 */
 	public function grid_box_content_structure( $cs ) {
-		// TODO add box widgets for choosing from/to/with and relation-type(s)
 		$store    = new Content_Relations_Store();
 		$types = $store->get_types();
 
 		$selections = array(
-			array( 'key' => '-1', 'text' => __( '-- No filtering by content relation --' ) ),
-			array( 'key' => '0', 'text' => __( ' All ' ) ),
+			array( 'key' => '-1', 'text' => __( '-- Filter by content relation --' ) ),
+			array( 'key' => '0', 'text' => __( ' All types ' ) ),
 		);
 		foreach ( $types as $type ) {
 			$selections[] = array(
