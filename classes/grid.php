@@ -21,7 +21,8 @@ class Grid {
 		$types = $store->get_types();
 
 		$selections = array(
-			array( 'key' => '0', 'text' => __( '-- All --' ) )
+			array( 'key' => '-1', 'text' => __( '-- No filtering by content relation --' ) ),
+			array( 'key' => '0', 'text' => __( ' All ' ) ),
 		);
 		foreach ( $types as $type ) {
 			$selections[] = array(
@@ -56,7 +57,7 @@ class Grid {
 	 */
 	public function filter_query_args( $args, $content ) {
 
-		if ( isset( $content->content_relation_direction ) ) {
+		if ( isset( $content->content_relation_direction ) && isset( $content->content_relation_type ) && $content->content_relation_type != '-1' ) {
 			global $post;
 			$args['content_relations'] = array();
 			if ( 'both' == $content->content_relation_direction ) {
@@ -66,7 +67,7 @@ class Grid {
 			} elseif ( 'to' == $content->content_relation_direction ) {
 				$args['content_relations']['to'] = $post->ID;
 			}
-			if ( isset( $content->content_relation_type ) && 0 != $content->content_relation_type ) {
+			if ( 0 != $content->content_relation_type ) {
 				$args['content_relations']['type'] = $content->content_relation_type;
 			}
 		}
