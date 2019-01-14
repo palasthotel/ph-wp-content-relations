@@ -3,8 +3,8 @@ Contributors: palasthotel, edwardbock
 Donate link: http://palasthotel.de/
 Tags: post, relation, metabox
 Requires at least: 4.0
-Tested up to: 4.9.8
-Stable tag: 1.0.8
+Tested up to: 4.9.9
+Stable tag: 1.0.9
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -27,6 +27,10 @@ You can add relations between posts with a new meta box in post editor.
 
 
 == Changelog ==
+
+= 1.0.9 =
+* Feature: two new filters for meta box autocomplete args
+* Optimization: Post type names in post edit meta box autocomplete
 
 = 1.0.8 =
 * hookable into grid posts box
