@@ -122,7 +122,7 @@
 		 	 * listens for mousedown on widget list item and selects item
 		 	 */
 		 	 $type_list.on("mousedown", ".content-relation-type-item", function(e){
-		 	 	var $this = $(this);;
+		 	 	var $this = $(this);
 		 	 	if($this.hasClass("content-relation-type-new")){
 		 	 		var new_title = $type_new_item_title.text();
 		 	 		if(new_title.length < 1){
@@ -163,6 +163,7 @@
 			var _value = "";
 			var active_type = null;
 			var autocomplete_items = null;
+			const autocomplete_types = {};
 			$relation_title.on("keyup", function(){
 				if(_value == this.value) return;
 				_value = this.value;
@@ -181,6 +182,10 @@
 						q: title
 					},
 					success: function( data ) {
+						for( let key in data.types){
+							if(!data.types.hasOwnProperty(key)) continue;
+							autocomplete_types[key] = data.types[key];
+						}
 						autocomplete_items = data.result;
 						build_autocomplete( data.result );
 					}
@@ -191,7 +196,10 @@
 				var $list = $("<ul>").addClass("ph-content-relation-autocomplete-list");
 				jQuery.each(result,function(type, list){
 					if(list.length > 0){
-						$types.append("<div class='ph-relation-post-type post-type-"+type+"'>"+type+"</div>");
+						const label = (typeof autocomplete_types[type] === typeof "")? autocomplete_types[type]: type;
+						$types.append(
+							$("<div class='ph-relation-post-type post-type-"+type+"'>"+label+"</div>").data("type", type)
+						);
 						build_autocomplete_items($list, list, type);
 					}
 				});
@@ -235,7 +243,7 @@
 				$aw.find(".ph-relation-post-type").removeClass("active");
 				$(this).addClass("active");
 				$aw.find(".post-relation-item").hide();
-				active_type = $(this).text();
+				active_type = $(this).data("type");
 				$aw.find(".post-relation-item.post-type-"+active_type).show();
 			});
 			$autocomplete_wrapper.on("click", ".post-relation-item", function(){
@@ -485,7 +493,7 @@
 		 				pub_date: init_relations[i].pub_date,
 					    post_status: init_relations[i].post_status,
 		 			};
-		 		};
+		 		}
 		 		renderRelations();
 		 	}
 		 	initRelationsList();
@@ -495,7 +503,8 @@
 		 	this.add_relation = function(post_id, post_title, type_name, pub_date, post_type, src){
 		 		addRelation(post_id, post_title, type_name, pub_date, post_type, src);
 		 	}
-	 	}
+	 	};
+
 	 	// to global object
 	 	window.content_relations = new ContentRelations();
 
