@@ -85,10 +85,14 @@
 	?>
 	window.ph_content_relations_initial = <?php echo json_encode($relations); ?>;
 	</script>
-	
+
+	<?php do_action(\ContentRelations\Plugin::ACTION_META_BOX_LIST_BEFORE, $post); ?>
+
 	<div class="content-relations-contents">
 		<ul class="content-relations-list"></ul>
 	</div>
+
+	<?php do_action(\ContentRelations\Plugin::ACTION_META_BOX_LIST_AFTER, $post); ?>
 
 	<?php
 	if (!empty( $required_types )) { 

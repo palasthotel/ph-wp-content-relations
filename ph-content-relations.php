@@ -4,7 +4,7 @@
  * @wordpress-plugin
  * Plugin Name:       Content Relations
  * Description:       To relate contents to other contents.
- * Version:           1.0.9
+ * Version:           1.0.10
  * Author:            PALASTHOTEL by Edward Bock
  */
 
@@ -38,6 +38,12 @@ class Plugin{
 
 	const FILTER_META_BOX_POST_TYPES = "content_relations_meta_box_post_types";
 	const FILTER_META_BOX_FIND_QUERY_ARGS = "content_relations_meta_box_find_query_args";
+
+	/**
+	 * actions
+	 */
+	const ACTION_META_BOX_LIST_BEFORE = "content_relations_meta_box_list_before";
+	const ACTION_META_BOX_LIST_AFTER = "content_relations_meta_box_list_after";
 
 	/**
 	 * singleton pattern
