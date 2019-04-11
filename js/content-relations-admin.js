@@ -1,13 +1,27 @@
 /**
  * Javascript for post editor content relations box
  */
- (function( $ ) {
+ (function( $, cr ) {
  	'use strict';
+ 	const post_id =  cr.config.ID;
+ 	const post_type = cr.config.post_type;
 	/**
 	 * Start after dom is ready
 	 */
 	 $(function() {
 	 	var ContentRelations = function(){
+
+		    /*
+		     * public events
+		     */
+		    const $events = $(window);
+	 		const EVENTS = {
+	 		    ITEM_RENDERED: "content_relations_item_rendered",
+		    };
+	 		const triggerEvent = (event, data)=>{
+				$events.trigger(event, data);
+		    };
+
 		 	/**
 		 	 * get the post ID
 		 	 */
@@ -69,7 +83,7 @@
 		 					while($prev.hasClass("hide") && $prev.length > 0){
 			 					$prev = $prev.prev();
 			 				}
-		 				} 
+		 				}
 		 				if($prev.length > 0){
 		 					$prev.addClass("selected");
 		 				} else {
@@ -102,7 +116,7 @@
 			 			$type_new_item_title.text($this.val());
 			 			filter_type($this.val());
 		 			break;
-		 		}	 		
+		 		}
 		 	});
 
 		 	function filter_type(text){
@@ -179,7 +193,9 @@
 					url: ajaxurl+"?action=ph_content_relations_title",
 					dataType: "json",
 					data: {
-						q: title
+						q: title,
+						post_id: post_id,
+						post_type: post_type,
 					},
 					success: function( data ) {
 						for( let key in data.types){
@@ -213,7 +229,7 @@
 					}
 				}
 				$types.children().first().trigger("click");
-				
+
 			}
 			function build_autocomplete_items($list, items, type){
 				jQuery.each(items, function(index, item){
@@ -230,7 +246,7 @@
 			 	 		img = "<img class='post-relation-image' src='"+item.src[0]+"' />";
 			 	 	}
 			 	 	var $item = $( "<li class='"+classes+"'></li>" )
-			 	 	.append( img+"<div class='post-relation-title'>" + item.post_title + 
+			 	 	.append( img+"<div class='post-relation-title'>" + item.post_title +
 			 	 		"<br>ID " + item.ID + " - "+type+" - "+item.pub_date+"</div>" );
 
 			 	 	$item.attr("data-type", type).attr("data-index", index);
@@ -261,7 +277,7 @@
 	 	 		} else {
 	 	 			$relation_widget.removeAttr("data-src");
 	 	 		}
-	 	 		
+
 	 	 		$relation_widget.attr("data-pub-date", item.pub_date);
 	 	 		if( $type_widget.attr("data-type-name") != ""){
 					$relation_add.trigger("click");
@@ -331,11 +347,11 @@
 	 	 	 */
 	 	 	 function addRelation(target_id, post_title, type_name, pub_date, post_type, src){
 	 	 	 	relations[ID+"-"+target_id+"-"+type_name] = {
-	 	 	 		source_id: ID, 
-	 	 	 		target_id: target_id, 
-	 	 	 		post_title: post_title, 
-	 	 	 		type: type_name, 
-	 	 	 		post_type: post_type, 
+	 	 	 		source_id: ID,
+	 	 	 		target_id: target_id,
+	 	 	 		post_title: post_title,
+	 	 	 		type: type_name,
+	 	 	 		post_type: post_type,
 	 	 	 		src: src ,
 	 	 	 		pub_date: pub_date,
 	 	 	 	};
@@ -369,7 +385,7 @@
 					});
 					$list.append($section);
 				}
-				
+
 			}
 
 			/**
@@ -405,7 +421,7 @@
 					.val(target_id);
 
 				var icon_type = "dashicons-no relation-delete";
-				
+
 				var display_id = target_id;
 				if(ID === target_id){
 					display_id = source_id;
@@ -440,12 +456,24 @@
 					.attr("data-type", type)
 					.append($display)
 					.append($infos);
-				if(image != ""){
+				if(image !== ""){
 					$item.append(image);
-				}			
+				}
 				$item.append($field_type)
 					.append($field_soruce_id)
 					.append($field_target_id);
+
+				triggerEvent(EVENTS.ITEM_RENDERED, {
+					$element: $item,
+					type,source_id,
+					target_id,
+					post_title,
+					pub_date,
+					post_type,
+					src,
+					post_status
+				});
+
 				return $item;
 			}
 
@@ -482,11 +510,11 @@
 		 			var src = null;
 		 			if(typeof init_relations[i].src != "undefined"){
 		 				src = init_relations[i].src;
-		 			} 
+		 			}
 		 			relations[init_relations[i].source_id+"-"+init_relations[i].target_id+"-"+init_relations[i].type] = {
-		 				source_id: init_relations[i].source_id, 
-		 				target_id: init_relations[i].target_id, 
-		 				post_title: init_relations[i].post_title, 
+		 				source_id: init_relations[i].source_id,
+		 				target_id: init_relations[i].target_id,
+		 				post_title: init_relations[i].post_title,
 		 				type: init_relations[i].type,
 		 				post_type: init_relations[i].post_type,
 		 				src: src,
@@ -512,4 +540,4 @@
 
 	
 
-})( jQuery );
+})( jQuery, _ContentRelations );

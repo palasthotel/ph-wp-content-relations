@@ -113,7 +113,7 @@ class MetaBox {
 
 		add_meta_box(
 			'ph_meta_box_content_relations',
-			__( 'Content relations', 'ph_content_relations' ),
+			apply_filters( Plugin::FILTER_META_BOX_TITLE, __( 'Content relations', 'ph_content_relations' ), $post_type, $post),
 			array( $this, 'render_post_meta_relations' )
 		// 'post'
 		);
@@ -121,16 +121,29 @@ class MetaBox {
 		 * Add css and javascript for meta box
 		 */
 		wp_enqueue_style(
-			'content-realations-style', $this->plugin->url . '/css/content-relations-admin.css',
+			'content-relations-style', $this->plugin->url . '/css/content-relations-admin.css',
 			array(),
 			1,
 			'all'
 		);
 		wp_enqueue_script(
-			'content-realations-js', $this->plugin->url . '/js/content-relations-admin.js',
+			'content-relations-js', $this->plugin->url . '/js/content-relations-admin.js',
 			array( 'jquery', 'jquery-ui-autocomplete', 'jquery-ui-sortable' ),
 			1,
 			false
+		);
+		wp_localize_script(
+			'content-relations-js',
+			'_ContentRelations',
+			array(
+				"config" => array(
+					"ID" => $post->ID,
+					"post_type" => $post_type,
+				),
+				"i18n" => array(
+
+				),
+			)
 		);
 
 	}
@@ -230,12 +243,14 @@ class MetaBox {
 	 */
 	public function get_contents_by_title() {
 
-		if ( ! isset( $_GET['q'] ) ) {
+		if ( ! isset( $_GET['q'] ) || ! isset( $_GET['post_id'] ) || ! isset( $_GET['post_type'] ) ) {
 			print json_encode( array( 'result' => array() ) );
 			die();
 		}
 
 		$query_string = sanitize_text_field( $_GET['q'] );
+		$post_id_context = sanitize_text_field( $_GET['post_id'] );
+		$post_type_context = sanitize_text_field( $_GET['post_type'] );
 		$result       = array();
 
 		/**
@@ -252,7 +267,9 @@ class MetaBox {
 
 		$post_types = apply_filters(
 			Plugin::FILTER_META_BOX_POST_TYPES,
-			get_post_types( array( 'public' => true ) )
+			get_post_types( array( 'public' => true ) ),
+			$post_type_context,
+			$post_id_context
 		);
 		$types = array();
 		foreach ( $post_types as $type ) {
