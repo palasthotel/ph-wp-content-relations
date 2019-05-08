@@ -3,12 +3,19 @@
 namespace ContentRelations\Db;
 
 /**
+ * @return \wpdb
+ */
+function wpdb(){
+	global $wpdb;
+	return $wpdb;
+}
+
+/**
  * @param $type_id
  * @return int
  */
 function count_relations_by_type( $type_id ){
-	global $wpdb;
-	return intval($wpdb->get_var("SELECT count(id) FROM ".$wpdb->prefix."content_relations WHERE type_id = ".$type_id)) ;
+	return intval(wpdb()->get_var("SELECT count(id) FROM ".wpdb()->prefix."content_relations WHERE type_id = ".$type_id)) ;
 }
 
 /**
@@ -20,7 +27,6 @@ function count_relations_by_type( $type_id ){
  * @return bool|false|int
  */
 function add_relation($source_id, $target_id, $type, $weight = 0){
-	global $wpdb;
 	// if there are invalid posts given, don't add them.
 	if ( intval( $source_id ) <= 0 || intval( $target_id ) <= 0 ) { return false; }
 	$type_id = get_type_id( $type );
@@ -31,8 +37,8 @@ function add_relation($source_id, $target_id, $type, $weight = 0){
 		// catch this and return without creating the relation
 		if ( $type_id === -1 ) { return false; }
 	}
-	return $wpdb->replace(
-		$wpdb->prefix.'content_relations',
+	return wpdb()->replace(
+		wpdb()->prefix.'content_relations',
 		array(
 			'source_id' => $source_id,
 			'target_id' => $target_id,
@@ -48,7 +54,7 @@ function add_relation($source_id, $target_id, $type, $weight = 0){
  */
 function get_relations($post_id){
 
-	global $wpdb;
+	$wpdb = wpdb();
 
 	// get relations where this post is source
 	$query = 'SELECT source_id, target_id, type, weight, post_title, post_type '.
@@ -82,9 +88,8 @@ function get_relations($post_id){
  * @return int
  */
 function add_type($type){
-	global $wpdb;
-	$wpdb->insert( $wpdb->prefix.'content_relations_types', array( 'type' => $type ), array( '%s' ) );
-	return $wpdb->insert_id;
+	wpdb()->insert( wpdb()->prefix.'content_relations_types', array( 'type' => $type ), array( '%s' ) );
+	return wpdb()->insert_id;
 }
 
 /**
@@ -94,9 +99,8 @@ function add_type($type){
  * @return false|int
  */
 function delete_type($type_id){
-	global $wpdb;
-	$deleted = $wpdb->delete($wpdb->prefix.'content_relations', array('type_id' => $type_id), array('%d'));
-	$wpdb->delete($wpdb->prefix.'content_relations_types', array('id' => $type_id), array('%d'));
+	$deleted = wpdb()->delete(wpdb()->prefix.'content_relations', array('type_id' => $type_id), array('%d'));
+	wpdb()->delete(wpdb()->prefix.'content_relations_types', array('id' => $type_id), array('%d'));
 	return $deleted;
 }
 
@@ -106,8 +110,7 @@ function delete_type($type_id){
  * @return null|string
  */
 function get_type_id($type){
-	global $wpdb;
-	return $wpdb->get_var( 'SELECT id FROM '.$wpdb->prefix."content_relations_types WHERE type='$type' LIMIT 1" );
+	return wpdb()->get_var( 'SELECT id FROM '.wpdb()->prefix."content_relations_types WHERE type='$type' LIMIT 1" );
 }
 
 /**
@@ -115,8 +118,7 @@ function get_type_id($type){
  * @return  array relation_types
  */
 function get_types(){
-	global $wpdb;
-	return $wpdb->get_results( 'SELECT * FROM '.$wpdb->prefix.'content_relations_types', OBJECT );
+	return wpdb()->get_results( 'SELECT * FROM '.wpdb()->prefix.'content_relations_types', OBJECT );
 }
 
 /**
@@ -126,11 +128,10 @@ function get_types(){
  * @return false|int
  */
 function clear($post_id, $target = false){
-	global $wpdb;
 	if ( $target ){
-		$wpdb->delete( $wpdb->prefix.'content_relations', array( 'target_id' => $post_id ) );
+		wpdb()->delete( wpdb()->prefix.'content_relations', array( 'target_id' => $post_id ) );
 	}
-	return $wpdb->delete( $wpdb->prefix.'content_relations', array( 'source_id' => $post_id ) );
+	return wpdb()->delete( wpdb()->prefix.'content_relations', array( 'source_id' => $post_id ) );
 }
 
 /**
@@ -144,12 +145,11 @@ function clear($post_id, $target = false){
  */
 
 function clearByType($post_id, $type, $target = false){
-	global $wpdb;
 	$type_id = get_type_id($type);
 	if ( $target ){
-		$wpdb->delete( $wpdb->prefix.'content_relations', array( 'target_id' => $post_id, 'type_id' => $type_id ) );
+		wpdb()->delete( wpdb()->prefix.'content_relations', array( 'target_id' => $post_id, 'type_id' => $type_id ) );
 	}
-	return $wpdb->delete( $wpdb->prefix.'content_relations', array( 'source_id' => $post_id, 'type_id' => $type_id ) );
+	return wpdb()->delete( wpdb()->prefix.'content_relations', array( 'source_id' => $post_id, 'type_id' => $type_id ) );
 }
 
 
@@ -158,17 +158,13 @@ function clearByType($post_id, $type, $target = false){
  */
 function install(){
 	/**
-	 * wpdb object for prefix
-	 */
-	global $wpdb;
-	/**
 	 * require upgrade.php for dbDelta function
 	 */
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	/**
 	 * Create content_relations_relations table
 	 */
-	dbDelta('CREATE TABLE IF NOT EXISTS `'.$wpdb->prefix.'content_relations` (
+	dbDelta('CREATE TABLE IF NOT EXISTS `'.wpdb()->prefix.'content_relations` (
 				  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				  `source_id` int(11) unsigned NOT NULL,
 				  `target_id` int(11) unsigned NOT NULL,
@@ -184,7 +180,7 @@ function install(){
 	/**
 	 * create content_relations_types table
 	 */
-	dbDelta( 'CREATE TABLE IF NOT EXISTS `'.$wpdb->prefix."content_relations_types` (
+	dbDelta( 'CREATE TABLE IF NOT EXISTS `'.wpdb()->prefix."content_relations_types` (
 				  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				  `type` varchar(30) NOT NULL DEFAULT '',
 				  PRIMARY KEY (`id`),
