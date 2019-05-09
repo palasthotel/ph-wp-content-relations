@@ -4,7 +4,7 @@
  * @wordpress-plugin
  * Plugin Name:       Content Relations
  * Description:       To relate contents to other contents.
- * Version:           1.0.11
+ * Version:           1.0.12
  * Author:            PALASTHOTEL by Edward Bock
  */
 
