@@ -43,6 +43,7 @@
 		 	 */
 		 	 $type_widget.on("click", ".content-relation-type-title", function(){
 		 	 	var $this = $(this);
+			    $type_list.children().removeClass("hide");
 		 	 	$type_widget.addClass("active");
 		 	 	$type_input.val("");
 		 	 	$type_input.focus();
@@ -139,8 +140,9 @@
 		 	 	var $this = $(this);
 		 	 	if($this.hasClass("content-relation-type-new")){
 		 	 		var new_title = $type_new_item_title.text();
-		 	 		if(new_title.length < 1){
-		 	 			alert("Bitte gib vorher einen Typ-Namen ein.");
+				    const isEmpty = !new_title || /^\s*$/.test(new_title) || new_title.length < 1
+		 	 		if(isEmpty){
+		 	 			alert("Bitte gib vorher einen validen Namen des neuen Verbindungstypen ein.");
 		 	 			e.stopPropagation();
 		 	 			return false;
 		 	 		}
