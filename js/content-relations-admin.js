@@ -140,7 +140,7 @@
 		 	 	var $this = $(this);
 		 	 	if($this.hasClass("content-relation-type-new")){
 		 	 		var new_title = $type_new_item_title.text();
-				    const isEmpty = !new_title || /^\s*$/.test(new_title) || new_title.length < 1
+				    const isEmpty = !new_title || /^\s*$/.test(new_title) || new_title.length < 1;
 		 	 		if(isEmpty){
 		 	 			alert("Bitte gib vorher einen validen Namen des neuen Verbindungstypen ein.");
 		 	 			e.stopPropagation();
@@ -387,6 +387,14 @@
 					});
 					$list.append($section);
 				}
+
+				// if only one type. preselect this type
+			     const $items = $type_list.find(".content-relation-type-item");
+			     if($items.length === 2){
+					const $item = $($items.get(1));
+				     $type_title.text($item.text());
+				     $type_widget.attr("data-type-name", $item.text());
+			     }
 
 			}
 
