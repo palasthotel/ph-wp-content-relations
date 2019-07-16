@@ -31,6 +31,7 @@ class MetaBox {
 			$this,
 			'get_contents_by_title',
 		) );
+		add_filter(Plugin::FILTER_ADD_META_BOX, array($this, 'should_add_meta_box'), 10, 3);
 	}
 
 	/**
@@ -102,10 +103,23 @@ class MetaBox {
 	}
 
 	/**
+	 * @param $add
+	 * @param $post_type
+	 * @param $post
+	 *
+	 * @return bool
+	 */
+	public function should_add_meta_box($add, $post_type, $post){
+		// some plugins like "Members" use meta boxes but are no real post
+		return ($post instanceof \WP_Post);
+	}
+
+	/**
 	 * Register meta fields for content relations to post
 	 *
 	 */
 	public function add_post_meta_relations( $post_type, $post ) {
+
 		// should I render meta box?
 		if ( ! apply_filters( Plugin::FILTER_ADD_META_BOX, true, $post_type, $post ) ) {
 			return;
