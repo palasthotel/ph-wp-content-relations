@@ -3,8 +3,8 @@ Contributors: palasthotel, edwardbock
 Donate link: http://palasthotel.de/
 Tags: post, relation, metabox
 Requires at least: 4.0
-Tested up to: 5.2
-Stable tag: 1.0.12
+Tested up to: 5.2.1
+Stable tag: 1.0.13
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -27,6 +27,9 @@ You can add relations between posts with a new meta box in post editor.
 
 
 == Changelog ==
+
+= 1.0.13 =
+* Bugfix: error when using "Members" plugin
 
 = 1.0.12 =
 * Optimization: check to prevent empty types
