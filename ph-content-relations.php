@@ -18,6 +18,8 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Class Plugin
  *
+ * @property string url
+ * @property string path
  * @package ContentRelations
  */
 class Plugin{
@@ -62,6 +64,7 @@ class Plugin{
 	private function __construct() {
 
 		$this->url = plugin_dir_url( __FILE__ );
+		$this->path = plugin_dir_path(__FILE__);
 
 		/**
 		 * db handle

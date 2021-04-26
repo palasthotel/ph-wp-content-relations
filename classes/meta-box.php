@@ -137,13 +137,13 @@ class MetaBox {
 		wp_enqueue_style(
 			'content-relations-style', $this->plugin->url . '/css/content-relations-admin.css',
 			array(),
-			1,
+			filemtime($this->plugin->path."/css/content-relations-admin.css"),
 			'all'
 		);
 		wp_enqueue_script(
 			'content-relations-js', $this->plugin->url . '/js/content-relations-admin.js',
 			array( 'jquery', 'jquery-ui-autocomplete', 'jquery-ui-sortable' ),
-			1,
+			filemtime($this->plugin->path."/js/content-relations-admin.js"),
 			false
 		);
 		wp_localize_script(

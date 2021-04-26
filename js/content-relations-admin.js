@@ -306,8 +306,8 @@
 		 	 		return false;
 		 	 	}
 		 	 };
-		 	 $type_input.keydown(no_submit);
-		 	 $relation_title.keydown(no_submit);
+		 	 $type_input.on('keydown',no_submit);
+		 	 $relation_title.on('keydown', no_submit);
 
 		 	 /**
 		 	  * add button listener
