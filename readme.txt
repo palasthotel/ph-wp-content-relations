@@ -4,7 +4,7 @@ Donate link: http://palasthotel.de/
 Tags: post, relation, metabox
 Requires at least: 4.0
 Tested up to: 6.0.1
-Stable tag: 1.0.13
+Stable tag: 1.0.14
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
