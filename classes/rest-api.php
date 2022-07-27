@@ -14,6 +14,7 @@ use Content_Relations_Store;
 class RestApi {
 	public function __construct(Plugin $plugin) {
 		add_action('rest_api_init', array( $this, 'rest_api_init') );
+		add_filter('content_relations_modify_rest_json', [$this, 'content_relations_modify_rest_json'], 10 , 3);
 	}
 
 
@@ -49,5 +50,14 @@ class RestApi {
 		$store    = new Content_Relations_Store($post_id);
 		$relations = $store->get_relations();
 		return apply_filters('content_relations_modify_rest_json', $relations, $store, $post_id);
+	}
+
+	public function content_relations_modify_rest_json($relations, $store, $post_id){
+		if(current_user_can("edit_posts")){
+			return $relations;
+		}
+		return array_filter($relations, function($relation){
+			return get_post_status($relation->source_id) == "publish" && get_post_status($relation->target_id) == "publish";
+		});
 	}
 }
