@@ -11,6 +11,8 @@ namespace ContentRelations;
 
 class WPPostQueryExtension {
 
+    public Plugin $plugin;
+
 	/**
 	 * WPPostQueryExtension constructor.
 	 *

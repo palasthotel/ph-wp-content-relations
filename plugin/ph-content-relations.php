@@ -17,12 +17,17 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * Class Plugin
- *
- * @property string url
- * @property string path
  * @package ContentRelations
  */
 class Plugin{
+
+    public string $url;
+    public string $path;
+    public MetaBox $meta_box;
+    public Post $post;
+    public WPPostQueryExtension $wp_query_extension;
+    public RestApi $rest_api;
+    public Grid $grid;
 
 	/**
 	 * WP_Query args extension

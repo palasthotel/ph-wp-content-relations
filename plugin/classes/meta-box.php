@@ -15,6 +15,8 @@ use WP_Query;
 
 class MetaBox {
 
+    public Plugin $plugin;
+
 	public function __construct( Plugin $plugin ) {
 		$this->plugin = $plugin;
 		add_action( 'admin_menu', array( $this, 'menu_page' ) );
