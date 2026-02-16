@@ -1,0 +1,121 @@
+---
+name: Build and release to WordPress.org
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-release:
+    name: Build and deploy to WordPress.org
+    runs-on: ubuntu-latest
+    env:
+# get tag_name from release data
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
+    steps:
+      - name: Notify on start
+        run: |
+          echo "Starting release process for tag $RELEASE_TAG..."  
+          echo "This may take a few minutes. Please wait."
+
+      - name: Normalize release tag
+        shell: bash
+# #v/V removes leading v or V from tag
+# echo "VERSION=$VERSION" >> $GITHUB_ENV: safe the sanitized
+# version number to the github environment so other jobs can
+# use it
+        run: |
+          VERSION=${RELEASE_TAG#v}
+          VERSION=${VERSION#V}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Show release version
+        run: echo "VERSION=$VERSION"
+
+      - name: Checkout code
+# Get code files
+        uses: actions/checkout@v6
+
+      - name: Check version numbers
+# make version-checker.sh executable and run it
+# todo: understand and change the version-checker
+        run: |
+          chmod +x .github/workflows/scripts/version-checker.sh
+          ./.github/workflows/scripts/version-checker.sh
+
+      - name: Install SVN
+        run: |
+          sudo apt-get update  
+          sudo apt-get install -y subversion  
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer, wp-cli
+
+      - name: Install rsync
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rsync
+
+      - name: Create zip for release
+        run: |
+          chmod +x bin/build-plugin.sh
+          ./bin/build-plugin.sh
+
+      - name: Verify zip exists
+        run: test -f ./content-relations.zip
+
+      - name: Upload release asset
+        id: upload_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./content-relations.zip
+          asset_name: content-relations.zip
+          asset_content_type: application/zip
+
+      - name: Checkout WordPress SVN repository
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: svn checkout "https://plugins.svn.wordpress.org/content-relations" svn --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --no-auth-cache --non-interactive --trust-server-cert
+
+      - name: Prepare SVN & commit
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: |
+          ls -la
+          cd svn
+          ls -la
+          mkdir -p trunk "tags/$VERSION"
+          rsync -a --delete ../plugin/ trunk/
+          rsync -a --delete trunk/ "tags/$VERSION/"
+          svn add --force . || true
+          svn status | awk '/^!/{print $2}' | while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            svn rm "$file" || true
+          done
+          svn status
+          echo "===== TRUNK CONTENTS ====="
+          ls -la trunk
+          echo "===== TAG CONTENTS ====="
+          ls -la "tags/$VERSION"
+          # todo: reactivate after testing
+          # svn commit -m "Release version $VERSION" --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --no-auth-cache --non-interactive --trust-server-cert
+
+  # todo: since the vm is deleted after each run anyways, cannot I just ommit this?
+      - name: Cleanup SVN checkout
+        if: always()
+        run: rm -rf svn
+
+      - name: Notify on success
+        if: success()
+        run: |
+         echo "Plugin successfully deployed to WordPress.org and GitHub!"  
+         echo "Version ${RELEASE_TAG} is now live!"
