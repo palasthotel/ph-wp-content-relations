@@ -14,7 +14,12 @@ defined( 'WPINC' ) || exit;
  */
 class TypesScreen {
 
-	const PAGE_SLUG = 'settings-content-realations';
+	const PAGE_SLUG = 'settings-content-relations';
+
+	// The misspelled slug 1.0.15 shipped with (note "realations"). Anyone who bookmarked
+	// or linked the page under the typo gets redirected rather than "Sorry, you are not
+	// allowed to access this page." - see menu_page().
+	const LEGACY_PAGE_SLUG = 'settings-content-realations';
 
 	private Plugin $plugin;
 	private ?TypesListTable $table = null;
@@ -41,6 +46,39 @@ class TypesScreen {
 		if ( $hook ) {
 			add_action( "load-$hook", array( $this, 'load' ) );
 		}
+
+		// Registering under the old slug keeps its hook reachable by direct URL -
+		// remove_submenu_page() only hides the menu entry, not the registration. The
+		// redirect has to run on load-{$hook}, before admin-header.php starts sending
+		// output - the same reason handle_actions() below runs there rather than in
+		// render(). A first attempt put it in the page callback itself, which fired too
+		// late: "Cannot modify header information - headers already sent".
+		$legacy_hook = add_submenu_page(
+			'tools.php',
+			'',
+			'',
+			$this->capability(),
+			self::LEGACY_PAGE_SLUG,
+			'__return_null'
+		);
+		if ( $legacy_hook ) {
+			add_action( "load-$legacy_hook", array( $this, 'redirect_legacy_slug' ) );
+		}
+		remove_submenu_page( 'tools.php', self::LEGACY_PAGE_SLUG );
+	}
+
+	/**
+	 * Sends a visitor of the old, misspelled URL to the same screen under the corrected
+	 * slug, keeping every other query argument (action, type, s, orderby, message, ...).
+	 */
+	public function redirect_legacy_slug(): void {
+		$args = $_GET;
+		unset( $args['page'] );
+		wp_safe_redirect( add_query_arg(
+			array_merge( array( 'page' => self::PAGE_SLUG ), $args ),
+			admin_url( 'tools.php' )
+		) );
+		exit;
 	}
 
 	public function load(): void {
