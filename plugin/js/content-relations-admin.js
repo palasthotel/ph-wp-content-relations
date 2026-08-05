@@ -198,6 +198,7 @@
 						q: title,
 						post_id: post_id,
 						post_type: post_type,
+						_wpnonce: _ContentRelations.config.nonce,
 					},
 					success: function( data ) {
 						for( let key in data.types){

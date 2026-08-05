@@ -47,7 +47,7 @@
 						{
 							$required_types[] = $type->type;
 						}
-						?><li class="content-relation-type-item" data-value="<?php echo $type->id; ?>"><?php echo $type->type; ?></li><?php
+						?><li class="content-relation-type-item" data-value="<?php echo esc_attr( $type->id ); ?>"><?php echo esc_html( $type->type ); ?></li><?php
 					}
 					?>
 				</ul>
@@ -83,8 +83,10 @@
 		$relations[$i]->post_status = get_post_status($target_pid);
 	 } 
 	?>
-	window.ph_content_relations_initial = <?php echo json_encode($relations); ?>;
-	</script>
+	<?php // JSON_HEX_TAG so a post title containing "</script>" cannot close this block
+	// and inject markup after it. ?>
+	window.ph_content_relations_initial = <?php echo wp_json_encode( $relations, JSON_HEX_TAG ); ?>;
+</script>
 
 	<?php do_action(\ContentRelations\Plugin::ACTION_META_BOX_LIST_BEFORE, $post); ?>
 
