@@ -33,13 +33,20 @@ registerBlockVariation( 'core/query', {
 	icon: 'admin-links',
 	scope: [ 'inserter' ],
 	isActive: ( blockAttributes ) => blockAttributes.namespace === VARIATION,
+	// Post type, order and sticky posts are all decided by the relation, not by these
+	// controls - showing them would offer a choice apply_relation() always overrules.
+	// Everything else (author, search, taxQuery, ...) still narrows the result further, so
+	// those stay.
+	allowedControls: [ 'inherit', 'author', 'search', 'taxQuery', 'format', 'offset', 'pages', 'parents' ],
 	attributes: {
 		namespace: VARIATION,
 		query: {
 			perPage: 10,
 			pages: 0,
 			offset: 0,
-			postType: 'post',
+			// A relation is not scoped to one post type, so post__in must not be narrowed
+			// by one either - postType stays 'any' since its control is hidden.
+			postType: 'any',
 			order: 'desc',
 			orderBy: 'date',
 			author: '',
