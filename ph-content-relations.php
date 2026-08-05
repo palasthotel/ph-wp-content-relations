@@ -1,16 +1,21 @@
 <?php
 
 /**
- * Plugin Name:       Content Relations - DEV
- * Description:       Dev inc file
- * Version:           X.X.X
- * Requires at least: X.X
- * Tested up to:      X.X.X
- * Author:            PALASTHOTEL by Edward
- * Author URI:        http://www.palasthotel.de
+ * Plugin Name:       Content Relations (DEV)
+ * Plugin URI:        https://github.com/palasthotel/ph-wp-content-relations
+ * Description:       Development wrapper. Loads the plugin from plugin/, which is what ships to wordpress.org. Do not deploy this file.
+ * Version:           0.0.0-dev
+ * Requires at least: 4.8
+ * Author:            Palasthotel <rezeption@palasthotel.de> (Edward Bock, Jana Marie Eggebrecht)
+ * Author URI:        https://palasthotel.de
+ * License:           GPL-3.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain:       ph-content-relations
  * Domain Path:       /plugin/languages
  */
 
+// The version above is deliberately not a real one and nothing syncs it. This file never
+// ships, so its version means nothing, and bin/version-checker.sh does not check it.
 
 use ContentRelations\Plugin;
 
