@@ -19,7 +19,7 @@ Push to main
     │
     │    On release PR (opened / synchronize)
     ├──▶ [update-plugin-version.yml]
-    │        Syncs the Version header in plugin/ph-content-relations.php
+    │        Syncs the Version header in public/ph-content-relations.php
     │        + readme.txt Stable tag & changelog entry
     │
     │    On PR to main
@@ -69,7 +69,7 @@ nothing.
 
 Runs only on the release-please PR (`startsWith(github.head_ref, 'release-please--')`). It
 reads the version from `version.txt` and writes it into the `Version:` header of
-`plugin/ph-content-relations.php`, the `Stable tag:` in `plugin/readme.txt`, and a new
+`public/ph-content-relations.php`, the `Stable tag:` in `public/readme.txt`, and a new
 `= x.y.z =` section under `== Changelog ==`, converted from the Markdown release-please
 wrote into `CHANGELOG.md`.
 
@@ -86,7 +86,7 @@ Triggered by a `v*` tag, or manually by `workflow_dispatch` with a version input
 `bin/version-checker.sh` runs first and compares the tag against the version carriers, so
 a mismatch stops the run before anything is published.
 
-`bin/build-plugin.sh` stages `plugin/` in `build/content-relations/` and zips it. The zip
+`bin/build-plugin.sh` stages `public/` in `build/content-relations/` and zips it. The zip
 is attached to the GitHub Release, and the SVN commit rsyncs from the same directory — so
 the release asset and the wordpress.org download are identical.
 

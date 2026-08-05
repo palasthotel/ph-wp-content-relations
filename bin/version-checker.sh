@@ -18,18 +18,18 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TXT_VERSION="$(head -n1 "$ROOT_DIR/version.txt" | tr -d '[:space:]')"
 
 # 2) readme.txt Stable tag
-README_VERSION="$(grep -E '^Stable tag:' "$ROOT_DIR/plugin/readme.txt" | head -n1 | sed -E 's/^Stable tag:[[:space:]]*//')"
+README_VERSION="$(grep -E '^Stable tag:' "$ROOT_DIR/public/readme.txt" | head -n1 | sed -E 's/^Stable tag:[[:space:]]*//')"
 if [[ -z "$README_VERSION" ]]; then
-  echo "ERROR: Konnte 'Stable tag:' nicht in plugin/readme.txt finden" >&2
+  echo "ERROR: Konnte 'Stable tag:' nicht in public/readme.txt finden" >&2
   exit 1
 fi
 
 # 3) the plugin header
-PLUGIN_VERSION="$(grep -E '^[[:space:]]*\*?[[:space:]]*Version:[[:space:]]*[0-9]+\.[0-9]+\.[0-9]+' "$ROOT_DIR/plugin/ph-content-relations.php" \
+PLUGIN_VERSION="$(grep -E '^[[:space:]]*\*?[[:space:]]*Version:[[:space:]]*[0-9]+\.[0-9]+\.[0-9]+' "$ROOT_DIR/public/ph-content-relations.php" \
   | head -n1 \
   | sed -E 's/.*Version:[[:space:]]*([0-9]+\.[0-9]+\.[0-9]+).*/\1/')"
 if [[ -z "$PLUGIN_VERSION" ]]; then
-  echo "ERROR: Konnte 'Version:' nicht in plugin/ph-content-relations.php finden" >&2
+  echo "ERROR: Konnte 'Version:' nicht in public/ph-content-relations.php finden" >&2
   exit 1
 fi
 
