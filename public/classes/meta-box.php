@@ -136,6 +136,13 @@ class MetaBox {
 			return;
 		}
 
+		// In the block editor the sidebar panel does this job, so the meta box would just
+		// be a second, worse copy of it. It stays for the classic editor.
+		$screen = get_current_screen();
+		if ( $screen && method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor() ) {
+			return;
+		}
+
 		add_meta_box(
 			'ph_meta_box_content_relations',
 			apply_filters( Plugin::FILTER_META_BOX_TITLE, __( 'Content relations', 'ph_content_relations' ), $post_type, $post),
