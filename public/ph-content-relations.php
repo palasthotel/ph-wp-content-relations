@@ -39,6 +39,7 @@ class Plugin{
     public RestEditor $rest_editor;
     public BlockEditorAssets $block_editor_assets;
     public TypesScreen $types_screen;
+    public QueryLoop $query_loop;
     public Grid $grid;
 
 	/**
@@ -135,8 +136,8 @@ class Plugin{
 		$this->rest_editor = new RestEditor($this);
 
 		/**
-		 * Translated strings for RelationsEditor.jsx, shared by the sidebar panel and the
-		 * meta box
+		 * Translated strings for the block editor bundle: RelationsEditor.jsx (shared by
+		 * the sidebar panel and the meta box) and the Query Loop variation
 		 */
 		require_once dirname(__FILE__)."/classes/relations-i18n.php";
 
@@ -152,6 +153,12 @@ class Plugin{
 		require_once dirname(__FILE__)."/classes/types-list-table.php";
 		require_once dirname(__FILE__)."/classes/types-screen.php";
 		$this->types_screen = new TypesScreen($this);
+
+		/**
+		 * A "related posts" variation of the core Query Loop block
+		 */
+		require_once dirname(__FILE__)."/classes/query-loop.php";
+		$this->query_loop = new QueryLoop($this);
 
 		/**
 		 * Grid Add Ons

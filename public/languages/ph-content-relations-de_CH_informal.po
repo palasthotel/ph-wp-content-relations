@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Content Relations\n"
 "Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/"
 "issues\n"
-"POT-Creation-Date: 2026-08-05T10:53:02+00:00\n"
+"POT-Creation-Date: 2026-08-05T11:39:50+00:00\n"
 "PO-Revision-Date: 2026-08-05 12:00+0200\n"
 "Last-Translator: Palasthotel <cybertreff@palasthotel.de>\n"
 "Language-Team: Palasthotel <cybertreff@palasthotel.de>\n"
@@ -52,7 +52,7 @@ msgstr "-- Nach Inhaltsbeziehung filtern --"
 msgid " All types "
 msgstr " Alle Typen "
 
-#: classes/grid.php:36 classes/relations-i18n.php:25
+#: classes/grid.php:36 classes/relations-i18n.php:26
 msgid "Relation type"
 msgstr "Beziehungstyp"
 
@@ -72,62 +72,90 @@ msgstr "Beziehungen von diesem Inhalt zu einem anderen"
 msgid "Relations pointing to this post"
 msgstr "Beziehungen, die auf diesen Inhalt zeigen"
 
-#: classes/relations-i18n.php:20
+#: classes/relations-i18n.php:21
 msgid "No relations yet."
 msgstr "Noch keine Beziehungen."
 
-#: classes/relations-i18n.php:21
+#: classes/relations-i18n.php:22
 msgid "Add relation"
 msgstr "Beziehung hinzufügen"
 
-#: classes/relations-i18n.php:22 classes/types-screen.php:198
+#: classes/relations-i18n.php:23 classes/types-screen.php:212
 msgid "Move up"
 msgstr "Nach oben"
 
-#: classes/relations-i18n.php:23 classes/types-screen.php:199
+#: classes/relations-i18n.php:24 classes/types-screen.php:213
 msgid "Move down"
 msgstr "Nach unten"
 
-#: classes/relations-i18n.php:24
+#: classes/relations-i18n.php:25 classes/types-screen.php:215
 msgid "Remove"
 msgstr "Entfernen"
 
-#: classes/relations-i18n.php:26
+#: classes/relations-i18n.php:27
 msgid "Pick a type or type a new name."
 msgstr "Einen Typ wählen oder einen neuen Namen eingeben."
 
-#: classes/relations-i18n.php:27
+#: classes/relations-i18n.php:28
 msgid "Choose a relation type first."
 msgstr "Wähle zuerst einen Beziehungstyp."
 
-#: classes/relations-i18n.php:28
+#: classes/relations-i18n.php:29
 msgid "Add a related post"
 msgstr "Verwandten Inhalt hinzufügen"
 
-#: classes/relations-i18n.php:29
+#: classes/relations-i18n.php:30
 msgid "Search posts…"
 msgstr "Inhalte suchen…"
 
-#: classes/relations-i18n.php:30
+#: classes/relations-i18n.php:31
 msgctxt "post search"
 msgid "No posts found."
 msgstr "Keine Inhalte gefunden."
 
 #. translators: %s is replaced with the typed name in the browser, not by PHP
-#: classes/relations-i18n.php:32
+#: classes/relations-i18n.php:33
 #, php-format
 msgid "Create \"%s\""
 msgstr "„%s“ anlegen"
 
-#: classes/rest-editor.php:148
+#: classes/relations-i18n.php:35
+msgctxt "block editor"
+msgid "Related content"
+msgstr "Verwandte Inhalte"
+
+#: classes/relations-i18n.php:36
+msgctxt "block editor"
+msgid ""
+"Posts this post relates to, under one relation type, in their saved order."
+msgstr ""
+"Beiträge, mit denen dieser Beitrag über einen Beziehungstyp verknüpft ist, "
+"in der gespeicherten Reihenfolge."
+
+#: classes/relations-i18n.php:37
+msgctxt "block editor"
+msgid "Relation type"
+msgstr "Beziehungstyp"
+
+#: classes/relations-i18n.php:38
+msgctxt "block editor"
+msgid "Which of this post's relation types to list."
+msgstr "Welcher Beziehungstyp dieses Beitrags aufgelistet werden soll."
+
+#: classes/relations-i18n.php:39
+msgctxt "block editor"
+msgid "— Select —"
+msgstr "— Auswählen —"
+
+#: classes/rest-editor.php:161
 msgid "You are not allowed to edit the relations of this post."
 msgstr "Du darfst die Beziehungen dieses Inhalts nicht bearbeiten."
 
-#: classes/rest-editor.php:156
+#: classes/rest-editor.php:169
 msgid "Relations must be a list."
 msgstr "Beziehungen müssen eine Liste sein."
 
-#: classes/rest-editor.php:200
+#: classes/rest-editor.php:216
 msgid "A type is required."
 msgstr "Ein Typ ist erforderlich."
 
@@ -155,41 +183,45 @@ msgstr "Bearbeiten"
 msgid "Delete this relation type and every relation of it?"
 msgstr "Diesen Beziehungstyp und alle seine Beziehungen löschen?"
 
-#: classes/types-list-table.php:97
+#: classes/types-list-table.php:98
 msgid "No relation types yet. They appear here once a relation is created."
 msgstr ""
 "Noch keine Beziehungstypen. Sie erscheinen hier, sobald eine Beziehung "
 "angelegt wird."
 
-#: classes/types-screen.php:200
+#: classes/types-screen.php:214
+msgid "Drag to reorder"
+msgstr "Ziehen, um die Reihenfolge zu ändern"
+
+#: classes/types-screen.php:216
 msgid "Save order"
 msgstr "Reihenfolge speichern"
 
-#: classes/types-screen.php:201
+#: classes/types-screen.php:217
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: classes/types-screen.php:202
+#: classes/types-screen.php:218
 msgid "Order saved."
 msgstr "Reihenfolge gespeichert."
 
-#: classes/types-screen.php:203
+#: classes/types-screen.php:219
 msgid "Saving failed."
 msgstr "Speichern fehlgeschlagen."
 
-#: classes/types-screen.php:204
+#: classes/types-screen.php:220
 msgid "This type has no relations."
 msgstr "Dieser Typ hat keine Beziehungen."
 
 #. translators: %s: number of deleted relations
-#: classes/types-screen.php:286
+#: classes/types-screen.php:302
 #, php-format
 msgid "%s relation deleted."
 msgid_plural "%s relations deleted."
 msgstr[0] "%s Beziehung gelöscht."
 msgstr[1] "%s Beziehungen gelöscht."
 
-#: classes/types-screen.php:302
+#: classes/types-screen.php:318
 msgid ""
 "Relation types are created when a relation is added in the editor. Delete a "
 "type here to remove it and every relation of it."
@@ -197,16 +229,16 @@ msgstr ""
 "Beziehungstypen entstehen, wenn im Editor eine Beziehung angelegt wird. Hier "
 "gelöscht, verschwindet der Typ samt all seiner Beziehungen."
 
-#: classes/types-screen.php:305
+#: classes/types-screen.php:321
 msgid "Search types"
 msgstr "Typen durchsuchen"
 
 #. translators: %s: relation type name
-#: classes/types-screen.php:324
+#: classes/types-screen.php:340
 #, php-format
 msgid "Edit relation type: %s"
 msgstr "Beziehungstyp bearbeiten: %s"
 
-#: classes/types-screen.php:330
+#: classes/types-screen.php:346
 msgid "Back to types"
 msgstr "Zurück zu den Typen"
