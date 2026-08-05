@@ -1,7 +1,7 @@
 === Content Relations ===
 Contributors: palasthotel, janaeggebrecht, edwardbock
 Donate link: http://palasthotel.de/
-Tags: post, relation, metabox, rest, related
+Tags: post, relation, related, rest, gutenberg
 Requires at least: 6.6
 Tested up to: 7.0.2
 Requires PHP: 7.4
@@ -9,13 +9,19 @@ Stable tag: 1.0.15
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Relate posts to other posts, with a meta box in the editor and the relations on the REST API.
+Relate posts to other posts, edit them in the block editor sidebar or a meta box, and show them with a Related content block or on the REST API.
 
 == Description ==
 
-Content Relations adds a meta box to the post editor for linking a post to any other post. Relations are typed - you name the kind of relation ("see also", "part of", whatever fits) - and ordered by dragging.
+Content Relations lets you link a post to any other post. Relations are typed - you name the kind of relation ("see also", "part of", whatever fits) - and ordered by dragging.
 
-Each related post's relations are exposed on the REST API under a `content_relations` field, so a headless or block-based front end can read them. Relations to unpublished posts are hidden from anyone who cannot edit posts.
+In the block editor, a **Content Relations** panel in the document sidebar edits a post's relations the same way you'd edit categories: grouped by type, saved with the rest of the post, no separate save button. The classic editor keeps the same editor in a meta box instead.
+
+A **Related content** block - a variation of the core Query Loop block - lists a post's own related posts under one relation type, in the order you set in the sidebar, meta box, or the Tools screen. Drop it in wherever a "related articles" section belongs; it uses the same layout options as any other Query Loop.
+
+**Tools → Content Relations** lists every relation type in a sortable, searchable table. Opening a type there lets you reorder or remove its relations across every post that uses it, grouped by source post, with drag handles or up/down buttons.
+
+Each related post's relations are exposed on the REST API under a `content_relations` field, so a headless front end can read them too. Relations to unpublished posts are hidden from anyone who cannot edit posts.
 
 A `WP_Query` extension lets a query filter by relation: give it a related post id and, optionally, a relation type, and it returns the posts related to it.
 
@@ -23,11 +29,15 @@ A `WP_Query` extension lets a query filter by relation: give it a related post i
 
 1. Install the plugin through **Plugins → Add New**, or upload it to `/wp-content/plugins/`.
 2. Activate it through the **Plugins** menu.
-3. A **Content Relations** meta box appears in the post editor, and a settings page under **Tools → Content Relations** lists the relation types.
+3. A **Content Relations** panel appears in the block editor's document sidebar (a meta box in the classic editor), and a settings page under **Tools → Content Relations** lists the relation types.
 
 == Frequently Asked Questions ==
 
-= How do I read relations on the front end? =
+= How do I show related posts on the front end? =
+
+Add the **Related content** block (in the inserter, under the same category as the Query Loop block) to a post, and pick a relation type in its settings panel. It lists that post's related posts of that type, in the order you set in the sidebar or meta box.
+
+= How do I read relations on the front end myself? =
 
 Every post's REST response carries a `content_relations` field with its relations. In PHP, `content_relations_get_relations_by_post_id( $post_id )` returns the same data.
 

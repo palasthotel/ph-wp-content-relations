@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Content Relations\n"
 "Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/"
 "issues\n"
-"POT-Creation-Date: 2026-08-05T11:39:50+00:00\n"
+"POT-Creation-Date: 2026-08-05T11:53:33+00:00\n"
 "PO-Revision-Date: 2026-08-05 12:00+0200\n"
 "Last-Translator: Palasthotel <cybertreff@palasthotel.de>\n"
 "Language-Team: Palasthotel <cybertreff@palasthotel.de>\n"
@@ -27,11 +27,12 @@ msgstr ""
 #. Description of the plugin
 #: ph-content-relations.php
 msgid ""
-"Relate posts to other posts, with a meta box in the editor and the relations "
-"exposed on the REST API."
+"Relate posts to other posts, edit them in the block editor sidebar or a meta "
+"box, and show them with a Related content block or on the REST API."
 msgstr ""
-"Inhalte mit anderen Inhalten verknüpfen – mit einer Metabox im Editor und "
-"den Beziehungen in der REST-API."
+"Inhalte mit anderen Inhalten verknüpfen, in der Editor-Seitenleiste oder "
+"einer Metabox bearbeiten und mit einem Verwandte-Inhalte-Block oder über "
+"die REST-API anzeigen."
 
 #. Author of the plugin
 #: ph-content-relations.php

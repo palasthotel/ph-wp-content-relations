@@ -1,6 +1,6 @@
 # Content Relations (WordPress-Plugin)
 
-With this plugin you can add typed relations between posts with a new meta box in post editor. The plugin is available on [WordPress.org](https://wordpress.org/plugins/content-relations/) (slug `content-relations`; this repository is `ph-wp-content-relations`).
+With this plugin you can add typed, ordered relations between posts - editable from the block editor's document sidebar, the classic editor's meta box, or the Tools screen - and query them back with a `WP_Query` extension, a REST field, or a Query Loop block variation. The plugin is available on [WordPress.org](https://wordpress.org/plugins/content-relations/) (slug `content-relations`; this repository is `ph-wp-content-relations`).
 
 ## Repository layout
 
@@ -11,6 +11,31 @@ the whole repository can be symlinked into `wp-content/plugins` during developme
 Releases are cut by release-please from conventional commits and deployed to the
 wordpress.org SVN by GitHub Actions — see [.github/WORKFLOWS.md](.github/WORKFLOWS.md).
 Contribution rules and the local setup are in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Editing relations
+
+- **Block editor**: a *Content Relations* panel in the document sidebar, grouped by
+  relation type. Saves with the rest of the post, the way a taxonomy does - no separate
+  save button.
+- **Classic editor**: the same editor (`src/shared/RelationsEditor.jsx`), in a meta box
+  instead of the sidebar.
+- **Tools → Content Relations**: every relation type in a sortable, searchable
+  `WP_List_Table`. Opening a type there lets you reorder or remove its relations across
+  every post that uses it, grouped by source post.
+
+All three write through the same paths: the block editor and meta box via the
+`content_relations_edit` REST field (`classes/rest-editor.php`), the Tools screen's
+per-type editor via `/content-relations/v1/reorder`.
+
+## Showing relations on the front end
+
+- **Related content block**: a `core/query` variation (`src/query-loop/QueryLoopVariation.jsx`,
+  `classes/query-loop.php`) that lists the post it's placed on's own related posts under
+  one chosen type, in their saved order (`post__in` + `orderby=post__in`) - drop it in
+  wherever a "related articles" section belongs.
+- **REST**: a read-only `content_relations` field on every post type's REST response,
+  carrying both directions of a relation.
+- **`WP_Query` extension**: see below.
 
 ## Filters
 
