@@ -26,12 +26,23 @@ const ns = ( window.ContentRelationsTypeEdit || {} ).restNamespace || 'content-r
  * for that post, just gathered in one place. Saving sends each post's new target order to
  * the reorder endpoint, which rebuilds that post keeping its other types untouched.
  */
-export default function TypeEdit( { type, initialGroups, listUrl } ) {
+export default function TypeEdit( { type, initialGroups } ) {
+	// savedGroups is the last state confirmed written to the server - what Reset goes
+	// back to. It starts as the initial load and moves forward on every successful save,
+	// so resetting after a save discards only the edits made since, not the whole visit.
+	const [ savedGroups, setSavedGroups ] = useState( initialGroups );
 	const [ groups, setGroups ] = useState( initialGroups );
 	const [ saving, setSaving ] = useState( false );
 	const [ saved, setSaved ] = useState( false );
 	const [ error, setError ] = useState( null );
-	const [ dirty, setDirty ] = useState( false );
+
+	const dirty = groups !== savedGroups;
+
+	const reset = () => {
+		setGroups( savedGroups );
+		setSaved( false );
+		setError( null );
+	};
 
 	const move = ( groupIndex, from, to ) => {
 		const group = groups[ groupIndex ];
@@ -42,7 +53,6 @@ export default function TypeEdit( { type, initialGroups, listUrl } ) {
 		const [ moved ] = targets.splice( from, 1 );
 		targets.splice( to, 0, moved );
 		setGroups( groups.map( ( g, i ) => ( i === groupIndex ? { ...g, targets } : g ) ) );
-		setDirty( true );
 		setSaved( false );
 	};
 
@@ -61,8 +71,8 @@ export default function TypeEdit( { type, initialGroups, listUrl } ) {
 			},
 		} )
 			.then( () => {
+				setSavedGroups( groups );
 				setSaved( true );
-				setDirty( false );
 			} )
 			.catch( ( err ) => setError( err?.message || __( 'Saving failed.', 'ph-content-relations' ) ) )
 			.finally( () => setSaving( false ) );
@@ -134,8 +144,8 @@ export default function TypeEdit( { type, initialGroups, listUrl } ) {
 					{ __( 'Save order', 'ph-content-relations' ) }
 				</Button>
 				{ saving && <Spinner /> }
-				<Button variant="tertiary" href={ listUrl }>
-					{ __( 'Back to types', 'ph-content-relations' ) }
+				<Button variant="tertiary" disabled={ saving || ! dirty } onClick={ reset }>
+					{ __( 'Reset', 'ph-content-relations' ) }
 				</Button>
 			</Flex>
 		</Flex>

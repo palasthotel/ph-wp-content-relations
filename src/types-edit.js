@@ -12,7 +12,6 @@ domReady( () => {
 		<TypeEdit
 			type={ data.type || '' }
 			initialGroups={ data.groups || [] }
-			listUrl={ data.listUrl || '' }
 		/>
 	);
 } );

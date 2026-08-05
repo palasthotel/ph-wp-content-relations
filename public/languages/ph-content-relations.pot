@@ -9,16 +9,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-05T10:12:03+00:00\n"
+"POT-Creation-Date: 2026-08-05T10:35:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ph-content-relations\n"
 
 #. Plugin Name of the plugin
 #: ph-content-relations.php
-#: classes/types-screen.php:34
-#: classes/types-screen.php:35
-#: classes/types-screen.php:253
+#: classes/types-screen.php:39
+#: classes/types-screen.php:40
+#: classes/types-screen.php:290
 msgid "Content Relations"
 msgstr ""
 
@@ -118,29 +118,28 @@ msgid "No relation types yet. They appear here once a relation is created."
 msgstr ""
 
 #. translators: %s: number of deleted relations
-#: classes/types-screen.php:240
+#: classes/types-screen.php:277
 #, php-format
 msgid "%s relation deleted."
 msgid_plural "%s relations deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/types-screen.php:256
+#: classes/types-screen.php:293
 msgid "Relation types are created when a relation is added in the editor. Delete a type here to remove it and every relation of it."
 msgstr ""
 
-#: classes/types-screen.php:259
+#: classes/types-screen.php:296
 msgid "Search types"
 msgstr ""
 
 #. translators: %s: relation type name
-#: classes/types-screen.php:278
+#: classes/types-screen.php:315
 #, php-format
 msgid "Edit relation type: %s"
 msgstr ""
 
-#: classes/types-screen.php:284
-#: src/types-edit/TypeEdit.jsx:138
+#: classes/types-screen.php:321
 msgid "Back to types"
 msgstr ""
 
@@ -155,12 +154,12 @@ msgid "No relations yet."
 msgstr ""
 
 #: src/shared/RelationsEditor.jsx:184
-#: src/types-edit/TypeEdit.jsx:114
+#: src/types-edit/TypeEdit.jsx:124
 msgid "Move up"
 msgstr ""
 
 #: src/shared/RelationsEditor.jsx:191
-#: src/types-edit/TypeEdit.jsx:121
+#: src/types-edit/TypeEdit.jsx:131
 msgid "Move down"
 msgstr ""
 
@@ -193,18 +192,22 @@ msgctxt "post search"
 msgid "No posts found."
 msgstr ""
 
-#: src/types-edit/TypeEdit.jsx:67
+#: src/types-edit/TypeEdit.jsx:77
 msgid "Saving failed."
 msgstr ""
 
-#: src/types-edit/TypeEdit.jsx:74
+#: src/types-edit/TypeEdit.jsx:84
 msgid "This type has no relations."
 msgstr ""
 
-#: src/types-edit/TypeEdit.jsx:88
+#: src/types-edit/TypeEdit.jsx:98
 msgid "Order saved."
 msgstr ""
 
-#: src/types-edit/TypeEdit.jsx:134
+#: src/types-edit/TypeEdit.jsx:144
 msgid "Save order"
+msgstr ""
+
+#: src/types-edit/TypeEdit.jsx:148
+msgid "Reset"
 msgstr ""

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Content Relations\n"
 "Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/"
 "issues\n"
-"POT-Creation-Date: 2026-08-05T10:12:03+00:00\n"
+"POT-Creation-Date: 2026-08-05T10:35:55+00:00\n"
 "PO-Revision-Date: 2026-08-05 12:00+0200\n"
 "Last-Translator: Palasthotel <cybertreff@palasthotel.de>\n"
 "Language-Team: Palasthotel <cybertreff@palasthotel.de>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "X-Domain: ph-content-relations\n"
 
 #. Plugin Name of the plugin
-#: ph-content-relations.php classes/types-screen.php:34
-#: classes/types-screen.php:35 classes/types-screen.php:253
+#: ph-content-relations.php classes/types-screen.php:39
+#: classes/types-screen.php:40 classes/types-screen.php:290
 msgid "Content Relations"
 msgstr "Content Relations"
 
@@ -120,14 +120,14 @@ msgstr ""
 "angelegt wird."
 
 #. translators: %s: number of deleted relations
-#: classes/types-screen.php:240
+#: classes/types-screen.php:277
 #, php-format
 msgid "%s relation deleted."
 msgid_plural "%s relations deleted."
 msgstr[0] "%s Beziehung gelöscht."
 msgstr[1] "%s Beziehungen gelöscht."
 
-#: classes/types-screen.php:256
+#: classes/types-screen.php:293
 msgid ""
 "Relation types are created when a relation is added in the editor. Delete a "
 "type here to remove it and every relation of it."
@@ -135,17 +135,17 @@ msgstr ""
 "Beziehungstypen entstehen, wenn im Editor eine Beziehung angelegt wird. Hier "
 "gelöscht, verschwindet der Typ samt all seiner Beziehungen."
 
-#: classes/types-screen.php:259
+#: classes/types-screen.php:296
 msgid "Search types"
 msgstr "Typen durchsuchen"
 
 #. translators: %s: relation type name
-#: classes/types-screen.php:278
+#: classes/types-screen.php:315
 #, php-format
 msgid "Edit relation type: %s"
 msgstr "Beziehungstyp bearbeiten: %s"
 
-#: classes/types-screen.php:284 src/types-edit/TypeEdit.jsx:138
+#: classes/types-screen.php:321
 msgid "Back to types"
 msgstr "Zurück zu den Typen"
 
@@ -158,11 +158,11 @@ msgstr "„%s“ anlegen"
 msgid "No relations yet."
 msgstr "Noch keine Beziehungen."
 
-#: src/shared/RelationsEditor.jsx:184 src/types-edit/TypeEdit.jsx:114
+#: src/shared/RelationsEditor.jsx:184 src/types-edit/TypeEdit.jsx:124
 msgid "Move up"
 msgstr "Nach oben"
 
-#: src/shared/RelationsEditor.jsx:191 src/types-edit/TypeEdit.jsx:121
+#: src/shared/RelationsEditor.jsx:191 src/types-edit/TypeEdit.jsx:131
 msgid "Move down"
 msgstr "Nach unten"
 
@@ -195,18 +195,22 @@ msgctxt "post search"
 msgid "No posts found."
 msgstr "Keine Inhalte gefunden."
 
-#: src/types-edit/TypeEdit.jsx:67
+#: src/types-edit/TypeEdit.jsx:77
 msgid "Saving failed."
 msgstr "Speichern fehlgeschlagen."
 
-#: src/types-edit/TypeEdit.jsx:74
+#: src/types-edit/TypeEdit.jsx:84
 msgid "This type has no relations."
 msgstr "Dieser Typ hat keine Beziehungen."
 
-#: src/types-edit/TypeEdit.jsx:88
+#: src/types-edit/TypeEdit.jsx:98
 msgid "Order saved."
 msgstr "Reihenfolge gespeichert."
 
-#: src/types-edit/TypeEdit.jsx:134
+#: src/types-edit/TypeEdit.jsx:144
 msgid "Save order"
 msgstr "Reihenfolge speichern"
+
+#: src/types-edit/TypeEdit.jsx:148
+msgid "Reset"
+msgstr "Zurücksetzen"

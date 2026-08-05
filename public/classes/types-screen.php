@@ -193,7 +193,6 @@ class TypesScreen {
 		wp_localize_script( 'content-relations-types-edit', 'ContentRelationsTypeEdit', array(
 			'restNamespace' => RestEditor::NAMESPACE,
 			'type'          => $type_name,
-			'listUrl'       => $this->pageUrl(),
 			'groups'        => $this->grouped_relations( $type_name ),
 		) );
 	}
