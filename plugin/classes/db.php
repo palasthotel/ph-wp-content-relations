@@ -15,7 +15,11 @@ function wpdb(){
  * @return int
  */
 function count_relations_by_type( $type_id ){
-	return intval(wpdb()->get_var("SELECT count(id) FROM ".wpdb()->prefix."content_relations WHERE type_id = ".$type_id)) ;
+	$wpdb = wpdb();
+	return intval( $wpdb->get_var( $wpdb->prepare(
+		"SELECT count(id) FROM {$wpdb->prefix}content_relations WHERE type_id = %d",
+		$type_id
+	) ) );
 }
 
 /**
@@ -57,20 +61,24 @@ function get_relations($post_id){
 	$wpdb = wpdb();
 
 	// get relations where this post is source
-	$query = 'SELECT source_id, target_id, type, weight, post_title, post_type '.
-	         'FROM '.$wpdb->prefix.'content_relations as relations '.
-	         'LEFT JOIN '.$wpdb->prefix.'content_relations_types as types ON relations.type_id=types.id '.
-	         'LEFT JOIN '.$wpdb->prefix.'posts as posts ON relations.target_id = posts.ID '.
-	         "WHERE source_id = '".$post_id." ORDER BY weight ASC';";
-	$result = $wpdb->get_results( $query, OBJECT );
+	// The source query used to end in "source_id = '$post_id ORDER BY weight ASC'" -
+	// the closing quote sat after ASC, so the id, the whole ORDER BY and a stray quote
+	// were one string literal. It only ever worked because $post_id is an int; as a
+	// prepared %d it is now both safe and actually ordered.
+	$query = "SELECT source_id, target_id, type, weight, post_title, post_type ".
+	         "FROM {$wpdb->prefix}content_relations as relations ".
+	         "LEFT JOIN {$wpdb->prefix}content_relations_types as types ON relations.type_id=types.id ".
+	         "LEFT JOIN {$wpdb->prefix}posts as posts ON relations.target_id = posts.ID ".
+	         "WHERE source_id = %d ORDER BY weight ASC";
+	$result = $wpdb->get_results( $wpdb->prepare( $query, $post_id ), OBJECT );
 
 	// get relations where this post is target
-	$query = 'SELECT source_id, target_id, type, weight, post_title, post_type '.
-	         'FROM '.$wpdb->prefix.'content_relations as relations '.
-	         'LEFT JOIN '.$wpdb->prefix.'content_relations_types as types ON relations.type_id=types.id '.
-	         'LEFT JOIN '.$wpdb->prefix.'posts as posts ON relations.source_id = posts.ID '.
-	         "WHERE target_id = '".$post_id."' ORDER BY weight ASC ;";
-	$result = array_merge( $result, $wpdb->get_results( $query, OBJECT ) );
+	$query = "SELECT source_id, target_id, type, weight, post_title, post_type ".
+	         "FROM {$wpdb->prefix}content_relations as relations ".
+	         "LEFT JOIN {$wpdb->prefix}content_relations_types as types ON relations.type_id=types.id ".
+	         "LEFT JOIN {$wpdb->prefix}posts as posts ON relations.source_id = posts.ID ".
+	         "WHERE target_id = %d ORDER BY weight ASC";
+	$result = array_merge( $result, $wpdb->get_results( $wpdb->prepare( $query, $post_id ), OBJECT ) );
 	/**
 	 * Save result to class array
 	 */
@@ -110,7 +118,14 @@ function delete_type($type_id){
  * @return null|string
  */
 function get_type_id($type){
-	return wpdb()->get_var( 'SELECT id FROM '.wpdb()->prefix."content_relations_types WHERE type='$type' LIMIT 1" );
+	$wpdb = wpdb();
+	// $type reaches here from a saved relation, sanitize_text_field'd but not
+	// SQL-escaped, so a name like "x' UNION SELECT user_pass FROM wp_users#" used to
+	// run verbatim. Prepared, the quote is just a quote.
+	return $wpdb->get_var( $wpdb->prepare(
+		"SELECT id FROM {$wpdb->prefix}content_relations_types WHERE type = %s LIMIT 1",
+		$type
+	) );
 }
 
 /**

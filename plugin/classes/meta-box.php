@@ -59,9 +59,17 @@ class MetaBox {
 
 		$deleted_relations = "";
 		if ( isset( $_POST['delete_relation'] ) && is_numeric( $_POST["delete_relation"] ) ) {
-			$type_id           = intval( $_POST['delete_relation'] );
-			$deleted_relations = $store->delete_type( $type_id );
-			$deleted_relations = "<p>" . $deleted_relations . " had been deleted</p>";
+			// This deleted a whole relation type on any POST, with no nonce - so a page
+			// on another site could delete an admin's relation types by CSRF. The token
+			// is bound to the type id, so the confirm cannot be replayed for another one.
+			$type_id = intval( $_POST['delete_relation'] );
+			check_admin_referer( 'delete_relation_' . $type_id );
+			$deleted           = (int) $store->delete_type( $type_id );
+			$deleted_relations = '<div class="notice notice-success"><p>' . sprintf(
+				/* translators: %d: number of deleted relations */
+				esc_html__( '%d relations had been deleted', 'ph-content-relations' ),
+				$deleted
+			) . '</p></div>';
 		}
 
 		$relation_types = $store->get_types();
@@ -76,15 +84,16 @@ class MetaBox {
 				foreach ( $relation_types as $relation_type ) {
 					?>
 					<form method="post"
-					      action="<?php echo sanitize_text_field( $_SERVER['PHP_SELF'] ) . '?page=' . sanitize_text_field( $page ); ?>">
+					      action="<?php echo esc_url( add_query_arg( 'page', $page, admin_url( 'tools.php' ) ) ); ?>">
+						<?php wp_nonce_field( 'delete_relation_' . $relation_type->id ); ?>
 						<tr>
-							<th scope="row"><?php echo $relation_type->type ?>
-								(<?php echo $store->get_relations_count_by_type( $relation_type->id ); ?>
+							<th scope="row"><?php echo esc_html( $relation_type->type ); ?>
+								(<?php echo (int) $store->get_relations_count_by_type( $relation_type->id ); ?>
 								)
 							</th>
 							<input type="hidden" name="delete_relation"
-							       value="<?php echo $relation_type->id; ?>"/>
-							<td><?php submit_button( 'Löschen', 'delete delete-relation-button button-primary', 'delete_' . $relation_type->id ); ?></td>
+							       value="<?php echo esc_attr( $relation_type->id ); ?>"/>
+							<td><?php submit_button( __( 'Delete', 'ph-content-relations' ), 'delete delete-relation-button button-primary', 'delete_' . $relation_type->id ); ?></td>
 						</tr>
 					</form>
 					<?php
@@ -155,6 +164,8 @@ class MetaBox {
 				"config" => array(
 					"ID" => $post->ID,
 					"post_type" => $post_type,
+					// The title search now checks this, so the metabox has to hand it over.
+					"nonce" => wp_create_nonce( 'ph_content_relations_title' ),
 				),
 				"i18n" => array(
 
@@ -259,6 +270,15 @@ class MetaBox {
 	 */
 	public function get_contents_by_title() {
 
+		// This endpoint used to answer any logged-in user, with no nonce, searching
+		// post_status "any" - so a subscriber could read drafts, private posts and, via
+		// the whole-object bug below, password hashes. It is a picker for the relations
+		// metabox, so it needs the capability that metabox needs and its nonce.
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json( array( 'result' => array() ), 403 );
+		}
+		check_ajax_referer( 'ph_content_relations_title' );
+
 		if ( ! isset( $_GET['q'] ) || ! isset( $_GET['post_id'] ) || ! isset( $_GET['post_type'] ) ) {
 			print json_encode( array( 'result' => array() ) );
 			die();
@@ -274,7 +294,9 @@ class MetaBox {
 		 */
 		if ( is_numeric( $query_string ) ) {
 			$post = get_post( $query_string );
-			if ( is_a( $post, "WP_Post" ) ) {
+			// current_user_can( 'read_post', … ) so a direct id lookup cannot pull up a
+			// draft or private post the searcher is not allowed to see.
+			if ( is_a( $post, "WP_Post" ) && current_user_can( 'read_post', $post->ID ) ) {
 				$result[ $post->post_type ] = array( $this->get_contents_item( $post ) );
 				wp_reset_postdata();
 			}
@@ -297,6 +319,10 @@ class MetaBox {
 				'posts_per_page' => 20,
 				's'              => $query_string,
 				'post_status'    => 'any',
+				// 'readable' makes WP_Query drop statuses the current user may not read -
+				// other authors' drafts and private posts - instead of returning every
+				// status to anyone who can edit a post.
+				'perm'           => 'readable',
 				'post_type'      => $type,
 			);
 			$query = new WP_Query( apply_filters( Plugin::FILTER_META_BOX_FIND_QUERY_ARGS, $args ) );
@@ -332,7 +358,10 @@ class MetaBox {
 		$item['post_title']  = $post->post_title;
 		$item['ID']          = $post->ID;
 		$item['post_type']   = $post->post_type;
-		$item['post_status'] = get_post( $post->ID );
+		// Was get_post(), which serialised the whole WP_Post - post_content and
+		// post_password included - into the JSON. The script only compares this to
+		// "trash", so the status string is all it ever needed.
+		$item['post_status'] = get_post_status( $post->ID );
 		$item['format']      = get_post_format( $post->ID );
 		if ( $post->post_type == "attachment" ) {
 			$item['src'] = wp_get_attachment_image_src( $post->ID, 'thumbnail', false );

@@ -68,29 +68,34 @@ class WPPostQueryExtension {
 		$prefix = $wpdb->prefix;
 		$conditions = array();
 
+		// $to and $from are intval'd above; the type names are only sanitize_text_field'd,
+		// so they go through $wpdb->prepare here. This arg is not a public query var - it
+		// is set by developer code, not a request - but the escaping costs nothing.
 		if($to != null){
 			$type_conditions = "";
 			if(count($types) > 0){
 				$tcs = array();
 				foreach ($types as $type){
-					$tcs[] = " ID IN ( SELECT source_id FROM {$prefix}content_relations as cr RIGHT JOIN {$prefix}content_relations_types as crt".
-					         " ON cr.type_id = crt.id WHERE crt.type = '$type' ) ";
+					$tcs[] = $wpdb->prepare(
+						" ID IN ( SELECT source_id FROM {$prefix}content_relations as cr RIGHT JOIN {$prefix}content_relations_types as crt".
+						" ON cr.type_id = crt.id WHERE crt.type = %s ) ", $type );
 				}
 				$type_conditions = " AND ( ".join(" OR ",$tcs)." ) ";
 			}
-			$conditions[] = " (ID IN ( SELECT source_id FROM {$prefix}content_relations WHERE target_id = $to ) $type_conditions) ";
+			$conditions[] = " (ID IN ( SELECT source_id FROM {$prefix}content_relations WHERE target_id = ".intval($to)." ) $type_conditions) ";
 		}
 		if($from != null){
 			$type_conditions = "";
 			if(count($types) > 0){
 				$tcs = array();
 				foreach ($types as $type){
-					$tcs[] = " ID IN ( SELECT target_id FROM {$prefix}content_relations as cr RIGHT JOIN {$prefix}content_relations_types as crt".
-					         " ON cr.type_id = crt.id WHERE crt.type = '$type' ) ";
+					$tcs[] = $wpdb->prepare(
+						" ID IN ( SELECT target_id FROM {$prefix}content_relations as cr RIGHT JOIN {$prefix}content_relations_types as crt".
+						" ON cr.type_id = crt.id WHERE crt.type = %s ) ", $type );
 				}
 				$type_conditions = " AND ( ".join(" OR ",$tcs)." ) ";
 			}
-			$conditions[] = " (ID IN ( SELECT target_id FROM {$prefix}content_relations WHERE source_id = $from ) $type_conditions) ";
+			$conditions[] = " (ID IN ( SELECT target_id FROM {$prefix}content_relations WHERE source_id = ".intval($from)." ) $type_conditions) ";
 		}
 
 		if(count($conditions) > 0){
