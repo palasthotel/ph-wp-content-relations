@@ -6,7 +6,7 @@
  * Plugin URI:        https://wordpress.org/plugins/content-relations/
  * Description:       Relate posts to other posts, with a meta box in the editor and the relations exposed on the REST API.
  * Version:           1.0.15
- * Requires at least: 4.8
+ * Requires at least: 6.6
  * Tested up to:      7.0.2
  * Requires PHP:      7.4
  * Author:            Palasthotel <rezeption@palasthotel.de> (Edward Bock, Jana Marie Eggebrecht)

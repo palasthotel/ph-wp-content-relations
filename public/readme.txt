@@ -2,7 +2,7 @@
 Contributors: palasthotel, janaeggebrecht, edwardbock
 Donate link: http://palasthotel.de/
 Tags: post, relation, metabox, rest, related
-Requires at least: 4.8
+Requires at least: 6.6
 Tested up to: 7.0.2
 Requires PHP: 7.4
 Stable tag: 1.0.15
