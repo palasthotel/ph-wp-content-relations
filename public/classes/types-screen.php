@@ -50,8 +50,114 @@ class TypesScreen {
 
 		$this->handle_actions();
 
+		if ( $this->current_edit_type() ) {
+			$this->enqueue_edit_app( $this->current_edit_type() );
+			return;
+		}
+
 		$this->table = new TypesListTable( self::PAGE_SLUG );
 		$this->table->prepare_items( $this->rows() );
+	}
+
+	/**
+	 * The type being edited, or 0 for the list.
+	 */
+	private function current_edit_type(): int {
+		if ( ! isset( $_GET['action'] ) || 'edit' !== sanitize_key( $_GET['action'] ) ) {
+			return 0;
+		}
+		$id = isset( $_GET['type'] ) ? (int) $_GET['type'] : 0;
+		if ( $id <= 0 ) {
+			return 0;
+		}
+		$store = new \Content_Relations_Store();
+		foreach ( $store->get_types() as $type ) {
+			if ( (int) $type->id === $id ) {
+				return $id;
+			}
+		}
+
+		return 0;
+	}
+
+	private function type_name( int $type_id ): string {
+		$store = new \Content_Relations_Store();
+		foreach ( $store->get_types() as $type ) {
+			if ( (int) $type->id === $type_id ) {
+				return (string) $type->type;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * The relations of a type, grouped by source post, for the edit screen.
+	 *
+	 * @param string $type_name
+	 * @return array groups: [ { source_id, source_title, targets: [ { target_id, title, post_type, post_status } ] } ]
+	 */
+	private function grouped_relations( string $type_name ): array {
+		global $wpdb;
+
+		// The relations of this type, source and target, ordered by weight so each
+		// source post's targets come out in the order the editor saved them.
+		$rows = $wpdb->get_results( $wpdb->prepare(
+			"SELECT r.source_id, r.target_id
+			 FROM {$wpdb->prefix}content_relations r
+			 LEFT JOIN {$wpdb->prefix}content_relations_types t ON r.type_id = t.id
+			 WHERE t.type = %s
+			 ORDER BY r.source_id ASC, r.weight ASC",
+			$type_name
+		) );
+
+		$groups = array();
+		foreach ( $rows as $row ) {
+			$source_id = (int) $row->source_id;
+			if ( ! isset( $groups[ $source_id ] ) ) {
+				$groups[ $source_id ] = array(
+					'source_id'    => $source_id,
+					'source_title' => get_the_title( $source_id ),
+					'targets'      => array(),
+				);
+			}
+			$target_id = (int) $row->target_id;
+			$groups[ $source_id ]['targets'][] = array(
+				'target_id'   => $target_id,
+				'title'       => get_the_title( $target_id ),
+				'post_type'   => get_post_type( $target_id ),
+				'post_status' => get_post_status( $target_id ),
+			);
+		}
+
+		return array_values( $groups );
+	}
+
+	private function enqueue_edit_app( int $type_id ): void {
+		$dir   = $this->plugin->path . '/dist';
+		$asset = $dir . '/types-edit.asset.php';
+		if ( ! file_exists( $asset ) ) {
+			return;
+		}
+		$meta = include $asset;
+
+		wp_enqueue_script(
+			'content-relations-types-edit',
+			$this->plugin->url . 'dist/types-edit.js',
+			$meta['dependencies'],
+			$meta['version'],
+			true
+		);
+		wp_enqueue_style( 'wp-components' );
+		wp_set_script_translations( 'content-relations-types-edit', 'ph-content-relations', $this->plugin->path . '/languages' );
+
+		$type_name = $this->type_name( $type_id );
+		wp_localize_script( 'content-relations-types-edit', 'ContentRelationsTypeEdit', array(
+			'restNamespace' => RestEditor::NAMESPACE,
+			'type'          => $type_name,
+			'listUrl'       => $this->pageUrl(),
+			'groups'        => $this->grouped_relations( $type_name ),
+		) );
 	}
 
 	private function pageUrl( array $args = array() ): string {
@@ -138,6 +244,10 @@ class TypesScreen {
 	}
 
 	public function render(): void {
+		if ( $this->current_edit_type() ) {
+			$this->render_edit( $this->current_edit_type() );
+			return;
+		}
 		?>
 		<div class="wrap">
 			<h1 class="wp-heading-inline"><?php esc_html_e( 'Content Relations', 'ph-content-relations' ); ?></h1>
@@ -154,6 +264,27 @@ class TypesScreen {
 				$this->table->display();
 				?>
 			</form>
+		</div>
+		<?php
+	}
+
+	private function render_edit( int $type_id ): void {
+		?>
+		<div class="wrap">
+			<h1 class="wp-heading-inline">
+				<?php
+				printf(
+					/* translators: %s: relation type name */
+					esc_html__( 'Edit relation type: %s', 'ph-content-relations' ),
+					esc_html( $this->type_name( $type_id ) )
+				);
+				?>
+			</h1>
+			<a href="<?php echo esc_url( $this->pageUrl() ); ?>" class="page-title-action">
+				<?php esc_html_e( 'Back to types', 'ph-content-relations' ); ?>
+			</a>
+			<hr class="wp-header-end" />
+			<div id="content-relations-type-edit-root"></div>
 		</div>
 		<?php
 	}

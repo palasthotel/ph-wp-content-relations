@@ -1,7 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Content Relations\n"
-"Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/"
+"issues\n"
+"POT-Creation-Date: 2026-08-05T10:12:03+00:00\n"
 "PO-Revision-Date: 2026-08-05 12:00+0200\n"
 "Last-Translator: Palasthotel <cybertreff@palasthotel.de>\n"
 "Language-Team: Palasthotel <cybertreff@palasthotel.de>\n"
@@ -13,12 +15,35 @@ msgstr ""
 "X-Domain: ph-content-relations\n"
 
 #. Plugin Name of the plugin
+#: ph-content-relations.php classes/types-screen.php:34
+#: classes/types-screen.php:35 classes/types-screen.php:253
 msgid "Content Relations"
 msgstr "Content Relations"
 
+#. Plugin URI of the plugin
+#: ph-content-relations.php
+msgid "https://wordpress.org/plugins/content-relations/"
+msgstr ""
+
 #. Description of the plugin
-msgid "Relate posts to other posts, with a meta box in the editor and the relations exposed on the REST API."
-msgstr "Inhalte mit anderen Inhalten verknüpfen – mit einer Metabox im Editor und den Beziehungen in der REST-API."
+#: ph-content-relations.php
+msgid ""
+"Relate posts to other posts, with a meta box in the editor and the relations "
+"exposed on the REST API."
+msgstr ""
+"Inhalte mit anderen Inhalten verknüpfen – mit einer Metabox im Editor und "
+"den Beziehungen in der REST-API."
+
+#. Author of the plugin
+#: ph-content-relations.php
+msgid ""
+"Palasthotel <rezeption@palasthotel.de> (Edward Bock, Jana Marie Eggebrecht)"
+msgstr ""
+
+#. Author URI of the plugin
+#: ph-content-relations.php
+msgid "https://palasthotel.de"
+msgstr ""
 
 #: classes/grid.php:23
 msgid "-- Filter by content relation --"
@@ -28,7 +53,7 @@ msgstr "-- Nach Inhaltsbeziehung filtern --"
 msgid " All types "
 msgstr " Alle Typen "
 
-#: classes/grid.php:36
+#: classes/grid.php:36 src/shared/RelationsEditor.jsx:222
 msgid "Relation type"
 msgstr "Beziehungstyp"
 
@@ -48,98 +73,140 @@ msgstr "Beziehungen von diesem Inhalt zu einem anderen"
 msgid "Relations pointing to this post"
 msgstr "Beziehungen, die auf diesen Inhalt zeigen"
 
-#: classes/meta-box.php:68 src/shared/RelationsEditor.jsx src/sidebar/RelationsPanel.jsx
+#: classes/meta-box.php:68 src/sidebar/RelationsPanel.jsx:33
 msgid "Content relations"
 msgstr "Inhaltsbeziehungen"
 
-#: classes/rest-editor.php
+#: classes/rest-editor.php:148
 msgid "You are not allowed to edit the relations of this post."
 msgstr "Du darfst die Beziehungen dieses Inhalts nicht bearbeiten."
 
-#: classes/rest-editor.php
+#: classes/rest-editor.php:156
 msgid "Relations must be a list."
 msgstr "Beziehungen müssen eine Liste sein."
 
-#: classes/types-list-table.php
+#: classes/rest-editor.php:200
+msgid "A type is required."
+msgstr "Ein Typ ist erforderlich."
+
+#: classes/types-list-table.php:36
 msgctxt "list table"
 msgid "Type"
 msgstr "Typ"
 
-#: classes/types-list-table.php
+#: classes/types-list-table.php:37
 msgctxt "list table"
 msgid "Relations"
 msgstr "Beziehungen"
 
-#: classes/types-list-table.php
+#: classes/types-list-table.php:50 classes/types-list-table.php:81
 msgctxt "list table"
 msgid "Delete"
 msgstr "Löschen"
 
-#: classes/types-list-table.php
+#: classes/types-list-table.php:75
+msgctxt "list table"
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: classes/types-list-table.php:80
 msgid "Delete this relation type and every relation of it?"
 msgstr "Diesen Beziehungstyp und alle seine Beziehungen löschen?"
 
-#: classes/types-list-table.php
+#: classes/types-list-table.php:97
 msgid "No relation types yet. They appear here once a relation is created."
-msgstr "Noch keine Beziehungstypen. Sie erscheinen hier, sobald eine Beziehung angelegt wird."
+msgstr ""
+"Noch keine Beziehungstypen. Sie erscheinen hier, sobald eine Beziehung "
+"angelegt wird."
 
-#: classes/types-screen.php
+#. translators: %s: number of deleted relations
+#: classes/types-screen.php:240
 #, php-format
 msgid "%s relation deleted."
 msgid_plural "%s relations deleted."
 msgstr[0] "%s Beziehung gelöscht."
 msgstr[1] "%s Beziehungen gelöscht."
 
-#: classes/types-screen.php
-msgid "Relation types are created when a relation is added in the editor. Delete a type here to remove it and every relation of it."
-msgstr "Beziehungstypen entstehen, wenn im Editor eine Beziehung angelegt wird. Hier gelöscht, verschwindet der Typ samt all seiner Beziehungen."
+#: classes/types-screen.php:256
+msgid ""
+"Relation types are created when a relation is added in the editor. Delete a "
+"type here to remove it and every relation of it."
+msgstr ""
+"Beziehungstypen entstehen, wenn im Editor eine Beziehung angelegt wird. Hier "
+"gelöscht, verschwindet der Typ samt all seiner Beziehungen."
 
-#: classes/types-screen.php
+#: classes/types-screen.php:259
 msgid "Search types"
 msgstr "Typen durchsuchen"
 
-#: src/shared/RelationsEditor.jsx
-#, javascript-format
+#. translators: %s: relation type name
+#: classes/types-screen.php:278
+#, php-format
+msgid "Edit relation type: %s"
+msgstr "Beziehungstyp bearbeiten: %s"
+
+#: classes/types-screen.php:284 src/types-edit/TypeEdit.jsx:138
+msgid "Back to types"
+msgstr "Zurück zu den Typen"
+
+#. translators: %s: the relation type name being created
+#: src/shared/RelationsEditor.jsx:113
 msgid "Create \"%s\""
 msgstr "„%s“ anlegen"
 
-#: src/shared/RelationsEditor.jsx
+#: src/shared/RelationsEditor.jsx:161
 msgid "No relations yet."
 msgstr "Noch keine Beziehungen."
 
-#: src/shared/RelationsEditor.jsx
+#: src/shared/RelationsEditor.jsx:184 src/types-edit/TypeEdit.jsx:114
 msgid "Move up"
 msgstr "Nach oben"
 
-#: src/shared/RelationsEditor.jsx
+#: src/shared/RelationsEditor.jsx:191 src/types-edit/TypeEdit.jsx:121
 msgid "Move down"
 msgstr "Nach unten"
 
-#: src/shared/RelationsEditor.jsx
+#: src/shared/RelationsEditor.jsx:199
 msgid "Remove"
 msgstr "Entfernen"
 
-#: src/shared/RelationsEditor.jsx
+#: src/shared/RelationsEditor.jsx:214
 msgid "Add relation"
 msgstr "Beziehung hinzufügen"
 
-#: src/shared/RelationsEditor.jsx
+#: src/shared/RelationsEditor.jsx:223
 msgid "Pick a type or type a new name."
 msgstr "Einen Typ wählen oder einen neuen Namen eingeben."
 
-#: src/shared/RelationsEditor.jsx
+#: src/shared/RelationsEditor.jsx:232
 msgid "Choose a relation type first."
 msgstr "Wähle zuerst einen Beziehungstyp."
 
-#: src/shared/RelationsEditor.jsx
+#: src/shared/RelationsEditor.jsx:237
 msgid "Add a related post"
 msgstr "Verwandten Inhalt hinzufügen"
 
-#: src/shared/RelationsEditor.jsx
+#: src/shared/RelationsEditor.jsx:238
 msgid "Search posts…"
 msgstr "Inhalte suchen…"
 
-#: src/shared/RelationsEditor.jsx
+#: src/shared/RelationsEditor.jsx:269
 msgctxt "post search"
 msgid "No posts found."
 msgstr "Keine Inhalte gefunden."
+
+#: src/types-edit/TypeEdit.jsx:67
+msgid "Saving failed."
+msgstr "Speichern fehlgeschlagen."
+
+#: src/types-edit/TypeEdit.jsx:74
+msgid "This type has no relations."
+msgstr "Dieser Typ hat keine Beziehungen."
+
+#: src/types-edit/TypeEdit.jsx:88
+msgid "Order saved."
+msgstr "Reihenfolge gespeichert."
+
+#: src/types-edit/TypeEdit.jsx:134
+msgid "Save order"
+msgstr "Reihenfolge speichern"

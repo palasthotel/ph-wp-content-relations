@@ -56,6 +56,10 @@ class TypesListTable extends \WP_List_Table {
 	}
 
 	protected function column_name( $item ): string {
+		$editUrl = add_query_arg(
+			array( 'page' => $this->pageSlug, 'action' => 'edit', 'type' => (int) $item['id'] ),
+			admin_url( 'tools.php' )
+		);
 		$deleteUrl = wp_nonce_url(
 			add_query_arg(
 				array( 'page' => $this->pageSlug, 'action' => 'delete', 'type' => (int) $item['id'] ),
@@ -65,6 +69,11 @@ class TypesListTable extends \WP_List_Table {
 		);
 
 		$actions = array(
+			'edit'   => sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $editUrl ),
+				esc_html_x( 'Edit', 'list table', 'ph-content-relations' )
+			),
 			'delete' => sprintf(
 				'<a href="%s" class="submitdelete" onclick="return confirm(%s)">%s</a>',
 				esc_url( $deleteUrl ),

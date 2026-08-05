@@ -60,6 +60,20 @@ class RestEditor {
 				'exclude'   => array( 'type' => 'array', 'required' => false ),
 			),
 		) );
+
+		register_rest_route( self::NAMESPACE, '/reorder', array(
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => array( $this, 'reorder' ),
+			// The Tools screen is manage_options; reordering there deletes nothing but
+			// changes every affected post, so it takes the same capability.
+			'permission_callback' => function () {
+				return current_user_can( 'manage_options' );
+			},
+			'args'                => array(
+				'type'  => array( 'type' => 'string', 'required' => true ),
+				'posts' => array( 'type' => 'array', 'required' => true ),
+			),
+		) );
 	}
 
 	/**
@@ -162,6 +176,75 @@ class RestEditor {
 		$store->update( $data );
 
 		return true;
+	}
+
+	/**
+	 * Reorder one relation type's targets within each source post.
+	 *
+	 * The Tools edit screen groups a type's relations by source post and lets the order
+	 * of that post's targets of this type change. weight is per source post, so this
+	 * rebuilds each affected post: its relations are grouped by type, the target type's
+	 * group is reordered to the submitted target order, and the rest keep their place -
+	 * the same flatten the editor sidebar does, done here across several posts at once.
+	 *
+	 * Body: { type: "<name>", posts: [ { source_id, target_ids: [<id>, ...] }, ... ] }
+	 *
+	 * @param WP_REST_Request $request
+	 * @return array|WP_Error
+	 */
+	public function reorder( WP_REST_Request $request ) {
+		$type  = sanitize_text_field( (string) $request->get_param( 'type' ) );
+		$posts = (array) $request->get_param( 'posts' );
+
+		if ( '' === $type ) {
+			return new WP_Error( 'content_relations_invalid', __( 'A type is required.', 'ph-content-relations' ), array( 'status' => 400 ) );
+		}
+
+		foreach ( $posts as $entry ) {
+			$source_id  = isset( $entry['source_id'] ) ? (int) $entry['source_id'] : 0;
+			$target_ids = isset( $entry['target_ids'] ) ? array_map( 'intval', (array) $entry['target_ids'] ) : array();
+			if ( $source_id <= 0 ) {
+				continue;
+			}
+
+			$store = new \Content_Relations_Store( $source_id );
+
+			// Group this post's outgoing relations by type, in their current order.
+			$groupsOrder = array();
+			$byType      = array();
+			foreach ( $store->get_relations() as $relation ) {
+				if ( (int) $relation->source_id !== $source_id ) {
+					continue;
+				}
+				$t = (string) $relation->type;
+				if ( ! isset( $byType[ $t ] ) ) {
+					$byType[ $t ]   = array();
+					$groupsOrder[]  = $t;
+				}
+				$byType[ $t ][] = (int) $relation->target_id;
+			}
+
+			// Reorder the target type's targets to match the request, keeping only the
+			// ones that are actually related (ignore stray ids).
+			if ( isset( $byType[ $type ] ) ) {
+				$current             = $byType[ $type ];
+				$wanted              = array_values( array_intersect( $target_ids, $current ) );
+				// Anything the request left out stays, appended in its old order.
+				$missing             = array_values( array_diff( $current, $wanted ) );
+				$byType[ $type ]     = array_merge( $wanted, $missing );
+			}
+
+			// Flatten back, groups in their original order, and save.
+			$data = array();
+			foreach ( $groupsOrder as $t ) {
+				foreach ( $byType[ $t ] as $target_id ) {
+					$data[] = array( 'source_id' => $source_id, 'target_id' => $target_id, 'type' => $t );
+				}
+			}
+			$store->update( $data );
+		}
+
+		return array( 'ok' => true );
 	}
 
 	/**

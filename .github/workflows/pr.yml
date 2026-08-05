@@ -50,6 +50,8 @@ jobs:
           test -f public/dist/block-editor.asset.php
           test -f public/dist/meta-box.js
           test -f public/dist/meta-box.asset.php
+          test -f public/dist/types-edit.js
+          test -f public/dist/types-edit.asset.php
 
   pack:
     name: Pack plugin
@@ -79,6 +81,7 @@ jobs:
           test -f build/content-relations/js/content-relations-admin.js
           test -f build/content-relations/dist/block-editor.js
           test -f build/content-relations/dist/meta-box.js
+          test -f build/content-relations/dist/types-edit.js
           test ! -e build/content-relations/bin
           test ! -e build/content-relations/.github
           test ! -e build/content-relations/CONTRIBUTING.md
