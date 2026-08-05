@@ -48,6 +48,8 @@ jobs:
         run: |
           test -f public/dist/block-editor.js
           test -f public/dist/block-editor.asset.php
+          test -f public/dist/meta-box.js
+          test -f public/dist/meta-box.asset.php
 
   pack:
     name: Pack plugin
@@ -76,6 +78,7 @@ jobs:
           test -f build/content-relations/classes/db.php
           test -f build/content-relations/js/content-relations-admin.js
           test -f build/content-relations/dist/block-editor.js
+          test -f build/content-relations/dist/meta-box.js
           test ! -e build/content-relations/bin
           test ! -e build/content-relations/.github
           test ! -e build/content-relations/CONTRIBUTING.md

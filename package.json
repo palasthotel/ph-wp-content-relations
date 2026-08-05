@@ -4,8 +4,8 @@
   "description": "Build tooling for the Content Relations block editor sidebar. The plugin itself is plain PHP; only the editor bundles are compiled.",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "start": "wp-scripts start src/block-editor.js --output-path=public/dist",
-    "build": "wp-scripts build src/block-editor.js --output-path=public/dist",
+    "start": "wp-scripts start src/block-editor.js src/meta-box.js --output-path=public/dist",
+    "build": "wp-scripts build src/block-editor.js src/meta-box.js --output-path=public/dist",
     "lint:js": "wp-scripts lint-js src"
   },
   "devDependencies": {

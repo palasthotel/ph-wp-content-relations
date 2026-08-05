@@ -149,37 +149,70 @@ class MetaBox {
 			array( $this, 'render_post_meta_relations' )
 		// 'post'
 		);
-		/**
-		 * Add css and javascript for meta box
-		 */
-		wp_enqueue_style(
-			'content-relations-style', $this->plugin->url . '/css/content-relations-admin.css',
-			array(),
-			filemtime($this->plugin->path."/css/content-relations-admin.css"),
-			'all'
-		);
+		$this->enqueue_metabox_app( $post );
+	}
+
+	/**
+	 * The compiled React meta box, the same editor the block editor sidebar uses.
+	 *
+	 * Replaces the hand-written jQuery (content-relations-admin.js) and its custom
+	 * autocomplete/arrow styles. The relations are localized as the initial state, and
+	 * the component writes the hidden fields save_post_meta_relations reads, so the save
+	 * path is unchanged.
+	 */
+	private function enqueue_metabox_app( $post ): void {
+		$dir   = $this->plugin->path . '/dist';
+		$asset = $dir . '/meta-box.asset.php';
+
+		// dist/ is built by the pipeline and is not in the repository.
+		if ( ! file_exists( $asset ) ) {
+			return;
+		}
+
+		$meta = include $asset;
+
 		wp_enqueue_script(
-			'content-relations-js', $this->plugin->url . '/js/content-relations-admin.js',
-			array( 'jquery', 'jquery-ui-autocomplete', 'jquery-ui-sortable' ),
-			filemtime($this->plugin->path."/js/content-relations-admin.js"),
-			false
-		);
-		wp_localize_script(
-			'content-relations-js',
-			'_ContentRelations',
-			array(
-				"config" => array(
-					"ID" => $post->ID,
-					"post_type" => $post_type,
-					// The title search now checks this, so the metabox has to hand it over.
-					"nonce" => wp_create_nonce( 'ph_content_relations_title' ),
-				),
-				"i18n" => array(
-
-				),
-			)
+			'content-relations-meta-box',
+			$this->plugin->url . '/dist/meta-box.js',
+			$meta['dependencies'],
+			$meta['version'],
+			true
 		);
 
+		// The block editor loads the @wordpress/components stylesheet on its own; the
+		// classic editor does not, so without this the core components in the meta box
+		// render unstyled.
+		wp_enqueue_style( 'wp-components' );
+
+		wp_set_script_translations( 'content-relations-meta-box', 'ph-content-relations', $this->plugin->path . '/languages' );
+
+		// The outgoing relations of this post, in order, as the shared editor expects them.
+		$store     = new \Content_Relations_Store( (int) $post->ID );
+		$relations = array();
+		foreach ( $store->get_relations() as $relation ) {
+			if ( (int) $relation->source_id !== (int) $post->ID ) {
+				continue;
+			}
+			$target_id   = (int) $relation->target_id;
+			$relations[] = array(
+				'target_id'   => $target_id,
+				'type'        => (string) $relation->type,
+				'post_title'  => get_the_title( $target_id ),
+				'post_type'   => get_post_type( $target_id ),
+				'post_status' => get_post_status( $target_id ),
+			);
+		}
+
+		wp_localize_script( 'content-relations-meta-box', 'ContentRelationsMetaBox', array(
+			'postId'    => (int) $post->ID,
+			'relations' => $relations,
+		) );
+
+		// apiFetch needs the REST namespace too; the shared api.js reads it here.
+		wp_localize_script( 'content-relations-meta-box', 'ContentRelationsEditor', array(
+			'restNamespace' => RestEditor::NAMESPACE,
+			'restField'     => RestEditor::FIELD,
+		) );
 	}
 
 	/**
