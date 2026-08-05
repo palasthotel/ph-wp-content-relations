@@ -3,9 +3,18 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Content Relations
- * Description:       To relate contents to other contents.
+ * Plugin URI:        https://wordpress.org/plugins/content-relations/
+ * Description:       Relate posts to other posts, with a meta box in the editor and the relations exposed on the REST API.
  * Version:           1.0.15
- * Author:            PALASTHOTEL by Edward Bock
+ * Requires at least: 4.8
+ * Tested up to:      7.0.2
+ * Requires PHP:      7.4
+ * Author:            Palasthotel <rezeption@palasthotel.de> (Edward Bock, Jana Marie Eggebrecht)
+ * Author URI:        https://palasthotel.de
+ * License:           GPL-3.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain:       ph-content-relations
+ * Domain Path:       /languages
  */
 
 namespace ContentRelations;

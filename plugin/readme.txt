@@ -1,27 +1,39 @@
 === Content Relations ===
-Contributors: palasthotel, edwardbock
+Contributors: palasthotel, janaeggebrecht, edwardbock
 Donate link: http://palasthotel.de/
-Tags: post, relation, metabox
-Requires at least: 4.0
-Tested up to: 6.0.1
+Tags: post, relation, metabox, rest, related
+Requires at least: 4.8
+Tested up to: 7.0.2
+Requires PHP: 7.4
 Stable tag: 1.0.15
-License: GPLv3
-License URI: http://www.gnu.org/licenses/gpl
+License: GPL-3.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Add relations between posts.
+Relate posts to other posts, with a meta box in the editor and the relations on the REST API.
 
 == Description ==
 
-You can add relations between posts with a new meta box in post editor.
+Content Relations adds a meta box to the post editor for linking a post to any other post. Relations are typed - you name the kind of relation ("see also", "part of", whatever fits) - and ordered by dragging.
+
+Each related post's relations are exposed on the REST API under a `content_relations` field, so a headless or block-based front end can read them. Relations to unpublished posts are hidden from anyone who cannot edit posts.
+
+A `WP_Query` extension lets a query filter by relation: give it a related post id and, optionally, a relation type, and it returns the posts related to it.
 
 == Installation ==
 
-1. Upload `content-relations-wordpress.zip` to the `/wp-content/plugins/` directory
-1. Extract the Plugin to a `content-relations` Folder
-1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Install the plugin through **Plugins → Add New**, or upload it to `/wp-content/plugins/`.
+2. Activate it through the **Plugins** menu.
+3. A **Content Relations** meta box appears in the post editor, and a settings page under **Tools → Content Relations** lists the relation types.
 
 == Frequently Asked Questions ==
 
+= How do I read relations on the front end? =
+
+Every post's REST response carries a `content_relations` field with its relations. In PHP, `content_relations_get_relations_by_post_id( $post_id )` returns the same data.
+
+= Are relations to drafts or private posts visible? =
+
+No. On the REST API they are filtered out for anyone who cannot edit posts, and the editor's search only offers posts the current user may read.
 
 == Screenshots ==
 

@@ -1,0 +1,77 @@
+name: PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  php-lint:
+    name: PHP syntax check (${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ["7.4", "8.2", "8.3", "8.4"]
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      - name: Lint PHP files
+        run: |
+          find . -name '*.php' -not -path './build/*' -print0 | xargs -0 -r -n1 php -l
+
+  pack:
+    name: Pack plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Pack
+        run: bash bin/build-plugin.sh
+
+      # The payload is what wordpress.org serves, so assert both what has to be in it
+      # and what must not.
+      - name: Assert the payload is clean
+        run: |
+          test -f build/content-relations/ph-content-relations.php
+          test -f build/content-relations/readme.txt
+          test -f build/content-relations/LICENSE
+          test -f build/content-relations/classes/db.php
+          test -f build/content-relations/js/content-relations-admin.js
+          test ! -e build/content-relations/bin
+          test ! -e build/content-relations/.github
+          test ! -e build/content-relations/CONTRIBUTING.md
+          test ! -e build/content-relations/version.txt
+          test ! -e build/content-relations/resource
+
+      # The development wrapper in the repository root carries a plugin header, so
+      # shipping it would put a second "Content Relations - DEV" entry in the plugin
+      # list. The payload comes from plugin/, not the root, so it should never appear -
+      # this fails loudly if that ever changes.
+      - name: Assert the dev wrapper is not shipped
+        run: |
+          if grep -rq 'Content Relations - DEV' build/content-relations/; then
+            echo "::error::the payload contains the development wrapper"
+            exit 1
+          fi
+
+  versions:
+    name: Version carriers agree
+    # Not on the release PR: it arrives with only version.txt bumped and gets its other
+    # carriers in a second push from update-plugin-version.yml, so checking its first
+    # commit would fail every time. The release job runs the same script anyway.
+    if: ${{ ! startsWith(github.head_ref, 'release-please--') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check version numbers
+        run: VERSION="$(head -n1 version.txt | tr -d '[:space:]')" bash bin/version-checker.sh
