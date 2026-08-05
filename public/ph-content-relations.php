@@ -135,6 +135,12 @@ class Plugin{
 		$this->rest_editor = new RestEditor($this);
 
 		/**
+		 * Translated strings for RelationsEditor.jsx, shared by the sidebar panel and the
+		 * meta box
+		 */
+		require_once dirname(__FILE__)."/classes/relations-i18n.php";
+
+		/**
 		 * Block editor sidebar bundle
 		 */
 		require_once dirname(__FILE__)."/classes/block-editor-assets.php";

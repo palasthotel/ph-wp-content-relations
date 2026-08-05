@@ -9,9 +9,13 @@ import {
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { useEffect, useMemo, useState } from '@wordpress/element';
-import { __, _x, sprintf } from '@wordpress/i18n';
 import { chevronDown, chevronUp, closeSmall } from '@wordpress/icons';
 import { fetchTypes, searchPosts } from '../sidebar/api';
+
+// Translated in PHP and passed in via wp_localize_script - see RelationsI18n::strings().
+// No @wordpress/i18n here: it would need wp_set_script_translations() and a JED JSON file
+// per bundle per locale, which ph-postqueue's editor does without.
+const { i18n } = window.ContentRelationsEditor || {};
 
 /**
  * Group a flat, ordered relation list by type, preserving the order the types first
@@ -109,8 +113,7 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 		if ( filter && ! types.some( ( t ) => t.toLowerCase() === filter.toLowerCase() ) ) {
 			options.unshift( {
 				value: filter,
-				/* translators: %s: the relation type name being created */
-				label: sprintf( __( 'Create "%s"', 'ph-content-relations' ), filter ),
+				label: i18n.create_type_template.replace( '%s', filter ),
 			} );
 		}
 		return options;
@@ -158,7 +161,7 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 		<Flex direction="column" gap="4">
 			{ groups.length === 0 && (
 				<Text isBlock variant="muted">
-					{ __( 'No relations yet.', 'ph-content-relations' ) }
+					{ i18n.no_relations }
 				</Text>
 			) }
 
@@ -181,14 +184,14 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 								<Button
 									size="small"
 									icon={ chevronUp }
-									label={ __( 'Move up', 'ph-content-relations' ) }
+									label={ i18n.move_up }
 									disabled={ index === 0 }
 									onClick={ () => moveInGroup( groupIndex, index, index - 1 ) }
 								/>
 								<Button
 									size="small"
 									icon={ chevronDown }
-									label={ __( 'Move down', 'ph-content-relations' ) }
+									label={ i18n.move_down }
 									disabled={ index === group.items.length - 1 }
 									onClick={ () => moveInGroup( groupIndex, index, index + 1 ) }
 								/>
@@ -196,7 +199,7 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 									size="small"
 									icon={ closeSmall }
 									isDestructive
-									label={ __( 'Remove', 'ph-content-relations' ) }
+									label={ i18n.remove }
 									onClick={ () => removeRelation( relation ) }
 								/>
 							</Flex>
@@ -211,7 +214,7 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 					aria-expanded={ showForm }
 					onClick={ () => setShowForm( ( v ) => ! v ) }
 				>
-					{ __( 'Add relation', 'ph-content-relations' ) }
+					{ i18n.add_relation }
 				</Button>
 			</FlexItem>
 
@@ -219,8 +222,8 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 				<Flex direction="column" gap="3">
 					<ComboboxControl
 						__next40pxDefaultSize
-						label={ __( 'Relation type', 'ph-content-relations' ) }
-						help={ __( 'Pick a type or type a new name.', 'ph-content-relations' ) }
+						label={ i18n.relation_type }
+						help={ i18n.relation_type_help }
 						value={ typeValue }
 						options={ typeOptions }
 						onChange={ setTypeValue }
@@ -229,13 +232,13 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 
 					{ '' === chosenType ? (
 						<Notice status="warning" isDismissible={ false }>
-							{ __( 'Choose a relation type first.', 'ph-content-relations' ) }
+							{ i18n.choose_type_first }
 						</Notice>
 					) : (
 						<SearchControl
 							__nextHasNoMarginBottom
-							label={ __( 'Add a related post', 'ph-content-relations' ) }
-							placeholder={ __( 'Search posts…', 'ph-content-relations' ) }
+							label={ i18n.add_related_post }
+							placeholder={ i18n.search_posts }
 							value={ search }
 							onChange={ setSearch }
 						/>
@@ -266,7 +269,7 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 
 					{ ! searching && '' !== chosenType && '' !== search.trim() && results.length === 0 && (
 						<Text isBlock variant="muted">
-							{ _x( 'No posts found.', 'post search', 'ph-content-relations' ) }
+							{ i18n.no_posts_found }
 						</Text>
 					) }
 				</Flex>

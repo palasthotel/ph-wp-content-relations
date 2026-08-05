@@ -34,10 +34,11 @@ class TypesScreen {
 	}
 
 	public function menu_page(): void {
+		// "Content Relations" is the plugin's name, not translated.
 		$hook = add_submenu_page(
 			'tools.php',
-			__( 'Content Relations', 'ph-content-relations' ),
-			__( 'Content Relations', 'ph-content-relations' ),
+			'Content Relations',
+			'Content Relations',
 			$this->capability(),
 			self::PAGE_SLUG,
 			array( $this, 'render' )
@@ -187,13 +188,21 @@ class TypesScreen {
 			true
 		);
 		wp_enqueue_style( 'wp-components' );
-		wp_set_script_translations( 'content-relations-types-edit', 'ph-content-relations', $this->plugin->path . '/languages' );
 
 		$type_name = $this->type_name( $type_id );
 		wp_localize_script( 'content-relations-types-edit', 'ContentRelationsTypeEdit', array(
 			'restNamespace' => RestEditor::NAMESPACE,
 			'type'          => $type_name,
 			'groups'        => $this->grouped_relations( $type_name ),
+			'i18n'          => array(
+				'move_up'       => __( 'Move up', 'ph-content-relations' ),
+				'move_down'     => __( 'Move down', 'ph-content-relations' ),
+				'save_order'    => __( 'Save order', 'ph-content-relations' ),
+				'reset'         => __( 'Reset', 'ph-content-relations' ),
+				'order_saved'   => __( 'Order saved.', 'ph-content-relations' ),
+				'saving_failed' => __( 'Saving failed.', 'ph-content-relations' ),
+				'no_relations'  => __( 'This type has no relations.', 'ph-content-relations' ),
+			),
 		) );
 	}
 
@@ -287,7 +296,7 @@ class TypesScreen {
 		}
 		?>
 		<div class="wrap">
-			<h1 class="wp-heading-inline"><?php esc_html_e( 'Content Relations', 'ph-content-relations' ); ?></h1>
+			<h1 class="wp-heading-inline">Content Relations</h1>
 			<hr class="wp-header-end" />
 			<?php $this->render_notice(); ?>
 			<p><?php esc_html_e( 'Relation types are created when a relation is added in the editor. Delete a type here to remove it and every relation of it.', 'ph-content-relations' ); ?></p>

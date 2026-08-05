@@ -12,10 +12,10 @@ import {
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
 import { chevronDown, chevronUp } from '@wordpress/icons';
 
-const ns = ( window.ContentRelationsTypeEdit || {} ).restNamespace || 'content-relations/v1';
+const { restNamespace, i18n } = window.ContentRelationsTypeEdit || {};
+const ns = restNamespace || 'content-relations/v1';
 
 /**
  * The Tools edit screen for one relation type.
@@ -74,14 +74,14 @@ export default function TypeEdit( { type, initialGroups } ) {
 				setSavedGroups( groups );
 				setSaved( true );
 			} )
-			.catch( ( err ) => setError( err?.message || __( 'Saving failed.', 'ph-content-relations' ) ) )
+			.catch( ( err ) => setError( err?.message || i18n.saving_failed ) )
 			.finally( () => setSaving( false ) );
 	};
 
 	if ( groups.length === 0 ) {
 		return (
 			<Text isBlock variant="muted">
-				{ __( 'This type has no relations.', 'ph-content-relations' ) }
+				{ i18n.no_relations }
 			</Text>
 		);
 	}
@@ -95,7 +95,7 @@ export default function TypeEdit( { type, initialGroups } ) {
 			) }
 			{ saved && ! dirty && (
 				<Notice status="success" onRemove={ () => setSaved( false ) }>
-					{ __( 'Order saved.', 'ph-content-relations' ) }
+					{ i18n.order_saved }
 				</Notice>
 			) }
 
@@ -121,14 +121,14 @@ export default function TypeEdit( { type, initialGroups } ) {
 									<Button
 										size="small"
 										icon={ chevronUp }
-										label={ __( 'Move up', 'ph-content-relations' ) }
+										label={ i18n.move_up }
 										disabled={ index === 0 }
 										onClick={ () => move( groupIndex, index, index - 1 ) }
 									/>
 									<Button
 										size="small"
 										icon={ chevronDown }
-										label={ __( 'Move down', 'ph-content-relations' ) }
+										label={ i18n.move_down }
 										disabled={ index === group.targets.length - 1 }
 										onClick={ () => move( groupIndex, index, index + 1 ) }
 									/>
@@ -141,11 +141,11 @@ export default function TypeEdit( { type, initialGroups } ) {
 
 			<Flex justify="flex-start" gap="2">
 				<Button variant="primary" isBusy={ saving } disabled={ saving || ! dirty } onClick={ save }>
-					{ __( 'Save order', 'ph-content-relations' ) }
+					{ i18n.save_order }
 				</Button>
 				{ saving && <Spinner /> }
 				<Button variant="tertiary" disabled={ saving || ! dirty } onClick={ reset }>
-					{ __( 'Reset', 'ph-content-relations' ) }
+					{ i18n.reset }
 				</Button>
 			</Flex>
 		</Flex>

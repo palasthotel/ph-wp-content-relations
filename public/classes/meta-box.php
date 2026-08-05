@@ -65,7 +65,8 @@ class MetaBox {
 
 		add_meta_box(
 			'ph_meta_box_content_relations',
-			apply_filters( Plugin::FILTER_META_BOX_TITLE, __( 'Content relations', 'ph-content-relations' ), $post_type, $post),
+			// "Content relations" is the plugin's name, not translated.
+			apply_filters( Plugin::FILTER_META_BOX_TITLE, 'Content relations', $post_type, $post),
 			array( $this, 'render_post_meta_relations' )
 		// 'post'
 		);
@@ -104,8 +105,6 @@ class MetaBox {
 		// render unstyled.
 		wp_enqueue_style( 'wp-components' );
 
-		wp_set_script_translations( 'content-relations-meta-box', 'ph-content-relations', $this->plugin->path . '/languages' );
-
 		// The outgoing relations of this post, in order, as the shared editor expects them.
 		$store     = new \Content_Relations_Store( (int) $post->ID );
 		$relations = array();
@@ -132,6 +131,7 @@ class MetaBox {
 		wp_localize_script( 'content-relations-meta-box', 'ContentRelationsEditor', array(
 			'restNamespace' => RestEditor::NAMESPACE,
 			'restField'     => RestEditor::FIELD,
+			'i18n'          => RelationsI18n::strings(),
 		) );
 	}
 

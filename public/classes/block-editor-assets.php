@@ -47,11 +47,10 @@ class BlockEditorAssets {
 			true
 		);
 
-		wp_set_script_translations( self::HANDLE, 'ph-content-relations', $this->plugin->path . '/languages' );
-
 		wp_localize_script( self::HANDLE, 'ContentRelationsEditor', array(
 			'restNamespace' => RestEditor::NAMESPACE,
 			'restField'     => RestEditor::FIELD,
+			'i18n'          => RelationsI18n::strings(),
 		) );
 	}
 }

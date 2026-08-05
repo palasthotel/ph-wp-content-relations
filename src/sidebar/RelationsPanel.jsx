@@ -1,9 +1,9 @@
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { __ } from '@wordpress/i18n';
 import RelationsEditor from '../shared/RelationsEditor.jsx';
 
-const FIELD = ( window.ContentRelationsEditor || {} ).restField || 'content_relations_edit';
+const { restField, i18n } = window.ContentRelationsEditor || {};
+const FIELD = restField || 'content_relations_edit';
 
 /**
  * The Content Relations panel in the block editor's document sidebar.
@@ -30,7 +30,7 @@ export default function RelationsPanel() {
 	return (
 		<PluginDocumentSettingPanel
 			name="content-relations"
-			title={ __( 'Content relations', 'ph-content-relations' ) }
+			title={ i18n.panel_title }
 		>
 			<RelationsEditor
 				relations={ relations }
