@@ -1,0 +1,172 @@
+# Copyright (C) 2026 Palasthotel <rezeption@palasthotel.de> (Edward Bock, Jana Marie Eggebrecht)
+# This file is distributed under the GPL-3.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Content Relations 1.0.15\n"
+"Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/issues\n"
+"Last-Translator: Palasthotel <cybertreff@palasthotel.de>\n"
+"Language-Team: Palasthotel <cybertreff@palasthotel.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-08-05T09:45:54+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: ph-content-relations\n"
+
+#. Plugin Name of the plugin
+#: ph-content-relations.php
+#: classes/types-screen.php:34
+#: classes/types-screen.php:35
+#: classes/types-screen.php:143
+msgid "Content Relations"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: ph-content-relations.php
+msgid "https://wordpress.org/plugins/content-relations/"
+msgstr ""
+
+#. Description of the plugin
+#: ph-content-relations.php
+msgid "Relate posts to other posts, with a meta box in the editor and the relations exposed on the REST API."
+msgstr ""
+
+#. Author of the plugin
+#: ph-content-relations.php
+msgid "Palasthotel <rezeption@palasthotel.de> (Edward Bock, Jana Marie Eggebrecht)"
+msgstr ""
+
+#. Author URI of the plugin
+#: ph-content-relations.php
+msgid "https://palasthotel.de"
+msgstr ""
+
+#: classes/grid.php:23
+msgid "-- Filter by content relation --"
+msgstr ""
+
+#: classes/grid.php:24
+msgid " All types "
+msgstr ""
+
+#: classes/grid.php:36
+#: src/shared/RelationsEditor.jsx:222
+msgid "Relation type"
+msgstr ""
+
+#: classes/grid.php:43
+msgid "Relation direction"
+msgstr ""
+
+#: classes/grid.php:45
+msgid "Relations from and to this post"
+msgstr ""
+
+#: classes/grid.php:46
+msgid "Relations added to this post to another"
+msgstr ""
+
+#: classes/grid.php:47
+msgid "Relations pointing to this post"
+msgstr ""
+
+#: classes/meta-box.php:68
+#: src/sidebar/RelationsPanel.jsx:33
+msgid "Content relations"
+msgstr ""
+
+#: classes/rest-editor.php:134
+msgid "You are not allowed to edit the relations of this post."
+msgstr ""
+
+#: classes/rest-editor.php:142
+msgid "Relations must be a list."
+msgstr ""
+
+#: classes/types-list-table.php:36
+msgctxt "list table"
+msgid "Type"
+msgstr ""
+
+#: classes/types-list-table.php:37
+msgctxt "list table"
+msgid "Relations"
+msgstr ""
+
+#: classes/types-list-table.php:50
+#: classes/types-list-table.php:72
+msgctxt "list table"
+msgid "Delete"
+msgstr ""
+
+#: classes/types-list-table.php:71
+msgid "Delete this relation type and every relation of it?"
+msgstr ""
+
+#: classes/types-list-table.php:88
+msgid "No relation types yet. They appear here once a relation is created."
+msgstr ""
+
+#. translators: %s: number of deleted relations
+#: classes/types-screen.php:134
+#, php-format
+msgid "%s relation deleted."
+msgid_plural "%s relations deleted."
+msgstr[0] ""
+msgstr[1] ""
+
+#: classes/types-screen.php:146
+msgid "Relation types are created when a relation is added in the editor. Delete a type here to remove it and every relation of it."
+msgstr ""
+
+#: classes/types-screen.php:149
+msgid "Search types"
+msgstr ""
+
+#. translators: %s: the relation type name being created
+#: src/shared/RelationsEditor.jsx:113
+#, js-format
+msgid "Create \"%s\""
+msgstr ""
+
+#: src/shared/RelationsEditor.jsx:161
+msgid "No relations yet."
+msgstr ""
+
+#: src/shared/RelationsEditor.jsx:184
+msgid "Move up"
+msgstr ""
+
+#: src/shared/RelationsEditor.jsx:191
+msgid "Move down"
+msgstr ""
+
+#: src/shared/RelationsEditor.jsx:199
+msgid "Remove"
+msgstr ""
+
+#: src/shared/RelationsEditor.jsx:214
+msgid "Add relation"
+msgstr ""
+
+#: src/shared/RelationsEditor.jsx:223
+msgid "Pick a type or type a new name."
+msgstr ""
+
+#: src/shared/RelationsEditor.jsx:232
+msgid "Choose a relation type first."
+msgstr ""
+
+#: src/shared/RelationsEditor.jsx:237
+msgid "Add a related post"
+msgstr ""
+
+#: src/shared/RelationsEditor.jsx:238
+msgid "Search posts…"
+msgstr ""
+
+#: src/shared/RelationsEditor.jsx:269
+msgctxt "post search"
+msgid "No posts found."
+msgstr ""

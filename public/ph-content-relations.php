@@ -83,6 +83,12 @@ class Plugin{
 		$this->url = plugin_dir_url( __FILE__ );
 		$this->path = plugin_dir_path(__FILE__);
 
+		// Load the bundled translations. On init, not earlier: WordPress 6.7 warns about
+		// translations loaded before the init hook.
+		add_action( 'init', function () {
+			load_plugin_textdomain( 'ph-content-relations', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+		} );
+
 		/**
 		 * db handle
 		 */

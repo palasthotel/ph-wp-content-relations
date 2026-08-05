@@ -1,0 +1,145 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Content Relations\n"
+"Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/issues\n"
+"PO-Revision-Date: 2026-08-05 12:00+0200\n"
+"Last-Translator: Palasthotel <cybertreff@palasthotel.de>\n"
+"Language-Team: Palasthotel <cybertreff@palasthotel.de>\n"
+"Language: de_CH_informal\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: ph-content-relations\n"
+
+#. Plugin Name of the plugin
+msgid "Content Relations"
+msgstr "Content Relations"
+
+#. Description of the plugin
+msgid "Relate posts to other posts, with a meta box in the editor and the relations exposed on the REST API."
+msgstr "Inhalte mit anderen Inhalten verknüpfen – mit einer Metabox im Editor und den Beziehungen in der REST-API."
+
+#: classes/grid.php:23
+msgid "-- Filter by content relation --"
+msgstr "-- Nach Inhaltsbeziehung filtern --"
+
+#: classes/grid.php:24
+msgid " All types "
+msgstr " Alle Typen "
+
+#: classes/grid.php:36
+msgid "Relation type"
+msgstr "Beziehungstyp"
+
+#: classes/grid.php:43
+msgid "Relation direction"
+msgstr "Beziehungsrichtung"
+
+#: classes/grid.php:45
+msgid "Relations from and to this post"
+msgstr "Beziehungen von und zu diesem Inhalt"
+
+#: classes/grid.php:46
+msgid "Relations added to this post to another"
+msgstr "Beziehungen von diesem Inhalt zu einem anderen"
+
+#: classes/grid.php:47
+msgid "Relations pointing to this post"
+msgstr "Beziehungen, die auf diesen Inhalt zeigen"
+
+#: classes/meta-box.php:68 src/shared/RelationsEditor.jsx src/sidebar/RelationsPanel.jsx
+msgid "Content relations"
+msgstr "Inhaltsbeziehungen"
+
+#: classes/rest-editor.php
+msgid "You are not allowed to edit the relations of this post."
+msgstr "Du darfst die Beziehungen dieses Inhalts nicht bearbeiten."
+
+#: classes/rest-editor.php
+msgid "Relations must be a list."
+msgstr "Beziehungen müssen eine Liste sein."
+
+#: classes/types-list-table.php
+msgctxt "list table"
+msgid "Type"
+msgstr "Typ"
+
+#: classes/types-list-table.php
+msgctxt "list table"
+msgid "Relations"
+msgstr "Beziehungen"
+
+#: classes/types-list-table.php
+msgctxt "list table"
+msgid "Delete"
+msgstr "Löschen"
+
+#: classes/types-list-table.php
+msgid "Delete this relation type and every relation of it?"
+msgstr "Diesen Beziehungstyp und alle seine Beziehungen löschen?"
+
+#: classes/types-list-table.php
+msgid "No relation types yet. They appear here once a relation is created."
+msgstr "Noch keine Beziehungstypen. Sie erscheinen hier, sobald eine Beziehung angelegt wird."
+
+#: classes/types-screen.php
+#, php-format
+msgid "%s relation deleted."
+msgid_plural "%s relations deleted."
+msgstr[0] "%s Beziehung gelöscht."
+msgstr[1] "%s Beziehungen gelöscht."
+
+#: classes/types-screen.php
+msgid "Relation types are created when a relation is added in the editor. Delete a type here to remove it and every relation of it."
+msgstr "Beziehungstypen entstehen, wenn im Editor eine Beziehung angelegt wird. Hier gelöscht, verschwindet der Typ samt all seiner Beziehungen."
+
+#: classes/types-screen.php
+msgid "Search types"
+msgstr "Typen durchsuchen"
+
+#: src/shared/RelationsEditor.jsx
+#, javascript-format
+msgid "Create \"%s\""
+msgstr "„%s“ anlegen"
+
+#: src/shared/RelationsEditor.jsx
+msgid "No relations yet."
+msgstr "Noch keine Beziehungen."
+
+#: src/shared/RelationsEditor.jsx
+msgid "Move up"
+msgstr "Nach oben"
+
+#: src/shared/RelationsEditor.jsx
+msgid "Move down"
+msgstr "Nach unten"
+
+#: src/shared/RelationsEditor.jsx
+msgid "Remove"
+msgstr "Entfernen"
+
+#: src/shared/RelationsEditor.jsx
+msgid "Add relation"
+msgstr "Beziehung hinzufügen"
+
+#: src/shared/RelationsEditor.jsx
+msgid "Pick a type or type a new name."
+msgstr "Einen Typ wählen oder einen neuen Namen eingeben."
+
+#: src/shared/RelationsEditor.jsx
+msgid "Choose a relation type first."
+msgstr "Wähle zuerst einen Beziehungstyp."
+
+#: src/shared/RelationsEditor.jsx
+msgid "Add a related post"
+msgstr "Verwandten Inhalt hinzufügen"
+
+#: src/shared/RelationsEditor.jsx
+msgid "Search posts…"
+msgstr "Inhalte suchen…"
+
+#: src/shared/RelationsEditor.jsx
+msgctxt "post search"
+msgid "No posts found."
+msgstr "Keine Inhalte gefunden."

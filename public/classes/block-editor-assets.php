@@ -41,7 +41,7 @@ class BlockEditorAssets {
 
 		wp_enqueue_script(
 			self::HANDLE,
-			$this->plugin->url . '/dist/block-editor.js',
+			$this->plugin->url . 'dist/block-editor.js',
 			$meta['dependencies'],
 			$meta['version'],
 			true

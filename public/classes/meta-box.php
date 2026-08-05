@@ -65,7 +65,7 @@ class MetaBox {
 
 		add_meta_box(
 			'ph_meta_box_content_relations',
-			apply_filters( Plugin::FILTER_META_BOX_TITLE, __( 'Content relations', 'ph_content_relations' ), $post_type, $post),
+			apply_filters( Plugin::FILTER_META_BOX_TITLE, __( 'Content relations', 'ph-content-relations' ), $post_type, $post),
 			array( $this, 'render_post_meta_relations' )
 		// 'post'
 		);
@@ -93,7 +93,7 @@ class MetaBox {
 
 		wp_enqueue_script(
 			'content-relations-meta-box',
-			$this->plugin->url . '/dist/meta-box.js',
+			$this->plugin->url . 'dist/meta-box.js',
 			$meta['dependencies'],
 			$meta['version'],
 			true
