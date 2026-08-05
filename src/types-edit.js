@@ -1,5 +1,6 @@
 import { createRoot } from '@wordpress/element';
 import domReady from '@wordpress/dom-ready';
+import './styles/types-edit.scss';
 import TypeEdit from './types-edit/TypeEdit.jsx';
 
 domReady( () => {

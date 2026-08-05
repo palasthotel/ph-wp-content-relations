@@ -155,15 +155,21 @@ class TypesScreen {
 			$source_id = (int) $row->source_id;
 			if ( ! isset( $groups[ $source_id ] ) ) {
 				$groups[ $source_id ] = array(
-					'source_id'    => $source_id,
-					'source_title' => get_the_title( $source_id ),
-					'targets'      => array(),
+					'source_id'        => $source_id,
+					'source_title'     => get_the_title( $source_id ),
+					// '' rather than 'display': a raw URL, not one HTML-escaped for
+					// printing into markup - this goes into a JS object, and null if the
+					// current user cannot edit that post, so the title falls back to plain
+					// text instead of a dead link.
+					'source_edit_link' => get_edit_post_link( $source_id, '' ),
+					'targets'          => array(),
 				);
 			}
 			$target_id = (int) $row->target_id;
 			$groups[ $source_id ]['targets'][] = array(
 				'target_id'   => $target_id,
 				'title'       => get_the_title( $target_id ),
+				'edit_link'   => get_edit_post_link( $target_id, '' ),
 				'post_type'   => get_post_type( $target_id ),
 				'post_status' => get_post_status( $target_id ),
 			);
@@ -188,6 +194,14 @@ class TypesScreen {
 			true
 		);
 		wp_enqueue_style( 'wp-components' );
+		if ( file_exists( $dir . '/types-edit.css' ) ) {
+			wp_enqueue_style(
+				'content-relations-types-edit',
+				$this->plugin->url . 'dist/types-edit.css',
+				array(),
+				$meta['version']
+			);
+		}
 
 		$type_name = $this->type_name( $type_id );
 		wp_localize_script( 'content-relations-types-edit', 'ContentRelationsTypeEdit', array(
@@ -197,6 +211,8 @@ class TypesScreen {
 			'i18n'          => array(
 				'move_up'       => __( 'Move up', 'ph-content-relations' ),
 				'move_down'     => __( 'Move down', 'ph-content-relations' ),
+				'drag_hint'     => __( 'Drag to reorder', 'ph-content-relations' ),
+				'remove'        => __( 'Remove', 'ph-content-relations' ),
 				'save_order'    => __( 'Save order', 'ph-content-relations' ),
 				'reset'         => __( 'Reset', 'ph-content-relations' ),
 				'order_saved'   => __( 'Order saved.', 'ph-content-relations' ),
@@ -330,7 +346,7 @@ class TypesScreen {
 				<?php esc_html_e( 'Back to types', 'ph-content-relations' ); ?>
 			</a>
 			<hr class="wp-header-end" />
-			<div id="content-relations-type-edit-root"></div>
+			<div id="content-relations-type-edit-root" class="content-relations-type-edit"></div>
 		</div>
 		<?php
 	}
