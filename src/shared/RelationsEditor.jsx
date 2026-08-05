@@ -130,6 +130,7 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 				type: chosenType,
 				post_title: post.post_title,
 				post_type: post.post_type,
+				post_type_label: post.post_type_label,
 				post_status: post.post_status,
 			},
 		] );
@@ -174,7 +175,14 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 						{ group.items.map( ( relation, index ) => (
 							<Flex key={ `${ relation.target_id }-${ index }` } align="center" gap="1">
 								<FlexItem isBlock>
-									<Text>{ relation.post_title || `#${ relation.target_id }` }</Text>
+									<Flex justify="flex-start" gap="1" wrap>
+										<Text>{ relation.post_title || `#${ relation.target_id }` }</Text>
+										{ relation.post_type_label && (
+											<Text variant="muted" size="12">
+												{ relation.post_type_label }
+											</Text>
+										) }
+									</Flex>
 									{ relation.post_status && 'publish' !== relation.post_status && (
 										<Text isBlock variant="muted" size="12">
 											{ relation.post_status }
@@ -258,10 +266,19 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 									variant="tertiary"
 									onClick={ () => addRelation( post ) }
 								>
-									{ post.post_title || `#${ post.target_id }` }
-									{ post.post_status && 'publish' !== post.post_status
-										? ` (${ post.post_status })`
-										: '' }
+									<Flex justify="flex-start" gap="1" wrap>
+										<Text>{ post.post_title || `#${ post.target_id }` }</Text>
+										{ post.post_type_label && (
+											<Text variant="muted" size="12">
+												{ post.post_type_label }
+											</Text>
+										) }
+										{ post.post_status && 'publish' !== post.post_status && (
+											<Text variant="muted" size="12">
+												({ post.post_status })
+											</Text>
+										) }
+									</Flex>
 								</Button>
 							) ) }
 						</Flex>

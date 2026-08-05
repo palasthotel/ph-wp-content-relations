@@ -113,12 +113,14 @@ class MetaBox {
 				continue;
 			}
 			$target_id   = (int) $relation->target_id;
+			$post_type   = get_post_type( $target_id );
 			$relations[] = array(
-				'target_id'   => $target_id,
-				'type'        => (string) $relation->type,
-				'post_title'  => get_the_title( $target_id ),
-				'post_type'   => get_post_type( $target_id ),
-				'post_status' => get_post_status( $target_id ),
+				'target_id'       => $target_id,
+				'type'            => (string) $relation->type,
+				'post_title'      => get_the_title( $target_id ),
+				'post_type'       => $post_type,
+				'post_type_label' => RestEditor::post_type_label( $post_type ),
+				'post_status'     => get_post_status( $target_id ),
 			);
 		}
 

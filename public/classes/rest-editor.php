@@ -83,6 +83,17 @@ class RestEditor {
 		return current_user_can( 'edit_posts' );
 	}
 
+	/**
+	 * A post type's singular label (e.g. "Post", "Page"). The old autocomplete grouped
+	 * results into a tab per post type; without tabs, this is what lets the editor and
+	 * meta box tell types apart, shown muted next to a post's title.
+	 */
+	public static function post_type_label( string $post_type ): string {
+		$object = get_post_type_object( $post_type );
+
+		return $object ? $object->labels->singular_name : $post_type;
+	}
+
 	private function register_edit_field(): void {
 		$post_types = get_post_types( array( 'public' => true ), 'names' );
 
@@ -121,13 +132,15 @@ class RestEditor {
 			if ( (int) $relation->source_id !== $post_id ) {
 				continue;
 			}
-			$target_id = (int) $relation->target_id;
-			$out[]     = array(
-				'target_id'  => $target_id,
-				'type'       => (string) $relation->type,
-				'post_title' => get_the_title( $target_id ),
-				'post_type'  => get_post_type( $target_id ),
-				'post_status' => get_post_status( $target_id ),
+			$target_id  = (int) $relation->target_id;
+			$post_type  = get_post_type( $target_id );
+			$out[]      = array(
+				'target_id'       => $target_id,
+				'type'            => (string) $relation->type,
+				'post_title'      => get_the_title( $target_id ),
+				'post_type'       => $post_type,
+				'post_type_label' => self::post_type_label( $post_type ),
+				'post_status'     => get_post_status( $target_id ),
 			);
 		}
 
@@ -299,10 +312,11 @@ class RestEditor {
 		$results = array();
 		foreach ( $query->posts as $post ) {
 			$results[] = array(
-				'target_id'  => (int) $post->ID,
-				'post_title' => get_the_title( $post ),
-				'post_type'  => $post->post_type,
-				'post_status' => get_post_status( $post ),
+				'target_id'       => (int) $post->ID,
+				'post_title'      => get_the_title( $post ),
+				'post_type'       => $post->post_type,
+				'post_type_label' => self::post_type_label( $post->post_type ),
+				'post_status'     => get_post_status( $post ),
 			);
 		}
 		wp_reset_postdata();
