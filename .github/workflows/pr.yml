@@ -28,11 +28,44 @@ jobs:
         run: |
           find . -name '*.php' -not -path './build/*' -print0 | xargs -0 -r -n1 php -l
 
+  assets:
+    name: Editor bundle (build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # Assert the build produced the bundle the plugin enqueues, so a renamed or dropped
+      # entry point surfaces here rather than as a missing sidebar in wp-admin.
+      - name: Assert the build produced the bundle
+        run: |
+          test -f public/dist/block-editor.js
+          test -f public/dist/block-editor.asset.php
+          test -f public/dist/meta-box.js
+          test -f public/dist/meta-box.asset.php
+          test -f public/dist/types-edit.js
+          test -f public/dist/types-edit.asset.php
+
   pack:
     name: Pack plugin
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+
+      - run: npm ci
+
+      - run: npm run build
 
       - name: Pack
         run: bash bin/build-plugin.sh
@@ -46,6 +79,9 @@ jobs:
           test -f build/content-relations/LICENSE
           test -f build/content-relations/classes/db.php
           test -f build/content-relations/js/content-relations-admin.js
+          test -f build/content-relations/dist/block-editor.js
+          test -f build/content-relations/dist/meta-box.js
+          test -f build/content-relations/dist/types-edit.js
           test ! -e build/content-relations/bin
           test ! -e build/content-relations/.github
           test ! -e build/content-relations/CONTRIBUTING.md

@@ -5,7 +5,7 @@
  * Plugin URI:        https://github.com/palasthotel/ph-wp-content-relations
  * Description:       Development wrapper. Loads the plugin from public/, which is what ships to wordpress.org. Do not deploy this file.
  * Version:           0.0.0-dev
- * Requires at least: 4.8
+ * Requires at least: 6.6
  * Author:            Palasthotel <rezeption@palasthotel.de> (Edward Bock, Jana Marie Eggebrecht)
  * Author URI:        https://palasthotel.de
  * License:           GPL-3.0-or-later

@@ -20,8 +20,8 @@ class Grid {
 		$types = $store->get_types();
 
 		$selections = array(
-			array( 'key' => '-1', 'text' => __( '-- Filter by content relation --' ) ),
-			array( 'key' => '0', 'text' => __( ' All types ' ) ),
+			array( 'key' => '-1', 'text' => __( '-- Filter by content relation --', 'ph-content-relations' ) ),
+			array( 'key' => '0', 'text' => __( ' All types ', 'ph-content-relations' ) ),
 		);
 		foreach ( $types as $type ) {
 			$selections[] = array(
@@ -33,18 +33,18 @@ class Grid {
 		$cs[] = array(
 			'key' => 'content_relation_type',
 			'type' => 'select',
-			'label' => __( 'Relation type' ),
+			'label' => __( 'Relation type', 'ph-content-relations' ),
 			'selections' => $selections,
 		);
 
 		$cs[] = array(
 			'key' => 'content_relation_direction',
 			'type' => 'select',
-			'label' => __( 'Relation direction' ),
+			'label' => __( 'Relation direction', 'ph-content-relations' ),
 			'selections' => array(
-				array( 'key' => 'both', 'text' => __( 'Relations from and to this post' ) ),
-				array( 'key' => 'from', 'text' => __( 'Relations added to this post to another' ) ),
-				array( 'key' => 'to', 'text' => __( 'Relations pointing to this post' ) ),
+				array( 'key' => 'both', 'text' => __( 'Relations from and to this post', 'ph-content-relations' ) ),
+				array( 'key' => 'from', 'text' => __( 'Relations added to this post to another', 'ph-content-relations' ) ),
+				array( 'key' => 'to', 'text' => __( 'Relations pointing to this post', 'ph-content-relations' ) ),
 			),
 		);
 		return $cs;

@@ -52,6 +52,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y subversion
 
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+
+      - name: Install node modules
+        run: npm ci
+
+      - name: Build editor bundle
+        run: npm run build
+
       - name: Pack plugin
         id: pack_plugin
         run: bash bin/build-plugin.sh

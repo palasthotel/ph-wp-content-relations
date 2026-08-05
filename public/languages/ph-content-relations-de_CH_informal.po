@@ -1,23 +1,23 @@
-# Copyright (C) 2026 Palasthotel <rezeption@palasthotel.de> (Edward Bock, Jana Marie Eggebrecht)
-# This file is distributed under the GPL-3.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Content Relations 1.0.15\n"
-"Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/issues\n"
+"Project-Id-Version: Content Relations\n"
+"Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/"
+"issues\n"
+"POT-Creation-Date: 2026-08-05T11:53:33+00:00\n"
+"PO-Revision-Date: 2026-08-05 12:00+0200\n"
 "Last-Translator: Palasthotel <cybertreff@palasthotel.de>\n"
 "Language-Team: Palasthotel <cybertreff@palasthotel.de>\n"
+"Language: de_CH_informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-05T11:53:33+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.12.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: ph-content-relations\n"
 
 #. Plugin Name of the plugin
 #: ph-content-relations.php
 msgid "Content Relations"
-msgstr ""
+msgstr "Content Relations"
 
 #. Plugin URI of the plugin
 #: ph-content-relations.php
@@ -26,12 +26,18 @@ msgstr ""
 
 #. Description of the plugin
 #: ph-content-relations.php
-msgid "Relate posts to other posts, edit them in the block editor sidebar or a meta box, and show them with a Related content block or on the REST API."
+msgid ""
+"Relate posts to other posts, edit them in the block editor sidebar or a meta "
+"box, and show them with a Related content block or on the REST API."
 msgstr ""
+"Inhalte mit anderen Inhalten verknüpfen, in der Editor-Seitenleiste oder "
+"einer Metabox bearbeiten und mit einem Verwandte-Inhalte-Block oder über "
+"die REST-API anzeigen."
 
 #. Author of the plugin
 #: ph-content-relations.php
-msgid "Palasthotel <rezeption@palasthotel.de> (Edward Bock, Jana Marie Eggebrecht)"
+msgid ""
+"Palasthotel <rezeption@palasthotel.de> (Edward Bock, Jana Marie Eggebrecht)"
 msgstr ""
 
 #. Author URI of the plugin
@@ -41,195 +47,199 @@ msgstr ""
 
 #: classes/grid.php:23
 msgid "-- Filter by content relation --"
-msgstr ""
+msgstr "-- Nach Inhaltsbeziehung filtern --"
 
 #: classes/grid.php:24
 msgid " All types "
-msgstr ""
+msgstr " Alle Typen "
 
-#: classes/grid.php:36
-#: classes/relations-i18n.php:26
+#: classes/grid.php:36 classes/relations-i18n.php:26
 msgid "Relation type"
-msgstr ""
+msgstr "Beziehungstyp"
 
 #: classes/grid.php:43
 msgid "Relation direction"
-msgstr ""
+msgstr "Beziehungsrichtung"
 
 #: classes/grid.php:45
 msgid "Relations from and to this post"
-msgstr ""
+msgstr "Beziehungen von und zu diesem Inhalt"
 
 #: classes/grid.php:46
 msgid "Relations added to this post to another"
-msgstr ""
+msgstr "Beziehungen von diesem Inhalt zu einem anderen"
 
 #: classes/grid.php:47
 msgid "Relations pointing to this post"
-msgstr ""
+msgstr "Beziehungen, die auf diesen Inhalt zeigen"
 
 #: classes/relations-i18n.php:21
 msgid "No relations yet."
-msgstr ""
+msgstr "Noch keine Beziehungen."
 
 #: classes/relations-i18n.php:22
 msgid "Add relation"
-msgstr ""
+msgstr "Beziehung hinzufügen"
 
-#: classes/relations-i18n.php:23
-#: classes/types-screen.php:212
+#: classes/relations-i18n.php:23 classes/types-screen.php:212
 msgid "Move up"
-msgstr ""
+msgstr "Nach oben"
 
-#: classes/relations-i18n.php:24
-#: classes/types-screen.php:213
+#: classes/relations-i18n.php:24 classes/types-screen.php:213
 msgid "Move down"
-msgstr ""
+msgstr "Nach unten"
 
-#: classes/relations-i18n.php:25
-#: classes/types-screen.php:215
+#: classes/relations-i18n.php:25 classes/types-screen.php:215
 msgid "Remove"
-msgstr ""
+msgstr "Entfernen"
 
 #: classes/relations-i18n.php:27
 msgid "Pick a type or type a new name."
-msgstr ""
+msgstr "Einen Typ wählen oder einen neuen Namen eingeben."
 
 #: classes/relations-i18n.php:28
 msgid "Choose a relation type first."
-msgstr ""
+msgstr "Wähle zuerst einen Beziehungstyp."
 
 #: classes/relations-i18n.php:29
 msgid "Add a related post"
-msgstr ""
+msgstr "Verwandten Inhalt hinzufügen"
 
 #: classes/relations-i18n.php:30
 msgid "Search posts…"
-msgstr ""
+msgstr "Inhalte suchen…"
 
 #: classes/relations-i18n.php:31
 msgctxt "post search"
 msgid "No posts found."
-msgstr ""
+msgstr "Keine Inhalte gefunden."
 
 #. translators: %s is replaced with the typed name in the browser, not by PHP
 #: classes/relations-i18n.php:33
 #, php-format
 msgid "Create \"%s\""
-msgstr ""
+msgstr "„%s“ anlegen"
 
 #: classes/relations-i18n.php:35
 msgctxt "block editor"
 msgid "Related content"
-msgstr ""
+msgstr "Verwandte Inhalte"
 
 #: classes/relations-i18n.php:36
 msgctxt "block editor"
-msgid "Posts this post relates to, under one relation type, in their saved order."
+msgid ""
+"Posts this post relates to, under one relation type, in their saved order."
 msgstr ""
+"Beiträge, mit denen dieser Beitrag über einen Beziehungstyp verknüpft ist, "
+"in der gespeicherten Reihenfolge."
 
 #: classes/relations-i18n.php:37
 msgctxt "block editor"
 msgid "Relation type"
-msgstr ""
+msgstr "Beziehungstyp"
 
 #: classes/relations-i18n.php:38
 msgctxt "block editor"
 msgid "Which of this post's relation types to list."
-msgstr ""
+msgstr "Welcher Beziehungstyp dieses Beitrags aufgelistet werden soll."
 
 #: classes/relations-i18n.php:39
 msgctxt "block editor"
 msgid "— Select —"
-msgstr ""
+msgstr "— Auswählen —"
 
 #: classes/rest-editor.php:161
 msgid "You are not allowed to edit the relations of this post."
-msgstr ""
+msgstr "Du darfst die Beziehungen dieses Inhalts nicht bearbeiten."
 
 #: classes/rest-editor.php:169
 msgid "Relations must be a list."
-msgstr ""
+msgstr "Beziehungen müssen eine Liste sein."
 
 #: classes/rest-editor.php:216
 msgid "A type is required."
-msgstr ""
+msgstr "Ein Typ ist erforderlich."
 
 #: classes/types-list-table.php:36
 msgctxt "list table"
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: classes/types-list-table.php:37
 msgctxt "list table"
 msgid "Relations"
-msgstr ""
+msgstr "Beziehungen"
 
-#: classes/types-list-table.php:50
-#: classes/types-list-table.php:81
+#: classes/types-list-table.php:50 classes/types-list-table.php:81
 msgctxt "list table"
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #: classes/types-list-table.php:75
 msgctxt "list table"
 msgid "Edit"
-msgstr ""
+msgstr "Bearbeiten"
 
 #: classes/types-list-table.php:80
 msgid "Delete this relation type and every relation of it?"
-msgstr ""
+msgstr "Diesen Beziehungstyp und alle seine Beziehungen löschen?"
 
 #: classes/types-list-table.php:98
 msgid "No relation types yet. They appear here once a relation is created."
 msgstr ""
+"Noch keine Beziehungstypen. Sie erscheinen hier, sobald eine Beziehung "
+"angelegt wird."
 
 #: classes/types-screen.php:214
 msgid "Drag to reorder"
-msgstr ""
+msgstr "Ziehen, um die Reihenfolge zu ändern"
 
 #: classes/types-screen.php:216
 msgid "Save order"
-msgstr ""
+msgstr "Reihenfolge speichern"
 
 #: classes/types-screen.php:217
 msgid "Reset"
-msgstr ""
+msgstr "Zurücksetzen"
 
 #: classes/types-screen.php:218
 msgid "Order saved."
-msgstr ""
+msgstr "Reihenfolge gespeichert."
 
 #: classes/types-screen.php:219
 msgid "Saving failed."
-msgstr ""
+msgstr "Speichern fehlgeschlagen."
 
 #: classes/types-screen.php:220
 msgid "This type has no relations."
-msgstr ""
+msgstr "Dieser Typ hat keine Beziehungen."
 
 #. translators: %s: number of deleted relations
 #: classes/types-screen.php:302
 #, php-format
 msgid "%s relation deleted."
 msgid_plural "%s relations deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s Beziehung gelöscht."
+msgstr[1] "%s Beziehungen gelöscht."
 
 #: classes/types-screen.php:318
-msgid "Relation types are created when a relation is added in the editor. Delete a type here to remove it and every relation of it."
+msgid ""
+"Relation types are created when a relation is added in the editor. Delete a "
+"type here to remove it and every relation of it."
 msgstr ""
+"Beziehungstypen entstehen, wenn im Editor eine Beziehung angelegt wird. Hier "
+"gelöscht, verschwindet der Typ samt all seiner Beziehungen."
 
 #: classes/types-screen.php:321
 msgid "Search types"
-msgstr ""
+msgstr "Typen durchsuchen"
 
 #. translators: %s: relation type name
 #: classes/types-screen.php:340
 #, php-format
 msgid "Edit relation type: %s"
-msgstr ""
+msgstr "Beziehungstyp bearbeiten: %s"
 
 #: classes/types-screen.php:346
 msgid "Back to types"
-msgstr ""
+msgstr "Zurück zu den Typen"

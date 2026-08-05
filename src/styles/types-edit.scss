@@ -1,0 +1,73 @@
+/**
+ * The Tools -> Content Relations -> edit-type screen.
+ *
+ * Mirrors ph-postqueue's items table: drag handle plus up/down buttons in a fixed-width
+ * order column, drag feedback on the row being carried and the row it would land on.
+ */
+
+$muted: #646970;
+$link: #2271b1;
+
+.content-relations-type-edit {
+
+	.content-relations-type-edit__items {
+
+		// Room for the handle and both buttons; a .widefat cell pads 2x10px on top of it.
+		.column-order {
+			width: 90px;
+		}
+
+		.column-actions {
+			width: 10%;
+			text-align: right;
+		}
+
+		td {
+			vertical-align: middle;
+		}
+
+		.content-relations-type-edit__order {
+			display: flex;
+			align-items: center;
+			gap: 2px;
+
+			> * {
+				flex-shrink: 0;
+			}
+		}
+
+		.content-relations-type-edit__handle {
+			display: flex;
+			align-items: center;
+			cursor: grab;
+			color: $muted;
+			padding: 2px;
+
+			svg {
+				fill: currentColor;
+			}
+		}
+
+		tr:hover .content-relations-type-edit__handle {
+			color: $link;
+		}
+
+		tr.is-dragging {
+			opacity: 0.5;
+		}
+
+		tr.is-drop-target > * {
+			box-shadow: 0 -2px 0 0 $link inset;
+		}
+
+		tr:active .content-relations-type-edit__handle {
+			cursor: grabbing;
+		}
+	}
+
+	@media screen and (max-width: 782px) {
+		.content-relations-type-edit__items .column-order {
+			width: auto;
+		}
+	}
+}
