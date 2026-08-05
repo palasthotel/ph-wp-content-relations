@@ -38,6 +38,7 @@ class Plugin{
     public RestApi $rest_api;
     public RestEditor $rest_editor;
     public BlockEditorAssets $block_editor_assets;
+    public TypesScreen $types_screen;
     public Grid $grid;
 
 	/**
@@ -132,6 +133,13 @@ class Plugin{
 		 */
 		require_once dirname(__FILE__)."/classes/block-editor-assets.php";
 		$this->block_editor_assets = new BlockEditorAssets($this);
+
+		/**
+		 * Tools -> Content Relations screen (relation types as a WP_List_Table)
+		 */
+		require_once dirname(__FILE__)."/classes/types-list-table.php";
+		require_once dirname(__FILE__)."/classes/types-screen.php";
+		$this->types_screen = new TypesScreen($this);
 
 		/**
 		 * Grid Add Ons
