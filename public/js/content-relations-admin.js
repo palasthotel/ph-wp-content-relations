@@ -146,7 +146,12 @@
 		 	 			e.stopPropagation();
 		 	 			return false;
 		 	 		}
-		 	 		$type_list.append('<li class="content-relation-type-item" data-value="">'+new_title+'</li>');
+		 	 		// .text(), not string concatenation: new_title is whatever the user typed,
+	 	 		// and building the <li> from a string would reinterpret any markup in it as
+	 	 		// HTML (CodeQL js/xss-through-dom).
+	 	 		$('<li class="content-relation-type-item" data-value=""></li>')
+	 	 			.text(new_title)
+	 	 			.appendTo($type_list);
 		 	 		$type_title.text(new_title);
 		 	 		$type_new_item_title.text("");
 		 	 	} else {
@@ -216,8 +221,14 @@
 				jQuery.each(result,function(type, list){
 					if(list.length > 0){
 						const label = (typeof autocomplete_types[type] === typeof "")? autocomplete_types[type]: type;
+						// label as text, class via addClass: the post-type label could carry
+						// markup, so it must not be concatenated into an HTML string.
 						$types.append(
-							$("<div class='ph-relation-post-type post-type-"+type+"'>"+label+"</div>").data("type", type)
+							$("<div></div>")
+								.addClass("ph-relation-post-type")
+								.addClass("post-type-" + type)
+								.text(label)
+								.data("type", type)
 						);
 						build_autocomplete_items($list, list, type);
 					}
@@ -242,15 +253,21 @@
 			 	 		return;
 			 	 	}
 			 	 	classes += " post-type-"+type;
-			 	 	var img = "";
+			 	 	var $img = null;
 			 	 	if(typeof item.src != "undefined")
 			 	 	{
 			 	 		classes+= " post-relation-has-image";
-			 	 		img = "<img class='post-relation-image' src='"+item.src[0]+"' />";
+			 	 		$img = $("<img class='post-relation-image' />").attr("src", item.src[0]);
 			 	 	}
-			 	 	var $item = $( "<li class='"+classes+"'></li>" )
-			 	 	.append( img+"<div class='post-relation-title'>" + item.post_title +
-			 	 		"<br>ID " + item.ID + " - "+type+" - "+item.pub_date+"</div>" );
+			 	 	// item.post_title is a post title, so it goes in via .text(); the rest
+			 	 	// is built with DOM nodes rather than a concatenated HTML string.
+			 	 	var $title = $("<div class='post-relation-title'></div>")
+			 	 		.text(item.post_title)
+			 	 		.append("<br>")
+			 	 		.append(document.createTextNode("ID " + item.ID + " - " + type + " - " + item.pub_date));
+			 	 	var $item = $("<li></li>").addClass(classes);
+			 	 	if($img !== null){ $item.append($img); }
+			 	 	$item.append($title);
 
 			 	 	$item.attr("data-type", type).attr("data-index", index);
 
@@ -406,7 +423,9 @@
 				var $section = $("<li></li>")
 					.addClass("content-relations-list-section")
 					.attr("data-type", type);
-				var $title = $("<div>"+type+"</div>").addClass("content-relations-section-title");
+				// type is a relation type name, which users create - .text() so a name
+				// containing markup renders as text, not HTML.
+				var $title = $("<div></div>").addClass("content-relations-section-title").text(type);
 				var $relations_list = $("<ul></ul>").addClass("content-relations-list-relations");
 				return $section.append($title).append($relations_list);
 			}
@@ -439,36 +458,52 @@
 					icon_type = "dashicons-external relation-external";
 				}
 
-				var icon = "<span class='dashicons "+icon_type+"'></span> ";
-				var icon_sort = "<span class='dashicons dashicons-sort relation-sort'></span>"
+				// Everything below is built with DOM APIs instead of HTML strings: the
+				// relation carries a post title and post type from the database, which an
+				// author controls, so concatenating them into markup would turn a title
+				// like "<img src=x onerror=…>" into live HTML (CodeQL js/xss-through-dom).
+				var $icon = $("<span></span>").addClass("dashicons").addClass(icon_type);
+				var $icon_sort = $("<span></span>").addClass("dashicons dashicons-sort relation-sort");
 
-				var image = "";
+				var $image = null;
 				if(post_type === "attachment"){
 					classes+= "ph-content-relation-has-image ";
-					image = "<img class='ph-relation-image' src='"+src+"' />";
+					$image = $("<img class='ph-relation-image' />").attr("src", src);
 				}
-				var link = "<a target='_new' href='/wp-admin/post.php?post="+display_id+"&action=edit'>"+post_title+"</a>";
-				if(post_status === "trash"){
-					link = "<a href='/wp-admin/edit.php?post_status=trash&post_type="+post_type+"' target='_blank'>"+post_title+"</a> is in trash!";
-				}
-				var $display = $("<div class='content-relation-item-title'>"
-								+icon
-								+icon_sort
-								+link
-								+"</div>");
-				var $infos = $("<div class='content-relation-infos'>"
-								+"ID " + display_id + " - " + post_type + " - " + pub_date
-								+"</div>");
 
-				var $item = $("<li class='"+classes+"' ></li>")
+				var $link;
+				if(post_status === "trash"){
+					$link = $("<a target='_blank'></a>")
+						.attr("href", "/wp-admin/edit.php?post_status=trash&post_type=" + encodeURIComponent(post_type))
+						.text(post_title);
+				} else {
+					$link = $("<a target='_new'></a>")
+						.attr("href", "/wp-admin/post.php?post=" + encodeURIComponent(display_id) + "&action=edit")
+						.text(post_title);
+				}
+
+				var $display = $("<div class='content-relation-item-title'></div>")
+					.append($icon)
+					.append(" ")
+					.append($icon_sort)
+					.append($link);
+				if(post_status === "trash"){
+					$display.append(document.createTextNode(" is in trash!"));
+				}
+
+				var $infos = $("<div class='content-relation-infos'></div>")
+					.text("ID " + display_id + " - " + post_type + " - " + pub_date);
+
+				var $item = $("<li></li>")
+					.addClass(classes)
 					.addClass("content-relation-item")
 					.attr("data-source-id", source_id)
 					.attr("data-target-id", target_id)
 					.attr("data-type", type)
 					.append($display)
 					.append($infos);
-				if(image !== ""){
-					$item.append(image);
+				if($image !== null){
+					$item.append($image);
 				}
 				$item.append($field_type)
 					.append($field_soruce_id)

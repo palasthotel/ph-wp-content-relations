@@ -5,7 +5,7 @@ Tags: post, relation, related, rest, gutenberg
 Requires at least: 6.6
 Tested up to: 7.0.2
 Requires PHP: 7.4
-Stable tag: 1.0.15
+Stable tag: 1.0.16
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -49,6 +49,12 @@ No. On the REST API they are filtered out for anyone who cannot edit posts, and 
 
 
 == Changelog ==
+
+= 1.0.16 =
+**Bug Fixes**
+* build the relations admin UI with the DOM instead of HTML strings (3ac2b97)
+* close information disclosure, SQL injection and CSRF holes (3d4fa95)
+
 = 1.0.15 =
 * Fix: Remove deprecated dynamic properties
 
