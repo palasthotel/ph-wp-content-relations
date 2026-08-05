@@ -42,9 +42,7 @@ No. On the REST API they are filtered out for anyone who cannot edit posts, and 
 
 = 1.0.16 =
 **Bug Fixes**
-* build the relations admin UI with the DOM instead of HTML strings (08c0b7c)
 * build the relations admin UI with the DOM instead of HTML strings (3ac2b97)
-* close information disclosure, SQL injection and CSRF holes (19860e6)
 * close information disclosure, SQL injection and CSRF holes (3d4fa95)
 
 = 1.0.15 =
