@@ -38,27 +38,27 @@ about that line.
 
 Everything else takes a type that releases nothing — workflows and CI, release tooling,
 repository documentation, internal refactoring, and anything touching files that are not
-shipped. As a rule of thumb, a change confined to files outside `plugin/` is almost never
+shipped. As a rule of thumb, a change confined to files outside `public/` is almost never
 a `fix:`.
 
 ## Repository layout
 
-`plugin/` is exactly what ships to WordPress.org. Everything outside it is
+`public/` is exactly what ships to WordPress.org. Everything outside it is
 repository-only.
 
 | Path | Description |
 |---|---|
-| `plugin/ph-content-relations.php` | plugin header and bootstrap |
-| `plugin/classes/` | the plugin's PHP |
-| `plugin/parts/` | the meta box template |
-| `plugin/js/`, `plugin/css/` | hand-written admin assets, not compiled |
-| `plugin/public-functions.php` | the public API |
-| `plugin/readme.txt` | the wordpress.org listing |
-| `ph-content-relations.php` | development wrapper, loads `plugin/`; never deployed |
+| `public/ph-content-relations.php` | plugin header and bootstrap |
+| `public/classes/` | the plugin's PHP |
+| `public/parts/` | the meta box template |
+| `public/js/`, `public/css/` | hand-written admin assets, not compiled |
+| `public/public-functions.php` | the public API |
+| `public/readme.txt` | the wordpress.org listing |
+| `ph-content-relations.php` | development wrapper, loads `public/`; never deployed |
 | `bin/` | release helper scripts |
 | `resource/` | wp-env helpers |
 
-The main file `plugin/ph-content-relations.php` must keep its name. WordPress identifies
+The main file `public/ph-content-relations.php` must keep its name. WordPress identifies
 an installed plugin by `<directory>/<main file>` and stores that pair in `active_plugins`;
 renaming it deactivates the plugin on every site at the next update. The version 2.0.3
 changelog entry ("you will have to reactivate the plugin because main php file was
@@ -78,10 +78,10 @@ npx @wordpress/env start      # http://localhost:8888, admin / password
 ## Versions
 
 Never edit version numbers by hand. `version.txt`, `CHANGELOG.md`,
-`plugin/ph-content-relations.php` and the `Stable tag:` in `plugin/readme.txt` are all
+`public/ph-content-relations.php` and the `Stable tag:` in `public/readme.txt` are all
 maintained by the release pipeline — see [.github/WORKFLOWS.md](.github/WORKFLOWS.md).
 
-Content changes to `plugin/readme.txt` (description, FAQ, tested-up-to) are of course done
+Content changes to `public/readme.txt` (description, FAQ, tested-up-to) are of course done
 by hand; just leave `Stable tag:` and the `== Changelog ==` entries alone.
 
 ## Checks

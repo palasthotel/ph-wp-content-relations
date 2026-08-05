@@ -1,5 +1,5 @@
 #!/bin/sh
-# Stages plugin/ in build/content-relations/ - exactly what is deployed to
+# Stages public/ in build/content-relations/ - exactly what is deployed to
 # WordPress.org - and zips it to content-relations.zip in the project root.
 #
 # The build directory is left in place on purpose: the release workflow rsyncs from
@@ -19,15 +19,15 @@ echo "Generating build directory..."
 rm -rf "$BUILD_PATH"
 mkdir -p "$DEST_PATH"
 
-if [ ! -f "$PROJECT_PATH/plugin/ph-content-relations.php" ]; then
-  echo "plugin/ph-content-relations.php is missing - is this the right directory?" >&2
+if [ ! -f "$PROJECT_PATH/public/ph-content-relations.php" ]; then
+  echo "public/ph-content-relations.php is missing - is this the right directory?" >&2
   exit 1
 fi
 
 echo "Syncing files..."
 # -L resolves symlinks into real files. wordpress.org discards symlinks when it builds
 # the download, and SVN refuses to put one where it versions a regular file.
-rsync -rL "$PROJECT_PATH/plugin/" "$DEST_PATH/"
+rsync -rL "$PROJECT_PATH/public/" "$DEST_PATH/"
 
 echo "Generating zip file..."
 cd "$BUILD_PATH" || exit 1

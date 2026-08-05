@@ -1,11 +1,11 @@
-# Content Relations
+# Content Relations (WordPress-Plugin)
 
-You can add typed relations between posts with a new meta box in post editor. The plugin is available on [WordPress.org](https://wordpress.org/plugins/content-relations/) (slug `content-relations`; this repository is `ph-wp-content-relations`).
+With this plugin you can add typed relations between posts with a new meta box in post editor. The plugin is available on [WordPress.org](https://wordpress.org/plugins/content-relations/) (slug `content-relations`; this repository is `ph-wp-content-relations`).
 
 ## Repository layout
 
-`plugin/` is exactly what ships to wordpress.org; everything else is repository-only.
-`ph-content-relations.php` in the root is a development wrapper that loads `plugin/`, so
+`public/` is exactly what ships to wordpress.org; everything else is repository-only.
+`ph-content-relations.php` in the root is a development wrapper that loads `public/`, so
 the whole repository can be symlinked into `wp-content/plugins` during development.
 
 Releases are cut by release-please from conventional commits and deployed to the

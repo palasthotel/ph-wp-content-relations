@@ -54,7 +54,7 @@ jobs:
 
       # The development wrapper in the repository root carries a plugin header, so
       # shipping it would put a second "Content Relations - DEV" entry in the plugin
-      # list. The payload comes from plugin/, not the root, so it should never appear -
+      # list. The payload comes from public/, not the root, so it should never appear -
       # this fails loudly if that ever changes.
       - name: Assert the dev wrapper is not shipped
         run: |

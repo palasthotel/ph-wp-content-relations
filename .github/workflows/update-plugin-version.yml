@@ -45,7 +45,7 @@ jobs:
           BOT_ID=$(gh api "/users/${APP_SLUG}%5Bbot%5D" --jq .id)
           git config user.name "${APP_SLUG}[bot]"
           git config user.email "${BOT_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
-          git add plugin/ph-content-relations.php plugin/readme.txt
+          git add public/ph-content-relations.php public/readme.txt
           git diff --cached --quiet && echo "No changes to commit" && exit 0
           git commit -m "chore: update plugin header and readme.txt"
           git push

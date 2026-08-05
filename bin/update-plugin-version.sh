@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Syncs the plugin's version carriers after release-please opened or updated the
 # release PR:
-#   - plugin/ph-content-relations.php  "Version:" header
-#   - plugin/readme.txt  "Stable tag:" and a new "= x.y.z =" changelog section
+#   - public/ph-content-relations.php  "Version:" header
+#   - public/readme.txt  "Stable tag:" and a new "= x.y.z =" changelog section
 # The version is read from version.txt, which release-please bumps in the PR.
 #
 # The development wrapper in the root is not in this list. It never ships, so its header
@@ -14,8 +14,8 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 VERSION_FILE="$ROOT_DIR/version.txt"
 CHANGELOG="$ROOT_DIR/CHANGELOG.md"
-README="$ROOT_DIR/plugin/readme.txt"
-PLUGIN_PHP="$ROOT_DIR/plugin/ph-content-relations.php"
+README="$ROOT_DIR/public/readme.txt"
+PLUGIN_PHP="$ROOT_DIR/public/ph-content-relations.php"
 
 VERSION="$(head -n1 "$VERSION_FILE" | tr -d "[:space:]")"
 
