@@ -83,7 +83,8 @@ class TypesListTable extends \WP_List_Table {
 		);
 
 		return sprintf(
-			'<strong>%s</strong>%s',
+			'<strong><a href="%s">%s</a></strong>%s',
+			esc_url( $editUrl ),
 			esc_html( $item['name'] ),
 			$this->row_actions( $actions )
 		);
