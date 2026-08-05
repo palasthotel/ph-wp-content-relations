@@ -5,7 +5,7 @@ Tags: post, relation, related, rest, gutenberg
 Requires at least: 6.6
 Tested up to: 7.0.2
 Requires PHP: 7.4
-Stable tag: 1.0.16
+Stable tag: 1.1.0
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -49,6 +49,23 @@ No. On the REST API they are filtered out for anyone who cannot edit posts, and 
 
 
 == Changelog ==
+
+= 1.1.0 =
+**Features**
+* add a Query Loop variation for related content (3a51a66)
+* add an edit screen for a relation type, grouped by source post (a0c3b74)
+* rebuild the Tools screen as a WP_List_Table (bec0d3f)
+* rework the type-edit screen onto ph-postqueue's item table (00f4d5e)
+* show each related post's type next to its title (062ac13)
+
+**Bug Fixes**
+* hide the Query Loop's post type, order and sticky controls (15385ef)
+* link the relation type's name to its edit screen (658d69c)
+* raise Requires at least to 6.6 (75fd296)
+* redirect the misspelled legacy Tools page slug (78bf51c)
+* repair and complete the translations (11270a8)
+* replace the redundant "Back to types" button with Reset (d48a8b5)
+* translate the JS UI strings in PHP instead of at runtime (5bdb58b)
 
 = 1.0.16 =
 **Bug Fixes**
