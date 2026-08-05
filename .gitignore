@@ -11,3 +11,7 @@
 .DS_Store
 Thumbs.db
 Icon
+
+# compiled editor bundle - the pipeline builds it
+/public/dist
+/node_modules

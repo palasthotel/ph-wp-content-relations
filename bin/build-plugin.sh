@@ -24,6 +24,12 @@ if [ ! -f "$PROJECT_PATH/public/ph-content-relations.php" ]; then
   exit 1
 fi
 
+# public/dist/ holds the compiled block editor sidebar and is not in the repository.
+if [ ! -f "$PROJECT_PATH/public/dist/block-editor.js" ]; then
+  echo "public/dist/ is missing - run \"npm ci && npm run build\" first." >&2
+  exit 1
+fi
+
 echo "Syncing files..."
 # -L resolves symlinks into real files. wordpress.org discards symlinks when it builds
 # the download, and SVN refuses to put one where it versions a regular file.

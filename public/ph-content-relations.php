@@ -36,6 +36,8 @@ class Plugin{
     public Post $post;
     public WPPostQueryExtension $wp_query_extension;
     public RestApi $rest_api;
+    public RestEditor $rest_editor;
+    public BlockEditorAssets $block_editor_assets;
     public Grid $grid;
 
 	/**
@@ -118,6 +120,18 @@ class Plugin{
 		 */
 		require_once dirname(__FILE__)."/classes/rest-api.php";
 		$this->rest_api = new RestApi($this);
+
+		/**
+		 * REST surface for the block editor sidebar and the reworked meta box
+		 */
+		require_once dirname(__FILE__)."/classes/rest-editor.php";
+		$this->rest_editor = new RestEditor($this);
+
+		/**
+		 * Block editor sidebar bundle
+		 */
+		require_once dirname(__FILE__)."/classes/block-editor-assets.php";
+		$this->block_editor_assets = new BlockEditorAssets($this);
 
 		/**
 		 * Grid Add Ons
