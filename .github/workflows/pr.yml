@@ -17,7 +17,7 @@ jobs:
       matrix:
         php-version: ["7.4", "8.2", "8.3", "8.4"]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -32,7 +32,7 @@ jobs:
     name: Editor bundle (build)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v6
         with:
@@ -57,7 +57,7 @@ jobs:
     name: Pack plugin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v6
         with:
@@ -107,7 +107,7 @@ jobs:
     if: ${{ ! startsWith(github.head_ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Check version numbers
         run: VERSION="$(head -n1 version.txt | tr -d '[:space:]')" bash bin/version-checker.sh
