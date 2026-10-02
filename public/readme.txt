@@ -5,7 +5,7 @@ Tags: post, relation, related, rest, gutenberg
 Requires at least: 6.6
 Tested up to: 7.1.2
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -46,6 +46,11 @@ Every post's REST response carries a `content_relations` field with its relation
 Only to someone who may read them. On the REST API a relation appears only if the current user may read both posts, so visitors see relations between published posts. The editor's search only offers posts the current user may read, and a relation can only be added to such a post.
 
 == Changelog ==
+
+= 1.1.1 =
+**Bug Fixes**
+* save the classic meta box's relations for the post being saved only (d913418)
+* stop showing contributors the titles of other authors' drafts and private posts (f00fee1)
 
 = 1.1.0 =
 **Features**

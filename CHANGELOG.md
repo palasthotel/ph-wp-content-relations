@@ -8,6 +8,14 @@ on the file is maintained by
 The plugin's user-facing history lives in `public/readme.txt`, which is what shows on the
 wordpress.org plugin page.
 
+## [1.1.1](https://github.com/palasthotel/ph-wp-content-relations/compare/v1.1.0...v1.1.1) (2026-10-02)
+
+
+### Bug Fixes
+
+* save the classic meta box's relations for the post being saved only ([d913418](https://github.com/palasthotel/ph-wp-content-relations/commit/d913418ac67f8f8f787b42af3080d64ddb0bf24f))
+* stop showing contributors the titles of other authors' drafts and private posts ([f00fee1](https://github.com/palasthotel/ph-wp-content-relations/commit/f00fee1965733590dc830a4ba29a2e6457ff6928))
+
 ## [1.1.0](https://github.com/palasthotel/ph-wp-content-relations/compare/v1.0.16...v1.1.0) (2026-08-05)
 
 
