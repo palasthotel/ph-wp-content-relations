@@ -76,8 +76,8 @@ class MetaBox {
 	/**
 	 * The compiled React meta box, the same editor the block editor sidebar uses.
 	 *
-	 * Replaces the hand-written jQuery (content-relations-admin.js) and its custom
-	 * autocomplete/arrow styles. The relations are localized as the initial state, and
+	 * Replaced the hand-written jQuery meta box (content-relations-admin.js, since deleted)
+	 * and its custom autocomplete/arrow styles. The relations are localized as the initial state, and
 	 * the component writes the hidden fields save_post_meta_relations reads, so the save
 	 * path is unchanged.
 	 */
