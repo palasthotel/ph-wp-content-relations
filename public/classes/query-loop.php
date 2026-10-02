@@ -65,11 +65,19 @@ class QueryLoop {
 	 * @return array
 	 */
 	public function rest_query( $args, $request ) {
-		return $this->apply_relation(
-			$args,
-			$request->get_param( self::QUERY_TYPE_KEY ),
-			(int) $request->get_param( self::QUERY_SOURCE_KEY )
-		);
+		$type      = $request->get_param( self::QUERY_TYPE_KEY );
+		$source_id = (int) $request->get_param( self::QUERY_SOURCE_KEY );
+
+		// The source comes from the request here, so a visitor could otherwise ask which
+		// posts a draft relates to. The editor preview always passes the post being
+		// edited, which its user can read.
+		if ( is_string( $type ) && '' !== $type && $source_id && ! current_user_can( 'read_post', $source_id ) ) {
+			$args['post__in'] = array( 0 );
+
+			return $args;
+		}
+
+		return $this->apply_relation( $args, $type, $source_id );
 	}
 
 	/**

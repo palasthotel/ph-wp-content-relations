@@ -112,16 +112,7 @@ class MetaBox {
 			if ( (int) $relation->source_id !== (int) $post->ID ) {
 				continue;
 			}
-			$target_id   = (int) $relation->target_id;
-			$post_type   = get_post_type( $target_id );
-			$relations[] = array(
-				'target_id'       => $target_id,
-				'type'            => (string) $relation->type,
-				'post_title'      => get_the_title( $target_id ),
-				'post_type'       => $post_type,
-				'post_type_label' => RestEditor::post_type_label( $post_type ),
-				'post_status'     => get_post_status( $target_id ),
-			);
+			$relations[] = RestEditor::editor_relation( (int) $relation->target_id, (string) $relation->type );
 		}
 
 		wp_localize_script( 'content-relations-meta-box', 'ContentRelationsMetaBox', array(
@@ -206,6 +197,9 @@ class MetaBox {
 
 		$data = array();
 		foreach ( $source_ids as $key => $source_id ) {
+			if ( ! RestEditor::can_link_target( (int) $post_id, (int) $target_ids[ $key ] ) ) {
+				continue;
+			}
 			$data[] = array(
 				'source_id' => (int) $source_id,
 				'target_id' => (int) $target_ids[ $key ],
