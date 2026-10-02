@@ -3,10 +3,20 @@
   "private": true,
   "description": "Build tooling for the Content Relations block editor sidebar. The plugin itself is plain PHP; only the editor bundles are compiled.",
   "license": "GPL-3.0-or-later",
+  "author": {
+    "name": "Palasthotel",
+    "email": "webmaster@palasthotel.de",
+    "url": "https://palasthotel.de"
+  },
+  "repository": "git+https://github.com/palasthotel/ph-wp-content-relations.git",
+  "bugs": {
+    "url": "https://github.com/palasthotel/ph-wp-content-relations/issues"
+  },
   "scripts": {
     "start": "wp-scripts start src/block-editor.js src/meta-box.js src/types-edit.js --output-path=public/dist",
     "build": "wp-scripts build src/block-editor.js src/meta-box.js src/types-edit.js --output-path=public/dist",
-    "lint:js": "wp-scripts lint-js src"
+    "lint:js": "wp-scripts lint-js src",
+    "pack": "npm run build && SLUG=content-relations bash ../github-workflows/wp-plugin/bin/pack.sh"
   },
   "devDependencies": {
     "@wordpress/api-fetch": "^7.0.0",

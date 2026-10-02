@@ -9,105 +9,20 @@ permissions:
   contents: read
 
 jobs:
-  php-lint:
-    name: PHP syntax check (${{ matrix.php-version }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version: ["7.4", "8.2", "8.3", "8.4"]
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          coverage: none
-
-      - name: Lint PHP files
-        run: |
-          find . -name '*.php' -not -path './build/*' -print0 | xargs -0 -r -n1 php -l
-
-  assets:
-    name: Editor bundle (build)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24.x
-
-      - run: npm ci
-
-      - run: npm run build
-
-      # Assert the build produced the bundle the plugin enqueues, so a renamed or dropped
-      # entry point surfaces here rather than as a missing sidebar in wp-admin.
-      - name: Assert the build produced the bundle
-        run: |
-          test -f public/dist/block-editor.js
-          test -f public/dist/block-editor.asset.php
-          test -f public/dist/meta-box.js
-          test -f public/dist/meta-box.asset.php
-          test -f public/dist/types-edit.js
-          test -f public/dist/types-edit.asset.php
-
-  pack:
-    name: Pack plugin
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24.x
-
-      - run: npm ci
-
-      - run: npm run build
-
-      - name: Pack
-        run: bash bin/build-plugin.sh
-
-      # The payload is what wordpress.org serves, so assert both what has to be in it
-      # and what must not.
-      - name: Assert the payload is clean
-        run: |
-          test -f build/content-relations/ph-content-relations.php
-          test -f build/content-relations/readme.txt
-          test -f build/content-relations/LICENSE
-          test -f build/content-relations/classes/db.php
-          test -f build/content-relations/js/content-relations-admin.js
-          test -f build/content-relations/dist/block-editor.js
-          test -f build/content-relations/dist/meta-box.js
-          test -f build/content-relations/dist/types-edit.js
-          test ! -e build/content-relations/bin
-          test ! -e build/content-relations/.github
-          test ! -e build/content-relations/CONTRIBUTING.md
-          test ! -e build/content-relations/version.txt
-          test ! -e build/content-relations/resource
-
-      # The development wrapper in the repository root carries a plugin header, so
-      # shipping it would put a second "Content Relations - DEV" entry in the plugin
-      # list. The payload comes from public/, not the root, so it should never appear -
-      # this fails loudly if that ever changes.
-      - name: Assert the dev wrapper is not shipped
-        run: |
-          if grep -rq 'Content Relations - DEV' build/content-relations/; then
-            echo "::error::the payload contains the development wrapper"
-            exit 1
-          fi
-
-  versions:
-    name: Version carriers agree
-    # Not on the release PR: it arrives with only version.txt bumped and gets its other
-    # carriers in a second push from update-plugin-version.yml, so checking its first
-    # commit would fail every time. The release job runs the same script anyway.
-    if: ${{ ! startsWith(github.head_ref, 'release-please--') }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Check version numbers
-        run: VERSION="$(head -n1 version.txt | tr -d '[:space:]')" bash bin/version-checker.sh
+  checks:
+    uses: palasthotel/github-workflows/.github/workflows/wp-plugin-pr.yml@v1
+    with:
+      slug: content-relations
+      dev-plugin-name: Content Relations (DEV)
+      build-command: npm ci && npm run build
+      # What the plugin enqueues from the build, so a renamed or dropped entry point
+      # fails here instead of leaving wp-admin without its sidebar or meta box.
+      required-files: |
+        dist/block-editor.js
+        dist/block-editor.asset.php
+        dist/meta-box.js
+        dist/meta-box.asset.php
+        dist/types-edit.js
+        dist/types-edit.asset.php
+        dist/types-edit.css
+        languages/ph-content-relations-de_DE.mo
