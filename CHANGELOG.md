@@ -5,7 +5,7 @@ All notable changes to this project are documented here. The format follows
 on the file is maintained by
 [release-please](https://github.com/googleapis/release-please) — do not edit it by hand.
 
-The plugin's user-facing history lives in `plugin/readme.txt`, which is what shows on the
+The plugin's user-facing history lives in `public/readme.txt`, which is what shows on the
 wordpress.org plugin page.
 
 ## [1.1.0](https://github.com/palasthotel/ph-wp-content-relations/compare/v1.0.16...v1.1.0) (2026-08-05)

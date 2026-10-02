@@ -34,17 +34,28 @@ per-type editor via `/content-relations/v1/reorder`.
   one chosen type, in their saved order (`post__in` + `orderby=post__in`) - drop it in
   wherever a "related articles" section belongs.
 - **REST**: a read-only `content_relations` field on every post type's REST response,
-  carrying both directions of a relation.
+  carrying both directions of a relation - only those whose both posts the current user
+  may read, so visitors see relations between published posts.
 - **`WP_Query` extension**: see below.
 
-## Filters
+## Hooks
 
-Disable content relations meta box for some posts.
+| Hook | Type | Purpose |
+|---|---|---|
+| `content_relations_add_meta_box` | filter | `false` hides the classic meta box; receives `$add, $post_type, $post` |
+| `content_relations_meta_box_title` | filter | the meta box title; receives `$title, $post_type, $post` |
+| `content_relations_meta_box_post_types` | filter | the post types the editor's search offers |
+| `content_relations_meta_box_find_query_args` | filter | the `WP_Query` arguments of that search |
+| `content_relations_modify_rest_attribute_name` | filter | the name of the read-only REST field, default `content_relations` |
+| `content_relations_modify_rest_json` | filter | the relations in that field; the plugin itself uses it at priority 10 to drop relations the current user may not read |
+| `content_relations_meta_box_list_before` / `_after` | action | output before and after the meta box editor; receives `$post` |
 
-```
-add_filter('content_relations_add_meta_box', function($doIt, $post_type, $post){
-	return false;
-}, 10, 3) 
+Disable the meta box for some posts:
+
+```php
+add_filter( 'content_relations_add_meta_box', function ( $add, $post_type, $post ) {
+	return 'page' !== $post_type;
+}, 10, 3 );
 ```
 
 ## WP_Query Extension
@@ -92,7 +103,7 @@ _$post_id_ ==> ID of the post we want relations for.
 
 
 ```php
-$relatioins = content_relations_get_relations_by_post_id($post_id)
+$relations = content_relations_get_relations_by_post_id($post_id);
 ```
 
 **Parameters:**
@@ -149,3 +160,11 @@ _weight_ ==> Weight of relation in list. (Used for sorting)
 _post_title_ ==> Title of related post.
  
 _post_type_ ==> Post type of related post.
+
+## Security
+
+Please report vulnerabilities privately, see [SECURITY.md](SECURITY.md).
+
+## License
+
+GPL-3.0-or-later, see [LICENSE](LICENSE).
