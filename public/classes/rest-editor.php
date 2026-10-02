@@ -132,19 +132,68 @@ class RestEditor {
 			if ( (int) $relation->source_id !== $post_id ) {
 				continue;
 			}
-			$target_id  = (int) $relation->target_id;
-			$post_type  = get_post_type( $target_id );
-			$out[]      = array(
-				'target_id'       => $target_id,
-				'type'            => (string) $relation->type,
-				'post_title'      => get_the_title( $target_id ),
-				'post_type'       => $post_type,
-				'post_type_label' => self::post_type_label( $post_type ),
-				'post_status'     => get_post_status( $target_id ),
-			);
+			$out[] = self::editor_relation( (int) $relation->target_id, (string) $relation->type );
 		}
 
 		return $out;
+	}
+
+	/**
+	 * One outgoing relation the way the sidebar and the meta box show it.
+	 *
+	 * The title, type and status of a target the current user may not read are left
+	 * out. The relation itself stays in the list - so saving the post keeps it - but an
+	 * author whose post an editor linked to a private or draft post does not learn that
+	 * post's title from it.
+	 */
+	public static function editor_relation( int $target_id, string $type ): array {
+		if ( ! current_user_can( 'read_post', $target_id ) ) {
+			return array(
+				'target_id'       => $target_id,
+				'type'            => $type,
+				'post_title'      => '#' . $target_id,
+				'post_type'       => '',
+				'post_type_label' => '',
+				'post_status'     => '',
+			);
+		}
+
+		$post_type = (string) get_post_type( $target_id );
+
+		return array(
+			'target_id'       => $target_id,
+			'type'            => $type,
+			'post_title'      => get_the_title( $target_id ),
+			'post_type'       => $post_type,
+			'post_type_label' => self::post_type_label( $post_type ),
+			'post_status'     => get_post_status( $target_id ),
+		);
+	}
+
+	/**
+	 * Whether the current user may point $source_id at $target_id.
+	 *
+	 * Only at a post they can read - otherwise saving a relation to an arbitrary id and
+	 * reading the post back would reveal the title of any draft or private post. A
+	 * relation the post already has is kept either way, so editing a post somebody else
+	 * linked to such a post does not silently drop that link.
+	 */
+	public static function can_link_target( int $source_id, int $target_id ): bool {
+		if ( $target_id <= 0 ) {
+			return false;
+		}
+		if ( current_user_can( 'read_post', $target_id ) ) {
+			return true;
+		}
+
+		$store = new \Content_Relations_Store( $source_id );
+		foreach ( $store->get_relations() as $relation ) {
+			if ( (int) $relation->source_id === $source_id && (int) $relation->target_id === $target_id ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -175,7 +224,7 @@ class RestEditor {
 		foreach ( $value as $relation ) {
 			$target_id = isset( $relation['target_id'] ) ? (int) $relation['target_id'] : 0;
 			$type      = isset( $relation['type'] ) ? sanitize_text_field( $relation['type'] ) : '';
-			if ( $target_id <= 0 || '' === $type ) {
+			if ( '' === $type || ! self::can_link_target( (int) $post->ID, $target_id ) ) {
 				continue;
 			}
 			$data[] = array(

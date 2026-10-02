@@ -6,6 +6,7 @@ import {
 	Notice,
 	SearchControl,
 	Spinner,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis -- no stable Text component yet
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { useEffect, useMemo, useState } from '@wordpress/element';
@@ -56,10 +57,10 @@ export function flatten( groups ) {
  * the sidebar, hidden form fields in the meta box). All this component does is show them
  * grouped by type and let the user add, reorder within a type, and remove.
  *
- * @param {Object}   props
- * @param {Array}    props.relations current relations, ordered
- * @param {number}   props.postId    the post being edited, excluded from the search
- * @param {Function} props.onChange  called with the next relations list
+ * @param {Object}                     props
+ * @param {Array}                      props.relations current relations, ordered
+ * @param {number}                     props.postId    the post being edited, excluded from the search
+ * @param {(relations: Array) => void} props.onChange  called with the next relations list
  */
 export default function RelationsEditor( { relations, postId, onChange } ) {
 	const groups = useMemo( () => groupByType( relations ), [ relations ] );
@@ -110,7 +111,10 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 	const typeOptions = useMemo( () => {
 		const options = types.map( ( t ) => ( { label: t, value: t } ) );
 		const filter = typeFilter.trim();
-		if ( filter && ! types.some( ( t ) => t.toLowerCase() === filter.toLowerCase() ) ) {
+		if (
+			filter &&
+			! types.some( ( t ) => t.toLowerCase() === filter.toLowerCase() )
+		) {
 			options.unshift( {
 				value: filter,
 				label: i18n.create_type_template.replace( '%s', filter ),
@@ -146,14 +150,20 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 		const items = [ ...group.items ];
 		const [ moved ] = items.splice( from, 1 );
 		items.splice( to, 0, moved );
-		const nextGroups = groups.map( ( g, i ) => ( i === groupIndex ? { ...g, items } : g ) );
+		const nextGroups = groups.map( ( g, i ) =>
+			i === groupIndex ? { ...g, items } : g
+		);
 		onChange( flatten( nextGroups ) );
 	};
 
 	const removeRelation = ( relation ) => {
 		onChange(
 			relations.filter(
-				( r ) => ! ( r.target_id === relation.target_id && r.type === relation.type )
+				( r ) =>
+					! (
+						r.target_id === relation.target_id &&
+						r.type === relation.type
+					)
 			)
 		);
 	};
@@ -173,35 +183,61 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 					</Text>
 					<Flex direction="column" gap="1">
 						{ group.items.map( ( relation, index ) => (
-							<Flex key={ `${ relation.target_id }-${ index }` } align="center" gap="1">
+							<Flex
+								key={ `${ relation.target_id }-${ index }` }
+								align="center"
+								gap="1"
+							>
 								<FlexItem isBlock>
 									<Flex justify="flex-start" gap="1" wrap>
-										<Text>{ relation.post_title || `#${ relation.target_id }` }</Text>
+										<Text>
+											{ relation.post_title ||
+												`#${ relation.target_id }` }
+										</Text>
 										{ relation.post_type_label && (
 											<Text variant="muted" size="12">
 												{ relation.post_type_label }
 											</Text>
 										) }
 									</Flex>
-									{ relation.post_status && 'publish' !== relation.post_status && (
-										<Text isBlock variant="muted" size="12">
-											{ relation.post_status }
-										</Text>
-									) }
+									{ relation.post_status &&
+										'publish' !== relation.post_status && (
+											<Text
+												isBlock
+												variant="muted"
+												size="12"
+											>
+												{ relation.post_status }
+											</Text>
+										) }
 								</FlexItem>
 								<Button
 									size="small"
 									icon={ chevronUp }
 									label={ i18n.move_up }
 									disabled={ index === 0 }
-									onClick={ () => moveInGroup( groupIndex, index, index - 1 ) }
+									onClick={ () =>
+										moveInGroup(
+											groupIndex,
+											index,
+											index - 1
+										)
+									}
 								/>
 								<Button
 									size="small"
 									icon={ chevronDown }
 									label={ i18n.move_down }
-									disabled={ index === group.items.length - 1 }
-									onClick={ () => moveInGroup( groupIndex, index, index + 1 ) }
+									disabled={
+										index === group.items.length - 1
+									}
+									onClick={ () =>
+										moveInGroup(
+											groupIndex,
+											index,
+											index + 1
+										)
+									}
 								/>
 								<Button
 									size="small"
@@ -267,28 +303,35 @@ export default function RelationsEditor( { relations, postId, onChange } ) {
 									onClick={ () => addRelation( post ) }
 								>
 									<Flex justify="flex-start" gap="1" wrap>
-										<Text>{ post.post_title || `#${ post.target_id }` }</Text>
+										<Text>
+											{ post.post_title ||
+												`#${ post.target_id }` }
+										</Text>
 										{ post.post_type_label && (
 											<Text variant="muted" size="12">
 												{ post.post_type_label }
 											</Text>
 										) }
-										{ post.post_status && 'publish' !== post.post_status && (
-											<Text variant="muted" size="12">
-												({ post.post_status })
-											</Text>
-										) }
+										{ post.post_status &&
+											'publish' !== post.post_status && (
+												<Text variant="muted" size="12">
+													({ post.post_status })
+												</Text>
+											) }
 									</Flex>
 								</Button>
 							) ) }
 						</Flex>
 					) }
 
-					{ ! searching && '' !== chosenType && '' !== search.trim() && results.length === 0 && (
-						<Text isBlock variant="muted">
-							{ i18n.no_posts_found }
-						</Text>
-					) }
+					{ ! searching &&
+						'' !== chosenType &&
+						'' !== search.trim() &&
+						results.length === 0 && (
+							<Text isBlock variant="muted">
+								{ i18n.no_posts_found }
+							</Text>
+						) }
 				</Flex>
 			) }
 		</Flex>

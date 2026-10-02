@@ -37,7 +37,16 @@ registerBlockVariation( 'core/query', {
 	// controls - showing them would offer a choice apply_relation() always overrules.
 	// Everything else (author, search, taxQuery, ...) still narrows the result further, so
 	// those stay.
-	allowedControls: [ 'inherit', 'author', 'search', 'taxQuery', 'format', 'offset', 'pages', 'parents' ],
+	allowedControls: [
+		'inherit',
+		'author',
+		'search',
+		'taxQuery',
+		'format',
+		'offset',
+		'pages',
+		'parents',
+	],
 	attributes: {
 		namespace: VARIATION,
 		query: {
@@ -62,7 +71,10 @@ registerBlockVariation( 'core/query', {
 
 const RelationTypeSelect = ( { attributes, setAttributes } ) => {
 	const [ types, setTypes ] = useState( null );
-	const postId = useSelect( ( select ) => select( 'core/editor' )?.getCurrentPostId(), [] );
+	const postId = useSelect(
+		( select ) => select( 'core/editor' )?.getCurrentPostId(),
+		[]
+	);
 
 	useEffect( () => {
 		let cancelled = false;
@@ -77,7 +89,9 @@ const RelationTypeSelect = ( { attributes, setAttributes } ) => {
 	// keeping it in sync only ever affects what the editor previews.
 	useEffect( () => {
 		if ( postId && attributes.query?.[ SOURCE_KEY ] !== postId ) {
-			setAttributes( { query: { ...attributes.query, [ SOURCE_KEY ]: postId } } );
+			setAttributes( {
+				query: { ...attributes.query, [ SOURCE_KEY ]: postId },
+			} );
 		}
 	}, [ postId ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -109,7 +123,10 @@ const RelationTypeSelect = ( { attributes, setAttributes } ) => {
 
 const withRelationTypeControl = createHigherOrderComponent(
 	( BlockEdit ) => ( props ) => {
-		if ( 'core/query' !== props.name || VARIATION !== props.attributes?.namespace ) {
+		if (
+			'core/query' !== props.name ||
+			VARIATION !== props.attributes?.namespace
+		) {
 			return <BlockEdit { ...props } />;
 		}
 		return (
@@ -126,4 +143,8 @@ const withRelationTypeControl = createHigherOrderComponent(
 	'withContentRelationsTypeControl'
 );
 
-addFilter( 'editor.BlockEdit', 'content-relations/query-loop-control', withRelationTypeControl );
+addFilter(
+	'editor.BlockEdit',
+	'content-relations/query-loop-control',
+	withRelationTypeControl
+);

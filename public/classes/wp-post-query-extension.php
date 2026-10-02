@@ -8,6 +8,8 @@
 
 namespace ContentRelations;
 
+defined( 'ABSPATH' ) || exit;
+
 
 class WPPostQueryExtension {
 

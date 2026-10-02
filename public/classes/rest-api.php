@@ -8,6 +8,8 @@
 
 namespace ContentRelations;
 
+defined( 'ABSPATH' ) || exit;
+
 
 use Content_Relations_Store;
 
@@ -52,12 +54,19 @@ class RestApi {
 		return apply_filters('content_relations_modify_rest_json', $relations, $store, $post_id);
 	}
 
+	/**
+	 * Only relations whose both ends the current user may read.
+	 *
+	 * This used to hand every relation, with the other post's title, to anyone with
+	 * edit_posts - so a contributor could read the titles of other authors' drafts and
+	 * private posts here - and filter by "publish" for everybody else. read_post covers
+	 * both: published posts for visitors, and for a logged-in user exactly the drafts and
+	 * private posts WordPress would show them anyway.
+	 */
 	public function content_relations_modify_rest_json($relations, $store, $post_id){
-		if(current_user_can("edit_posts")){
-			return $relations;
-		}
-		return array_filter($relations, function($relation){
-			return get_post_status($relation->source_id) == "publish" && get_post_status($relation->target_id) == "publish";
-		});
+		return array_values( array_filter($relations, function($relation){
+			return current_user_can( 'read_post', (int) $relation->source_id )
+				&& current_user_can( 'read_post', (int) $relation->target_id );
+		}) );
 	}
 }

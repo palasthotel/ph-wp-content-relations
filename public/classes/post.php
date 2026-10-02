@@ -8,6 +8,8 @@
 
 namespace ContentRelations;
 
+defined( 'ABSPATH' ) || exit;
+
 
 use Content_Relations_Store;
 

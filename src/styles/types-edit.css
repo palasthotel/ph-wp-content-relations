@@ -1,0 +1,68 @@
+/**
+ * The Tools -> Content Relations -> edit-type screen.
+ *
+ * Mirrors ph-postqueue's items table: drag handle plus up/down buttons in a fixed-width
+ * order column, drag feedback on the row being carried and the row it would land on.
+ *
+ * Plain CSS: wp-scripts runs it through PostCSS (autoprefixer, minification), no Sass.
+ * The colours are wp-admin's muted text (#646970) and link blue (#2271b1).
+ */
+
+/* Room for the handle and both buttons; a .widefat cell pads 2x10px on top of it. */
+.content-relations-type-edit .content-relations-type-edit__items .column-order {
+	width: 90px;
+}
+
+.content-relations-type-edit .content-relations-type-edit__items .column-actions {
+	width: 10%;
+	text-align: right;
+}
+
+.content-relations-type-edit .content-relations-type-edit__items td {
+	vertical-align: middle;
+}
+
+.content-relations-type-edit .content-relations-type-edit__items .content-relations-type-edit__order {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.content-relations-type-edit .content-relations-type-edit__items .content-relations-type-edit__order > * {
+	flex-shrink: 0;
+}
+
+.content-relations-type-edit .content-relations-type-edit__items .content-relations-type-edit__handle {
+	display: flex;
+	align-items: center;
+	cursor: grab;
+	color: #646970;
+	padding: 2px;
+}
+
+.content-relations-type-edit .content-relations-type-edit__items .content-relations-type-edit__handle svg {
+	fill: currentColor;
+}
+
+.content-relations-type-edit .content-relations-type-edit__items tr:hover .content-relations-type-edit__handle {
+	color: #2271b1;
+}
+
+.content-relations-type-edit .content-relations-type-edit__items tr.is-dragging {
+	opacity: 0.5;
+}
+
+.content-relations-type-edit .content-relations-type-edit__items tr.is-drop-target > * {
+	box-shadow: 0 -2px 0 0 #2271b1 inset;
+}
+
+.content-relations-type-edit .content-relations-type-edit__items tr:active .content-relations-type-edit__handle {
+	cursor: grabbing;
+}
+
+@media screen and (max-width: 782px) {
+
+	.content-relations-type-edit .content-relations-type-edit__items .column-order {
+		width: auto;
+	}
+}

@@ -10,6 +10,10 @@ import RelationsEditor from './shared/RelationsEditor.jsx';
  * editor's state this keeps the relations in local state and mirrors them into the hidden
  * fields the existing save_post handler reads - the parallel type[]/source-id[]/
  * target-id[] arrays. Nothing in the PHP save path changes; only the UI does.
+ *
+ * @param {Object} props
+ * @param {Array}  props.initial the post's outgoing relations, as localized by PHP
+ * @param {number} props.postId  the post being edited
  */
 function MetaBoxApp( { initial, postId } ) {
 	const [ relations, setRelations ] = useState( initial );
@@ -22,11 +26,22 @@ function MetaBoxApp( { initial, postId } ) {
 				onChange={ setRelations }
 			/>
 			{ relations.map( ( relation, index ) => (
-				// eslint-disable-next-line react/no-array-index-key
 				<span key={ index }>
-					<input type="hidden" name="ph-content-relations-type[]" value={ relation.type } />
-					<input type="hidden" name="ph-content-relations-source-id[]" value={ postId } />
-					<input type="hidden" name="ph-content-relations-target-id[]" value={ relation.target_id } />
+					<input
+						type="hidden"
+						name="ph-content-relations-type[]"
+						value={ relation.type }
+					/>
+					<input
+						type="hidden"
+						name="ph-content-relations-source-id[]"
+						value={ postId }
+					/>
+					<input
+						type="hidden"
+						name="ph-content-relations-target-id[]"
+						value={ relation.target_id }
+					/>
 				</span>
 			) ) }
 		</>
@@ -40,6 +55,9 @@ domReady( () => {
 	}
 	const data = window.ContentRelationsMetaBox || {};
 	createRoot( root ).render(
-		<MetaBoxApp initial={ data.relations || [] } postId={ data.postId || 0 } />
+		<MetaBoxApp
+			initial={ data.relations || [] }
+			postId={ data.postId || 0 }
+		/>
 	);
 } );

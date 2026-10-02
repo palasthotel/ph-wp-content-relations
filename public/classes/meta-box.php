@@ -8,6 +8,8 @@
 
 namespace ContentRelations;
 
+defined( 'ABSPATH' ) || exit;
+
 
 use Content_Relations_Required;
 use Content_Relations_Store;
@@ -76,8 +78,8 @@ class MetaBox {
 	/**
 	 * The compiled React meta box, the same editor the block editor sidebar uses.
 	 *
-	 * Replaces the hand-written jQuery (content-relations-admin.js) and its custom
-	 * autocomplete/arrow styles. The relations are localized as the initial state, and
+	 * Replaced the hand-written jQuery meta box (content-relations-admin.js, since deleted)
+	 * and its custom autocomplete/arrow styles. The relations are localized as the initial state, and
 	 * the component writes the hidden fields save_post_meta_relations reads, so the save
 	 * path is unchanged.
 	 */
@@ -112,16 +114,7 @@ class MetaBox {
 			if ( (int) $relation->source_id !== (int) $post->ID ) {
 				continue;
 			}
-			$target_id   = (int) $relation->target_id;
-			$post_type   = get_post_type( $target_id );
-			$relations[] = array(
-				'target_id'       => $target_id,
-				'type'            => (string) $relation->type,
-				'post_title'      => get_the_title( $target_id ),
-				'post_type'       => $post_type,
-				'post_type_label' => RestEditor::post_type_label( $post_type ),
-				'post_status'     => get_post_status( $target_id ),
-			);
+			$relations[] = RestEditor::editor_relation( (int) $relation->target_id, (string) $relation->type );
 		}
 
 		wp_localize_script( 'content-relations-meta-box', 'ContentRelationsMetaBox', array(
@@ -165,18 +158,26 @@ class MetaBox {
 			return $post_id;
 		}
 
-
-		$nonce = $_POST['ph_meta_box_content_relations_nonce'];
-
 		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $nonce, 'ph_meta_box_content_relations' ) ) {
+		if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['ph_meta_box_content_relations_nonce'] ) ), 'ph_meta_box_content_relations' ) ) {
 			return $post_id;
 		}
-
 
 		// If this is an autosave, our form has not been submitted,
 		//     so we don't want to do anything.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return $post_id;
+		}
+
+		// save_post also fires for the revision WordPress stores alongside, with the same
+		// $_POST - the relations belong to the post, not to its revisions.
+		if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+			return $post_id;
+		}
+
+		// The nonce only proves the request came from a meta box form, any meta box form
+		// of this user - not that they may edit this post.
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return $post_id;
 		}
 
@@ -190,30 +191,32 @@ class MetaBox {
 			return $post_id;
 		}
 
-
-		$types = $_POST['ph-content-relations-type'];
-		/**
-		 * check values
-		 */
-		if ( ! isset( $_POST['ph-content-relations-source-id'] ) || ! is_array( $_POST['ph-content-relations-source-id'] ) ) {
-			return $post_id;
-		}
 		if ( ! isset( $_POST['ph-content-relations-target-id'] ) || ! is_array( $_POST['ph-content-relations-target-id'] ) ) {
 			return $post_id;
 		}
-		$source_ids = $_POST['ph-content-relations-source-id'];
-		$target_ids = $_POST['ph-content-relations-target-id'];
+		$types      = wp_unslash( $_POST['ph-content-relations-type'] );
+		$target_ids = wp_unslash( $_POST['ph-content-relations-target-id'] );
 
+		// The source is always the post being saved. The form still sends a source id
+		// per relation, and that used to be taken from the request as it was - so anyone
+		// who could save one post could write relations for any other post, including
+		// ones they cannot edit. It is ignored now.
 		$data = array();
-		foreach ( $source_ids as $key => $source_id ) {
+		foreach ( $types as $key => $type ) {
+			$target_id = isset( $target_ids[ $key ] ) ? (int) $target_ids[ $key ] : 0;
+			$type      = is_string( $type ) ? sanitize_text_field( $type ) : '';
+			if ( '' === $type || ! RestEditor::can_link_target( (int) $post_id, $target_id ) ) {
+				continue;
+			}
 			$data[] = array(
-				'source_id' => (int) $source_id,
-				'target_id' => (int) $target_ids[ $key ],
-				'type'      => sanitize_text_field( $types[ $key ] ),
+				'source_id' => (int) $post_id,
+				'target_id' => $target_id,
+				'type'      => $type,
 			);
 		}
 		$store->update( $data );
 
+		return $post_id;
 	}
 
 	/**

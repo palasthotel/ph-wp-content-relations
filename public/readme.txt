@@ -1,9 +1,9 @@
 === Content Relations ===
 Contributors: palasthotel, janaeggebrecht, edwardbock
-Donate link: http://palasthotel.de/
+Donate link: https://palasthotel.de/
 Tags: post, relation, related, rest, gutenberg
 Requires at least: 6.6
-Tested up to: 7.0.2
+Tested up to: 7.1.2
 Requires PHP: 7.4
 Stable tag: 1.1.0
 License: GPL-3.0-or-later
@@ -43,10 +43,7 @@ Every post's REST response carries a `content_relations` field with its relation
 
 = Are relations to drafts or private posts visible? =
 
-No. On the REST API they are filtered out for anyone who cannot edit posts, and the editor's search only offers posts the current user may read.
-
-== Screenshots ==
-
+Only to someone who may read them. On the REST API a relation appears only if the current user may read both posts, so visitors see relations between published posts. The editor's search only offers posts the current user may read, and a relation can only be added to such a post.
 
 == Changelog ==
 
@@ -129,11 +126,4 @@ No. On the REST API they are filtered out for anyone who cannot edit posts, and 
 
 = 1.0 =
 * First release
-
-== Upgrade Notice ==
-
-
-== Arbitrary section ==
-
-
 

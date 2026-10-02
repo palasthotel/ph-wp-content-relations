@@ -51,12 +51,13 @@ repository-only.
 | `public/ph-content-relations.php` | plugin header and bootstrap |
 | `public/classes/` | the plugin's PHP |
 | `public/parts/` | the meta box template |
-| `public/js/`, `public/css/` | hand-written admin assets, not compiled |
 | `public/public-functions.php` | the public API |
+| `public/languages/` | translations of the `ph-content-relations` text domain |
 | `public/readme.txt` | the wordpress.org listing |
+| `public/dist/` | the compiled editor bundles - built, not in the repository |
+| `src/` | sources of those bundles: the block editor sidebar and Query Loop variation, the classic meta box, the Tools type-edit screen |
 | `ph-content-relations.php` | development wrapper, loads `public/`; never deployed |
-| `bin/` | release helper scripts |
-| `resource/` | wp-env helpers |
+| `resource/mu-plugins/` | mu-plugins for wp-env |
 
 The main file `public/ph-content-relations.php` must keep its name. WordPress identifies
 an installed plugin by `<directory>/<main file>` and stores that pair in `active_plugins`;
@@ -66,14 +67,25 @@ renamed") is what that looks like when it happens.
 
 ## Local setup
 
-There is nothing to build: the plugin is plain PHP with hand-written JS and CSS.
+The PHP needs no build, the editor bundles do. Node 24 (or 22.22+) is required by
+`@wordpress/scripts`:
 
 ```sh
+npm ci && npm run build       # public/dist/; npm run start rebuilds on change
+npm run lint:js
 npx @wordpress/env start      # http://localhost:8888, admin / password
 ```
 
-`bash bin/build-plugin.sh` stages the payload in `build/content-relations/` and zips it to
-`content-relations.zip` — the same payload the release deploys.
+wp-env loads `public/` as the plugin, so build first - without `public/dist/` there is no
+sidebar, meta box or type-edit screen.
+
+JavaScript strings are translated in PHP (`classes/relations-i18n.php`, the `i18n` key of
+each `wp_localize_script` call), not with `@wordpress/i18n` in the bundle.
+
+`npm run pack` builds and stages the payload in `build/content-relations/` and zips it to
+`content-relations.zip` - the same payload the release deploys. It runs the shared script
+from [palasthotel/github-workflows](https://github.com/palasthotel/github-workflows),
+which has to be checked out next to this repository.
 
 ## Versions
 
@@ -86,5 +98,6 @@ by hand; just leave `Stable tag:` and the `== Changelog ==` entries alone.
 
 ## Checks
 
-Every PR runs `php -l` against PHP 7.4, 8.2, 8.3 and 8.4, packs the plugin so a broken
-`bin/build-plugin.sh` surfaces in the pull request, and checks the version carriers agree.
+Every PR runs `php -l` against PHP 7.4, 8.2, 8.3 and 8.4, builds and packs the plugin,
+checks that the payload contains what the plugin enqueues from `public/dist/` and none of
+the repository-only files, and checks the version carriers agree.
