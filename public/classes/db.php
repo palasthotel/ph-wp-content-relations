@@ -2,6 +2,8 @@
 
 namespace ContentRelations\Db;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * @return \wpdb
  */

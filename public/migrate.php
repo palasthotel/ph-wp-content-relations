@@ -1,4 +1,6 @@
 <?php
+
+defined( 'ABSPATH' ) || exit;
 /**
  * registeres handler for content relations
  *
