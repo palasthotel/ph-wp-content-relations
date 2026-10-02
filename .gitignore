@@ -5,9 +5,6 @@
 # wp-env
 /.wp-env.override.json
 
-# committed by accident once; a runtime log has no business in the repo
-/resource/debug.log
-
 .DS_Store
 Thumbs.db
 Icon
