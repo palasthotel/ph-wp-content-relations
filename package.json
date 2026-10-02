@@ -8,9 +8,9 @@
     "email": "webmaster@palasthotel.de",
     "url": "https://palasthotel.de"
   },
-  "repository": "git+https://github.com/palasthotel/ph-wp-content-relations.git",
+  "repository": "git+https://github.com/palasthotel/wp-content-relations.git",
   "bugs": {
-    "url": "https://github.com/palasthotel/ph-wp-content-relations/issues"
+    "url": "https://github.com/palasthotel/wp-content-relations/issues"
   },
   "scripts": {
     "start": "wp-scripts start src/block-editor.js src/meta-box.js src/types-edit.js --output-path=public/dist",

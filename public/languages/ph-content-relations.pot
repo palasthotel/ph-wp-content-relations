@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Content Relations 1.0.15\n"
-"Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/palasthotel/wp-content-relations/issues\n"
 "Last-Translator: Palasthotel <cybertreff@palasthotel.de>\n"
 "Language-Team: Palasthotel <cybertreff@palasthotel.de>\n"
 "MIME-Version: 1.0\n"

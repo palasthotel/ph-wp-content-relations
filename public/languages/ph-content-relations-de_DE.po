@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Content Relations\n"
-"Report-Msgid-Bugs-To: https://github.com/palasthotel/ph-wp-content-relations/"
+"Report-Msgid-Bugs-To: https://github.com/palasthotel/wp-content-relations/"
 "issues\n"
 "POT-Creation-Date: 2026-08-05T11:53:33+00:00\n"
 "PO-Revision-Date: 2026-08-05 12:00+0200\n"
