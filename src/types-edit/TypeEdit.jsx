@@ -7,7 +7,9 @@ import {
 	Flex,
 	Notice,
 	Spinner,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis -- no stable Heading/Text yet
 	__experimentalHeading as Heading,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis -- no stable Heading/Text yet
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
@@ -28,6 +30,10 @@ const ns = restNamespace || 'content-relations/v1';
  * target here removes that one relation; the source post's other targets and types are
  * untouched. Saving sends each post's new (and possibly shorter) target list to the reorder
  * endpoint, which rebuilds that post keeping its other types untouched.
+ *
+ * @param {Object} props
+ * @param {string} props.type          the relation type's name
+ * @param {Array}  props.initialGroups the type's relations grouped by source post
  */
 export default function TypeEdit( { type, initialGroups } ) {
 	// savedGroups is the last state confirmed written to the server - what Reset goes
@@ -61,18 +67,32 @@ export default function TypeEdit( { type, initialGroups } ) {
 		const targets = [ ...group.targets ];
 		const [ moved ] = targets.splice( from, 1 );
 		targets.splice( to, 0, moved );
-		setGroups( groups.map( ( g, i ) => ( i === groupIndex ? { ...g, targets } : g ) ) );
+		setGroups(
+			groups.map( ( g, i ) =>
+				i === groupIndex ? { ...g, targets } : g
+			)
+		);
 		setSaved( false );
 	};
 
 	const remove = ( groupIndex, index ) => {
-		const targets = groups[ groupIndex ].targets.filter( ( _, i ) => i !== index );
-		setGroups( groups.map( ( g, i ) => ( i === groupIndex ? { ...g, targets } : g ) ) );
+		const targets = groups[ groupIndex ].targets.filter(
+			( _, i ) => i !== index
+		);
+		setGroups(
+			groups.map( ( g, i ) =>
+				i === groupIndex ? { ...g, targets } : g
+			)
+		);
 		setSaved( false );
 	};
 
 	const drop = ( groupIndex, toIndex ) => {
-		if ( dragged && dragged.groupIndex === groupIndex && dragged.index !== toIndex ) {
+		if (
+			dragged &&
+			dragged.groupIndex === groupIndex &&
+			dragged.index !== toIndex
+		) {
 			move( groupIndex, dragged.index, toIndex );
 		}
 		setDragged( null );
@@ -143,7 +163,8 @@ export default function TypeEdit( { type, initialGroups } ) {
 						<Heading level={ 4 }>
 							{ group.source_edit_link ? (
 								<a href={ group.source_edit_link }>
-									{ group.source_title || `#${ group.source_id }` }
+									{ group.source_title ||
+										`#${ group.source_id }` }
 								</a>
 							) : (
 								group.source_title || `#${ group.source_id }`
@@ -155,7 +176,9 @@ export default function TypeEdit( { type, initialGroups } ) {
 							<tbody>
 								{ group.targets.map( ( target, index ) => {
 									const isDragged =
-										dragged?.groupIndex === group.groupIndex && dragged?.index === index;
+										dragged?.groupIndex ===
+											group.groupIndex &&
+										dragged?.index === index;
 									const isOver =
 										over?.groupIndex === group.groupIndex &&
 										over?.index === index &&
@@ -165,14 +188,26 @@ export default function TypeEdit( { type, initialGroups } ) {
 											key={ target.target_id }
 											draggable
 											onDragStart={ ( event ) => {
-												setDragged( { groupIndex: group.groupIndex, index } );
-												event.dataTransfer.effectAllowed = 'move';
+												setDragged( {
+													groupIndex:
+														group.groupIndex,
+													index,
+												} );
+												event.dataTransfer.effectAllowed =
+													'move';
 												// Firefox ignores a drag without any data set.
-												event.dataTransfer.setData( 'text/plain', String( target.target_id ) );
+												event.dataTransfer.setData(
+													'text/plain',
+													String( target.target_id )
+												);
 											} }
 											onDragOver={ ( event ) => {
 												event.preventDefault();
-												setOver( { groupIndex: group.groupIndex, index } );
+												setOver( {
+													groupIndex:
+														group.groupIndex,
+													index,
+												} );
 											} }
 											onDrop={ ( event ) => {
 												event.preventDefault();
@@ -183,7 +218,9 @@ export default function TypeEdit( { type, initialGroups } ) {
 											// as the target means drop() never treats it as a move,
 											// only as cleanup. The actual move happens in onDrop,
 											// fired on the row being dragged over.
-											onDragEnd={ () => drop( group.groupIndex, index ) }
+											onDragEnd={ () =>
+												drop( group.groupIndex, index )
+											}
 											className={ [
 												isDragged ? 'is-dragging' : '',
 												isOver ? 'is-drop-target' : '',
@@ -202,41 +239,81 @@ export default function TypeEdit( { type, initialGroups } ) {
 														     without width or height and the SVG primitive adds
 														     none, so a raw one collapses to nothing. Icon is
 														     what clones it with a size. */ }
-														<Icon icon={ dragHandle } size={ 20 } />
+														<Icon
+															icon={ dragHandle }
+															size={ 20 }
+														/>
 													</span>
 													<Button
 														size="small"
 														icon={ chevronUp }
 														label={ i18n.move_up }
 														disabled={ index === 0 }
-														onClick={ () => move( group.groupIndex, index, index - 1 ) }
+														onClick={ () =>
+															move(
+																group.groupIndex,
+																index,
+																index - 1
+															)
+														}
 													/>
 													<Button
 														size="small"
 														icon={ chevronDown }
 														label={ i18n.move_down }
-														disabled={ index === group.targets.length - 1 }
-														onClick={ () => move( group.groupIndex, index, index + 1 ) }
+														disabled={
+															index ===
+															group.targets
+																.length -
+																1
+														}
+														onClick={ () =>
+															move(
+																group.groupIndex,
+																index,
+																index + 1
+															)
+														}
 													/>
 												</div>
 											</td>
 											<td className="column-primary">
 												{ target.edit_link ? (
-													<a href={ target.edit_link }>
-														{ target.title || `#${ target.target_id }` }
+													<a
+														href={
+															target.edit_link
+														}
+													>
+														{ target.title ||
+															`#${ target.target_id }` }
 													</a>
 												) : (
-													target.title || `#${ target.target_id }`
+													target.title ||
+													`#${ target.target_id }`
 												) }
-												{ target.post_status && 'publish' !== target.post_status && (
-													<Text variant="muted"> ({ target.post_status })</Text>
-												) }
+												{ target.post_status &&
+													'publish' !==
+														target.post_status && (
+														<Text variant="muted">
+															{ ' ' }
+															(
+															{
+																target.post_status
+															}
+															)
+														</Text>
+													) }
 											</td>
 											<td className="column-actions">
 												<Button
 													variant="link"
 													isDestructive
-													onClick={ () => remove( group.groupIndex, index ) }
+													onClick={ () =>
+														remove(
+															group.groupIndex,
+															index
+														)
+													}
 												>
 													{ i18n.remove }
 												</Button>
@@ -251,11 +328,20 @@ export default function TypeEdit( { type, initialGroups } ) {
 			) ) }
 
 			<Flex justify="flex-start" gap="2">
-				<Button variant="primary" isBusy={ saving } disabled={ saving || ! dirty } onClick={ save }>
+				<Button
+					variant="primary"
+					isBusy={ saving }
+					disabled={ saving || ! dirty }
+					onClick={ save }
+				>
 					{ i18n.save_order }
 				</Button>
 				{ saving && <Spinner /> }
-				<Button variant="tertiary" disabled={ saving || ! dirty } onClick={ reset }>
+				<Button
+					variant="tertiary"
+					disabled={ saving || ! dirty }
+					onClick={ reset }
+				>
 					{ i18n.reset }
 				</Button>
 			</Flex>

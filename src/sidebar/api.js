@@ -1,6 +1,8 @@
 import apiFetch from '@wordpress/api-fetch';
 
-const ns = ( window.ContentRelationsEditor || {} ).restNamespace || 'content-relations/v1';
+const ns =
+	( window.ContentRelationsEditor || {} ).restNamespace ||
+	'content-relations/v1';
 
 /**
  * Existing relation type names.
@@ -22,5 +24,7 @@ export function searchPosts( query, exclude = [] ) {
 	const params = new URLSearchParams();
 	params.set( 'q', query );
 	exclude.forEach( ( id ) => params.append( 'exclude[]', String( id ) ) );
-	return apiFetch( { path: `/${ ns }/search?${ params.toString() }` } ).catch( () => [] );
+	return apiFetch( { path: `/${ ns }/search?${ params.toString() }` } ).catch(
+		() => []
+	);
 }
