@@ -7,7 +7,7 @@
  * Description:       Relate posts to other posts, edit them in the block editor sidebar or a meta box, and show them with a Related content block or on the REST API.
  * Version:           1.1.1
  * Requires at least: 6.6
- * Tested up to:      7.1.2
+ * Tested up to:      7.1
  * Requires PHP:      7.4
  * Author:            Palasthotel <webmaster@palasthotel.de>
  * Author URI:        https://palasthotel.de
